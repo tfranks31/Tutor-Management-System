@@ -6,8 +6,17 @@
          xmlns="http://java.sun.com/xml/ns/javaee">
 
   <!-- Servlets -->
+  <servlet>
+    <servlet-name>AddTutorServlet</servlet-name>
+    <servlet-class>servlet.AddTutorServlet</servlet-class>
+  </servlet>
+
 
   <!-- Servlet mappings -->
+  <servlet-mapping>
+    <servlet-name>AddTutorServlet</servlet-name>
+    <url-pattern>/addTutor</url-pattern>
+  </servlet-mapping>
 
   <welcome-file-list>
     <welcome-file></welcome-file>
