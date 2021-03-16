@@ -2,7 +2,7 @@
 <html>
     <head>
         <title>Add a Tutor</title>
-        <link rel="stylesheet" href="addTutor.css">
+        <link rel="stylesheet" href="./_view/addTutor.css">
     </head>
     <body>
         <div id="title">
