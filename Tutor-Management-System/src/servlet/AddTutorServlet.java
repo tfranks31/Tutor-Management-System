@@ -24,6 +24,8 @@ public class AddTutorServlet extends HttpServlet {
 	protected void doPost(HttpServletRequest req, HttpServletResponse resp)
 			throws ServletException, IOException {
 		
-		System.out.println("AddNumbers Servlet: doPost");
+		System.out.println("AddTutor Servlet: doPost");
+		
+		req.getRequestDispatcher("/_view/addTutor.jsp").forward(req, resp);
 	}
 }
