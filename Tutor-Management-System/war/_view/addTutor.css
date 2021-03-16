@@ -1,0 +1,23 @@
+body {
+    max-width: fit-content;
+    margin: auto;
+}
+
+#labels {
+    font-size: 20px;
+    display: inline-block;
+}
+
+#textFields {
+    font-size: 19px;
+    display: inline-block;
+}
+
+#title {
+    font-size: 48px;
+    text-align: center;
+}
+
+#buttons {
+    text-align: center;
+}
