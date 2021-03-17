@@ -1,6 +1,6 @@
 package model;
 
-public class entryModel {
+public class Entry {
 
 	private String date, servicePerformed, wherePerformed;
 	private double hours;

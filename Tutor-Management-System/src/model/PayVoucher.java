@@ -6,7 +6,7 @@ package model;
  * Can tell if the voucher has been submitted, Signed, edited by an admin or
  * if the voucher is new.
  */
-public class payVoucherModel {
+public class PayVoucher {
     String dueDate;
     double totalHours;
     double totalPay;
@@ -15,7 +15,7 @@ public class payVoucherModel {
     boolean isNew;
     boolean isAdminEdited;
 
-    public payVoucherModel(){
+    public PayVoucher(){
         dueDate = "null";
         totalHours = 0.0;
         totalPay = 0.0;

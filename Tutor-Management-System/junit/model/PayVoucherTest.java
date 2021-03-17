@@ -4,12 +4,12 @@ import static org.junit.Assert.assertTrue;
 import org.junit.Before;
 import org.junit.Test;
 
-public class payVoucherModelTest{
-    private payVoucherModel model;
+public class PayVoucherTest{
+    private PayVoucher model;
 
     @Before
     public void setUp(){
-        model = new payVoucherModel();
+        model = new PayVoucher();
     }
 
     @Test

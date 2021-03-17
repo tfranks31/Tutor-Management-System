@@ -4,12 +4,12 @@ import static org.junit.Assert.*;
 import org.junit.Before;
 import org.junit.Test;
 
-public class entryModelTest {
-    private entryModel entry;
+public class EntryTest {
+    private Entry entry;
     
     @Before
     public void setUp() {
-    	entry = new entryModel();
+    	entry = new Entry();
     }
     
     @Test

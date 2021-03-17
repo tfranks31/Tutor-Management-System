@@ -4,12 +4,12 @@ import static org.junit.Assert.assertTrue;
 import org.junit.Before;
 import org.junit.Test;
 
-public class tutorModelTest{
-    private tutorModel model;
+public class TutorTest{
+    private Tutor model;
 
     @Before
     public void setUp(){
-        model = new tutorModel();
+        model = new Tutor();
 
     }
 
