@@ -5,12 +5,12 @@ package model;
  */
 
 public class Tutor extends User {
-    String name;
-    String email;
-    String subject;
-    double payRate;
-    int tutorID;
-    PayVoucher payVoucher = new PayVoucher();
+    private String name;
+    private String email;
+    private String subject;
+    private double payRate;
+    private int tutorID;
+    private PayVoucher payVoucher = new PayVoucher();
 
     //Constructors
     public Tutor(){

@@ -7,13 +7,13 @@ package model;
  * if the voucher is new.
  */
 public class PayVoucher {
-    String dueDate;
-    double totalHours;
-    double totalPay;
-    boolean isSubmitted;
-    boolean isSigned;
-    boolean isNew;
-    boolean isAdminEdited;
+    private String dueDate;
+    private double totalHours;
+    private double totalPay;
+    private boolean isSubmitted;
+    private boolean isSigned;
+    private boolean isNew;
+    private boolean isAdminEdited;
 
     public PayVoucher(){
         dueDate = "null";

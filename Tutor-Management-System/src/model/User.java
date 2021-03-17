@@ -13,7 +13,7 @@ public abstract class User {
 	 * Get this User's username.
 	 * @return The User's username.
 	 */
-	public String getUserName() {
+	public String getUsername() {
 		
 		return username;
 	}
@@ -22,7 +22,7 @@ public abstract class User {
 	 * Set this User's username.
 	 * @param username The User's new username
 	 */
-	public void setUserName(String username) {
+	public void setUsername(String username) {
 		
 		this.username = username;
 	}
