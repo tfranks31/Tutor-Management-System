@@ -1,12 +1,10 @@
 package model;
-
-import model.PayVoucher;
 /**
  * The model for the tutor class of users.
  * Contains tutors name, email, subject, payrate and tutorID
  */
 
-public class Tutor {
+public class Tutor extends User {
     String name;
     String email;
     String subject;
