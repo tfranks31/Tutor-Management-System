@@ -1,5 +1,6 @@
 package model;
 
+import model.payVoucherModel;
 /**
  * The model for the tutor class of users.
  * Contains tutors name, email, subject, payrate and tutorID
@@ -11,6 +12,7 @@ public class tutorModel {
     String subject;
     double payRate;
     int tutorID;
+    payVoucherModel payVoucher = new payVoucherModel();
 
     //Constructors
     public tutorModel(){
@@ -53,8 +55,14 @@ public class tutorModel {
         return subject;
     }
     
-    //submitPayVoucher()
-    //getPayVoucher() //requires payvoucher class to be finished
+    public void submitPayVoucher(){
+        payVoucher.setIsSubmitted(true);
+    }
+    
+    public payVoucherModel getPayVoucher(){
+        return payVoucher;
+    }
+
     //editPayVoucher()
 
 }
