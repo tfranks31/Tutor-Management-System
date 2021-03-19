@@ -10,14 +10,14 @@ package model;
  */
 
 
-public class adminModel extends User {
-    private tutorModel tutor = new tutorModel();
+public class Admin extends User {
+    private Tutor tutor = new Tutor();
 
     // Constructor
-    public adminModel() {
+    public Admin() {
     }
 
-    public void addTutor(String tutorName, String tutorEmail, double payRate
+    public void addTutor(String tutorName, String tutorEmail, double payRate,
     String subject, int tutorID) {
         tutor.setName(tutorName);
         tutor.setEmail(tutorEmail);

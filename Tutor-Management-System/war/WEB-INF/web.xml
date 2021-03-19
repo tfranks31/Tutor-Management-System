@@ -19,6 +19,6 @@
   </servlet-mapping>
 
   <welcome-file-list>
-    <welcome-file>./_view/addTutor.jsp</welcome-file>
+    <welcome-file>./_view/login.jsp</welcome-file>
   </welcome-file-list>
 </web-app>
