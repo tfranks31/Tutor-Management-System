@@ -5,7 +5,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Pay Voucher View</title>
-    <link rel="stylesheet" href="./_view/payVoucherMain.css">
+    <link rel="stylesheet" href="./_view/payVoucher.css">
 </head>
 
 <script src="./_view/payVoucher.js"></script>
