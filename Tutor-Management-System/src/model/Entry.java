@@ -1,10 +1,21 @@
 package model;
 
+/**
+ * Entry class. Contains Date, servicePerformed, wherePerformed, and hours
+ * Stores the information for each indivisual entry of a pay voucher
+ */
+
 public class Entry {
 
 	private String date, servicePerformed, wherePerformed;
 	private double hours;
 	
+	public Entry(){
+		date = "null";
+		servicePerformed = "null";
+		wherePerformed = "null";
+		hours = 0.0;
+	}
 	
 	public String getDate() {
 		return date;
