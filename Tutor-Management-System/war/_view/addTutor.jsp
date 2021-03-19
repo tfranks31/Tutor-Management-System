@@ -13,10 +13,18 @@
         	<table>
         		<tr>
         			<td>
-        				<label for="name" class="label">Name:</label>
+        				<label for="firstName" class="label">First Name:</label>
         			</td>
         			<td>
-        				<input type="text" id="name" name="name" value="${name}">
+        				<input type="text" id="firstName" name="firstName" value="${firstName}">
+        			</td>
+        		</tr>
+        		<tr>
+        			<td>
+        				<label for="lastName" class="label">Last Name:</label>
+        			</td>
+        			<td>
+        				<input type="text" id="lastName" name="lastName" value="${lastName}">
         			</td>
         		</tr>
         		<tr>
