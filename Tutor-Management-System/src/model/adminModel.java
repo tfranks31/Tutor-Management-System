@@ -9,9 +9,9 @@ package model;
  * 
  */
 
- tutorModel tutor = new tutorModel();
 
-public class adminModel {
+public class adminModel extends User {
+    private tutorModel tutor = new tutorModel();
 
     // Constructor
     public adminModel() {
