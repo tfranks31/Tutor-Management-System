@@ -26,6 +26,12 @@ public class AddTutorServlet extends HttpServlet {
 		
 		System.out.println("AddTutor Servlet: doPost");
 		
+		String errorMessage = null;
+		
+		
+		
+		req.setAttribute("errorMessage", errorMessage);
+		
 		req.getRequestDispatcher("/_view/addTutor.jsp").forward(req, resp);
 	}
 }

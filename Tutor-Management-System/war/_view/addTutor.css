@@ -3,14 +3,8 @@ body {
     margin: auto;
 }
 
-#labels {
+td {
     font-size: 20px;
-    display: inline-block;
-}
-
-#textFields {
-    font-size: 19px;
-    display: inline-block;
 }
 
 #title {
