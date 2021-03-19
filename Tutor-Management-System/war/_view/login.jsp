@@ -2,14 +2,12 @@
 <html>
 <head>
     <title>Login</title>
-    <link rel="stylesheet" type="text/css" href="./_view/login.css">
+    <link rel="stylesheet" href="./_view/login.css">
 </head>
 <body>
-    <div id="title">
-        Login
-    </div>
     <div id="loginBox">
         <form> 
+            <h1>Login</h1>
             <p>Username</p>
             <input type="text" name="" placeholder="Username">
             <p>Password</p>

@@ -1,7 +1,7 @@
 body {
     margin: 0;
     padding: 0;
-    background-image: url("ycpBackground.jpg");
+    background-image: url("./_view/ycpBackground.jpg");
     background-color: #cccccc;
   
 }
@@ -13,7 +13,7 @@ body {
     height: 400px;
     text-align: center;
     background: #669e62;
-    background-image: url("Potato.jpg");
+    background-image: url("./_view/Potato.jpg");
     background-size: cover;
     background-position: center;
     color: rgb(0, 0, 0);
