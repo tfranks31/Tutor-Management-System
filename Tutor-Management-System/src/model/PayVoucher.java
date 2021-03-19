@@ -1,12 +1,18 @@
 package model;
 
+import java.util.ArrayList;
+
 /**
  * PayVoucher class.
  * Contains dueDate, totalHours, totalPay.
  * Can tell if the voucher has been submitted, Signed, edited by an admin or
  * if the voucher is new.
  */
+
 public class PayVoucher {
+    
+    private final int defaultVoucherSize = 10; //10 entries per blank voucher
+
     private String dueDate;
     private double totalHours;
     private double totalPay;
@@ -14,6 +20,7 @@ public class PayVoucher {
     private boolean isSigned;
     private boolean isNew;
     private boolean isAdminEdited;
+    private ArrayList<Entry> entries = new ArrayList<Entry>();
 
     public PayVoucher(){
         dueDate = "null";
@@ -23,6 +30,11 @@ public class PayVoucher {
         isSigned = false;
         isNew = false;
         isAdminEdited = false;
+
+        //initializes default number of entries per voucher, currently 10
+        for (int i = 0; i < defaultVoucherSize; i++){
+            addEntry();
+        }
     }
 
     public void setIsSubmitted(boolean isSubmitted){
@@ -65,8 +77,8 @@ public class PayVoucher {
         return dueDate;
     }
 
-    public void calculatePay(double hours, double payrate){
-        totalPay = hours * payrate;
+    public void calculatePay(double hours, double payRate){
+        totalPay = hours * payRate;
     }
 
     public double getTotalPay(){
@@ -77,12 +89,16 @@ public class PayVoucher {
         return totalHours;
     }
 
-    // Will need to be changed once entry class is created
+    //iterates over every entry in the voucher, sums the hours
     public void CalculateTotalHours(double hours){
-        totalHours = hours;
+        for (Entry entry: entries){
+            totalHours += entry.getHours();
+        }
     }
 
-    // CalculateTotalHours
-    // addEntry
-
+    // generates a blank entry object and adds it to the array list
+    public void addEntry(){
+        Entry entry = new Entry();
+        entries.add(entry); 
+    }
 }

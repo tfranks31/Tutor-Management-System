@@ -2,7 +2,7 @@ package model;
 
 /**
  * Entry class. Contains Date, servicePerformed, wherePerformed, and hours
- * Stores the information for each indivisual entry of a pay voucher
+ * Stores the information for each individual entry of a pay voucher
  */
 
 public class Entry {
