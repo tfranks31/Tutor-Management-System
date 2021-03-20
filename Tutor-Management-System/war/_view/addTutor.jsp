@@ -1,4 +1,5 @@
 <!DOCTYPE html>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <html>
     <head>
         <title>Add a Tutor</title>
@@ -9,39 +10,76 @@
             Add a Tutor
         </div>
         <form action="${pageContext.servletContext.contextPath}/addTutor" method="post">
-        	<div id="labels">
-	            <label for="name" class="label">Name:</label>
-	            <br>
-	            <label for="username" class="label">Username:</label>
-	            <br>
-	            <label for="password" class="label">Password:</label>
-	            <br>
-	            <label for="email" class="label">Email:</label>
-	            <br>
-	            <label for="accountNumber" class="label">Account Number:</label>
-	            <br>
-	            <label for="subject" class="label">Subject:</label>
-	            <br>
-	            <label for="payRate" class="label">Pay Rate:</label>
-	            <br>
-	        </div>
-	
-	        <div id="textFields">
-	            <input type="text" id="name" name="name" value="${name}">
-	            <br>
-	            <input type="text" id="username" name="username" value="${username}">
-	            <br>
-	            <input type="text" id="password" name="password" value="${password}">
-	            <br>
-	            <input type="text" id="email" name="email" value="${email}">
-	            <br>
-	            <input type="text" id="accountNumber" name="accountNumber" value="${accountNumber}">
-	            <br>
-	            <input type="text" id="subject" name="subject" value="${subject}">
-	            <br>
-	            <input type="text" id="payRate" name="payRate" value="${payRate}">
-	            <br>
-	        </div>
+        	<table>
+        		<tr>
+        			<td>
+        				<label for="firstName" class="label">First Name:</label>
+        			</td>
+        			<td>
+        				<input type="text" id="firstName" name="firstName" value="${firstName}">
+        			</td>
+        		</tr>
+        		<tr>
+        			<td>
+        				<label for="lastName" class="label">Last Name:</label>
+        			</td>
+        			<td>
+        				<input type="text" id="lastName" name="lastName" value="${lastName}">
+        			</td>
+        		</tr>
+        		<tr>
+        			<td>
+        				<label for="username" class="label">Username:</label>
+        			</td>
+        			<td>
+        				<input type="text" id="username" name="username" value="${username}">
+        			</td>
+        		</tr>
+        		<tr>
+        			<td>
+        				<label for="password" class="label">Password:</label>
+        			</td>
+        			<td>
+        				<input type="text" id="password" name="password" value="${password}">
+        			</td>
+        		</tr>
+        		<tr>
+        			<td>
+        				<label for="email" class="label">Email:</label>
+        			</td>
+        			<td>
+        				<input type="text" id="email" name="email" value="${email}">
+        			</td>
+        		</tr>
+        		<tr>
+        			<td>
+        				<label for="accountNumber" class="label">Account Number:</label>
+        			</td>
+        			<td>
+        				<input type="text" id="accountNumber" name="accountNumber" value="${accountNumber}">
+        			</td>
+        		</tr>
+        		<tr>
+        			<td>
+        				<label for="subject" class="label">Subject:</label>
+        			</td>
+        			<td>
+        				<input type="text" id="subject" name="subject" value="${subject}">
+        			</td>
+        		</tr>
+        		<tr>
+        			<td>
+        				<label for="payRate" class="label">Pay Rate:</label>
+        			</td>
+        			<td>
+        				<input type="text" id="payRate" name="payRate" value="${payRate}">
+        			</td>
+        		</tr>
+        	</table>
+	        
+	        <c:if test="${! empty errorMessage}">
+				<div class="error">${errorMessage}</div>
+			</c:if>
 	
 	        <div id="buttons">
 	            <input type="submit" name="addTutor" value="Add Tutor">

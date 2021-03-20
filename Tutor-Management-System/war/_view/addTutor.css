@@ -3,14 +3,8 @@ body {
     margin: auto;
 }
 
-#labels {
-    font-size: 20px;
-    display: inline-block;
-}
-
-#textFields {
-    font-size: 19px;
-    display: inline-block;
+td {
+	font-size: 20px;
 }
 
 #title {
@@ -20,4 +14,9 @@ body {
 
 #buttons {
     text-align: center;
+}
+
+.error {
+	color: red;
+	text-align: center;
 }

@@ -1,0 +1,55 @@
+html{
+    margin-top: 20px;
+    margin-left: 20%;
+    margin-right: 20%;
+    margin-bottom: 20px;
+}
+
+.Header{
+    text-align: center;
+    margin: 0px;
+    font-size: 50px;
+}
+
+.search{
+    margin-top: 30px;
+    float: left;
+}
+
+.gwt-TextBox{
+    padding: 5x 4px;
+    font-size: small;
+    font-family: Arial Unicode MS, Arial, sans-serif;
+}
+
+
+.addTutor{
+    margin-top: 25px;
+    width: 180px;
+    height: 30px;
+    font-size: 20px;
+    text-align: center;
+    float: right;
+}
+
+#searchBTN{
+    width: 165px;
+    height: 25px;
+    float: bottom;
+    font-size: 15px;
+    text-align: center;
+}
+table{
+    width: 100%;
+    margin-top: 100px;
+}
+th,
+td{
+    padding: 10px;
+    text-align: center;
+}
+
+.pageNum{
+    padding: 10px;
+    text-align: center;
+}

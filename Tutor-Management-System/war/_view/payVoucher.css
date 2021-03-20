@@ -1,0 +1,75 @@
+html{
+    margin-top: 20px;
+    margin-left: 20%;
+    margin-right: 20%;
+    margin-bottom: 20px;
+}
+
+.Header{
+    text-align: center;
+    margin: 0;
+    font-size: 50px;
+
+}
+
+table{
+    width: 100%;
+    margin-top: 100px;
+}
+th,
+td{
+    padding: 10px;
+    text-align: center;
+}
+
+input { 
+    text-align: center; 
+}
+
+.addRow {
+    height: 50px;
+    width: 150px;
+    margin: 0;
+    position: relative;
+    bottom: auto;
+    left: 43%;
+}
+
+.studentInfo{
+    padding: 15px;
+    width: 240px;
+    font-size: 20px;
+    text-align: right;
+    float: left;
+}
+
+.dueDate{
+    padding: 15px;
+    width: 240px;
+    font-size: 20px;
+    text-align: left;
+    float: right;
+}
+
+.payInfo{
+    padding: 5px;
+    margin: 0;
+    position: relative;
+    text-align:center;
+}
+.addRow {
+    height: 25px;
+    width: 150px;
+    margin: 0;
+    position: relative;
+    bottom: auto;
+    left: 43%;
+}
+.submit{
+    height: 25px;
+    width: 150px;
+    margin: 0;
+    position: relative;
+    bottom: auto;
+    left: 43%;
+}
