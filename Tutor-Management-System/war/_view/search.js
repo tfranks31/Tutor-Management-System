@@ -28,4 +28,5 @@ function addRow2() {
     cell4.id = "dateSubmitted" + index;
     cell4.innerHTML = "March " + (index + 1);
     index++;
+    
 }
