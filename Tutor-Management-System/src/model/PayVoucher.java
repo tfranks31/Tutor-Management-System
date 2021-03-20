@@ -92,21 +92,12 @@ public class PayVoucher {
     public double getTotalHours(){
         return totalHours;
     }
-
-    public void entryValues() {
-    	for (Entry entry: entries) {
-    		System.out.println("entry:" + entry.getHours());
-    	}
-    }
     
     //iterates over every entry in the voucher, sums the hours
     public void CalculateTotalHours(){
-    	entryValues();
     	for (Entry entry: entries){
-        	System.out.println(totalHours + "   " + entry.getHours());
             totalHours += entry.getHours();
-        }
-        System.out.println(totalHours);
+        }   
     }
 
     // generates a blank entry object and adds it to the array list
