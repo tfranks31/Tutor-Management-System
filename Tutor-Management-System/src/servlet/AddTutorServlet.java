@@ -19,7 +19,7 @@ public class AddTutorServlet extends HttpServlet {
 		// Go back to search
 		if (req.getParameter("back") != null) {
 			
-			req.getRequestDispatcher("/_view/payVoucher.jsp").forward(req, resp);
+			req.getRequestDispatcher("/_view/search.jsp").forward(req, resp);
 		}
 		
 		// Load addTutor
@@ -40,7 +40,7 @@ public class AddTutorServlet extends HttpServlet {
 		// If the tutor information is valid, continue to the search page
 		if (tutorValidate(req)) {
 			
-			req.getRequestDispatcher("/_view/payVoucher.jsp").forward(req, resp);
+			req.getRequestDispatcher("/_view/search.jsp").forward(req, resp);
 		}
 		
 		// If the tutor information is invalid, set all parameters with inputed
