@@ -47,7 +47,7 @@ public class TutorTest {
 	public void testSetAccountNumber(){
 		int accountNumber = 55;
 		model.setAccountNumber(accountNumber);
-		assertTrue(model.getAccountNumber() == accountNumber)
+		assertTrue(model.getAccountNumber() == accountNumber);
 	}
 	// test submit payvoucher test
 	// get payvoucher test

@@ -85,20 +85,41 @@ public class PayVoucher {
         return totalPay;
     }
 
+    public void setTotalHours(double totalHours){
+        this.totalHours = totalHours; 
+    }
+
     public double getTotalHours(){
         return totalHours;
     }
 
+    public void entryValues() {
+    	for (Entry entry: entries) {
+    		System.out.println("entry:" + entry.getHours());
+    	}
+    }
+    
     //iterates over every entry in the voucher, sums the hours
-    public void CalculateTotalHours(double hours){
-        for (Entry entry: entries){
+    public void CalculateTotalHours(){
+    	entryValues();
+    	for (Entry entry: entries){
+        	System.out.println(totalHours + "   " + entry.getHours());
             totalHours += entry.getHours();
         }
+        System.out.println(totalHours);
     }
 
     // generates a blank entry object and adds it to the array list
     public void addEntry(){
         Entry entry = new Entry();
         entries.add(entry); 
+    }
+
+    public Entry getEntry(int entryNum){
+        return entries.get(entryNum);
+    } 
+    
+    public void setEntry(int entryNum, Entry entry){
+       entries.set(entryNum, entry);
     }
 }
