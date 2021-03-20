@@ -42,6 +42,13 @@ public class TutorTest {
 		model.setTutorID(12344321);
 		assertTrue(model.getTutorID() == 12344321);
 	}
+
+	@Test
+	public void testSetAccountNumber(){
+		int accountNumber = 55;
+		model.setAccountNumber(accountNumber);
+		assertTrue(model.getAccountNumber() == accountNumber)
+	}
 	// test submit payvoucher test
 	// get payvoucher test
 	// edit payvoucher test

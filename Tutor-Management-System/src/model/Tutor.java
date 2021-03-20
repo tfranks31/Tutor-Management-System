@@ -11,6 +11,7 @@ public class Tutor extends User {
 	private String subject;
 	private double payRate;
 	private int tutorID;
+	private int accountNumber;
 	private PayVoucher payVoucher = new PayVoucher();
 
 	// Constructors
@@ -70,6 +71,12 @@ public class Tutor extends User {
 		return payVoucher;
 	}
 
-	// editPayVoucher()
+	public void setAccountNumber(int accountNumber){
+		this.accountNumber = accountNumber;
+	}
 
+	public int getAccountNumber(){
+		return accountNumber;
+	}
+	// editPayVoucher()
 }
