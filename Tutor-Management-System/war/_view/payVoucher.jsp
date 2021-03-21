@@ -8,7 +8,7 @@
     <link rel="stylesheet" href="./_view/payVoucher.css">
 </head>
 
-<script src="./_view/payVoucher.js"></script>
+<script type="text/javascript" src="./_view/payVoucher.js"></script>
 
 <body>
 
@@ -19,20 +19,27 @@
         Student ID#:
     </div>
 
+	<div class = "back">
+		<form action="${pageContext.servletContext.contextPath}/payVoucher" method="get">
+   	     	<input type="submit" name="back" value="Back">
+   		 </form>
+	</div>
+	
     <div class = "dueDate">
         DueDate:
     </div>
-    
-    <table id = "voucherInfo">
-        <th>Date</th>
-        <th>Hours</th>
-        <th>Service Preformed</th>
-        <th>Where Preformed</th>
-        </tr>
-    </table>
+        <form action="${pageContext.servletContext.contextPath}/payVoucher"method="post">
+            <table id = "voucherInfo">
+                <th>Date</th>
+                <th>Hours</th>
+                <th>Service Preformed</th>
+                <th>Where Preformed</th>
+                </tr>
+            </table>
+    </form>
 
-    <button class = "addRow" onclick="addRow()">Add Row</button>
-  
+    <button class = "addRow" onclick="addRow()">Add Row</button>    
+
     <div class = "payInfo">
         <p> 
            Account Number = ##&#160;&#160;&#160; 
@@ -42,7 +49,9 @@
         </p>
     </div>
 
-    <button class="submit" onclick="addRow()">Submit Pay Voucher</button>
+
+    <button class="submit">Submit Pay Voucher</button>
+
 
 </body>
 

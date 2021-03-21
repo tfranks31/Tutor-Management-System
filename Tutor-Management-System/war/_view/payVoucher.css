@@ -12,6 +12,11 @@ html{
 
 }
 
+.back{
+    float: right;
+    padding: 15px;
+}
+
 table{
     width: 100%;
     margin-top: 100px;

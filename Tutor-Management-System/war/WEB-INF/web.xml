@@ -10,12 +10,22 @@
     <servlet-name>AddTutorServlet</servlet-name>
     <servlet-class>servlet.AddTutorServlet</servlet-class>
   </servlet>
+  
+  <servlet>
+    <servlet-name>PayVoucherServlet</servlet-name>
+    <servlet-class>servlet.PayVoucherServlet</servlet-class>
+  </servlet>
 
 
   <!-- Servlet mappings -->
   <servlet-mapping>
     <servlet-name>AddTutorServlet</servlet-name>
     <url-pattern>/addTutor</url-pattern>
+  </servlet-mapping>
+  
+   <servlet-mapping>
+    <servlet-name>PayVoucherServlet</servlet-name>
+    <url-pattern>/payVoucher</url-pattern>
   </servlet-mapping>
 
   <welcome-file-list>
