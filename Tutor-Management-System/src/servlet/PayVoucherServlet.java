@@ -14,7 +14,7 @@ public class PayVoucherServlet extends HttpServlet{
 	protected void doGet(HttpServletRequest req, HttpServletResponse resp)
 			throws ServletException, IOException {
 
-		System.out.println("AddTutor Servlet: doGet");	
+		System.out.println("PayVoucher Servlet: doGet");	
 		
 		// Go back to search
 		if (req.getParameter("back") != null) {
