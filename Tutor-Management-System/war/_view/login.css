@@ -8,14 +8,36 @@ body {
 
 #loginBox {
     margin: auto;
+    margin-top: 100px;
     padding: 10px; 
     width: 300px;
-    height: 400px;
+    height: 370px;
     text-align: center;
-    background: #669e62;
-    background-image: url("Potato.jpg");
+    background: #e1eae2;
     background-size: cover;
     background-position: center;
     color: rgb(0, 0, 0);
     border-radius: 25px;
+}
+
+#input {
+    width: 235px;
+    height: 24px;
+    font-size: 16px;
+    border: 0px;
+}
+
+#submit {
+    background-color:black;
+    color: white;
+    font-size: 18px;
+    text-align: center;
+    width: 160px;
+    height: 35px;
+    border-radius: 35px;
+    border: 0px;
+}
+
+.label {
+    font-size: 20px;
 }

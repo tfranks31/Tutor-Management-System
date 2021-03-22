@@ -16,6 +16,11 @@
     <servlet-class>servlet.PayVoucherServlet</servlet-class>
   </servlet>
 
+  <servlet>
+    <servlet-name>LoginServlet</servlet-name>
+    <servlet-class>servlet.Login</servlet-class>
+  </servlet>
+
 
   <!-- Servlet mappings -->
   <servlet-mapping>
@@ -23,9 +28,14 @@
     <url-pattern>/addTutor</url-pattern>
   </servlet-mapping>
   
-   <servlet-mapping>
+  <servlet-mapping>
     <servlet-name>PayVoucherServlet</servlet-name>
     <url-pattern>/payVoucher</url-pattern>
+  </servlet-mapping>
+
+  <servlet-mapping>
+    <servlet-name>LoginServlet</servlet-name>
+    <url-pattern>/login</url-pattern>
   </servlet-mapping>
 
   <welcome-file-list>
