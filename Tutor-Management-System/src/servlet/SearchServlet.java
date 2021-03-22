@@ -14,7 +14,15 @@ public class SearchServlet extends HttpServlet{
 	protected void doGet(HttpServletRequest req, HttpServletResponse resp)
 			throws ServletException, IOException {
 
-		System.out.println("Search Servlet: doGet");	
-		req.getRequestDispatcher("/_view/search.jsp").forward(req, resp);
+		System.out.println("Search Servlet: doGet");
+		
+		if (req.getParameter("addTutor") != null) {
+			
+			resp.sendRedirect("addTutor");
+		}
+		else {
+			
+			req.getRequestDispatcher("/_view/search.jsp").forward(req, resp);
+		}
 	}
 }

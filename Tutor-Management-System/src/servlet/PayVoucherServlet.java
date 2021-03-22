@@ -19,7 +19,7 @@ public class PayVoucherServlet extends HttpServlet{
 		// Go back to search
 		if (req.getParameter("back") != null) {
 			
-			req.getRequestDispatcher("/_view/search.jsp").forward(req, resp);
+			resp.sendRedirect("search");
 		}
 		
 		// Load addTutor

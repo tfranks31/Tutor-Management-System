@@ -22,8 +22,8 @@
         </form>
     </div>
     
-    <form>
-        <button class="addTutor">Add Tutor</button>
+    <form action="${pageContext.servletContext.contextPath}/search" method="get">
+        <input type="submit" name="addTutor" value="Add Tutor" class="addTutor"></input>
     </form>
 
     <table id = "searchResults">

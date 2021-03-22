@@ -27,7 +27,7 @@ public class LoginServlet extends HttpServlet{
 		
 		// Go to search if the user has logged in
 		if (loginValidate(req)) {
-			req.getRequestDispatcher("/_view/search.jsp").forward(req, resp);
+			resp.sendRedirect("search");
 		}
 		// Load addTutor
 		else {
