@@ -11,16 +11,19 @@ public class Tutor extends User {
 	private String subject;
 	private double payRate;
 	private int tutorID;
-	private int accountNumber;
+	private String accountNumber;
 	private PayVoucher payVoucher = new PayVoucher();
+	private String studentID;
 
 	// Constructors
 	public Tutor() {
-		name = "null";
-		email = "null";
-		subject = "null";
+		name = null;
+		email = null;
+		subject = null;
+		accountNumber = null;
 		payRate = 0.0;
 		tutorID = 0;
+		studentID = null;
 	}
 
 	public void setName(String name) {
@@ -71,12 +74,30 @@ public class Tutor extends User {
 		return payVoucher;
 	}
 
-	public void setAccountNumber(int accountNumber){
+	public void setAccountNumber(String accountNumber){
 		this.accountNumber = accountNumber;
 	}
 
-	public int getAccountNumber(){
+	public String getAccountNumber(){
 		return accountNumber;
+	}
+	
+	/**
+	 * Get this Tutor's Student ID
+	 * @return This Tutor's Student ID
+	 */
+	public String getStudentID() {
+		
+		return studentID;
+	}
+	
+	/**
+	 * Set this Tutor's Student ID
+	 * @param studentID This Tutor's new Student ID
+	 */
+	public void setStudentID(String studentID) {
+		
+		this.studentID = studentID;
 	}
 	// editPayVoucher()
 }

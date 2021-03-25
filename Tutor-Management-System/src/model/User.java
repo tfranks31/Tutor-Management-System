@@ -11,7 +11,7 @@ public abstract class User {
 	
 	/**
 	 * Get this User's username.
-	 * @return The User's username.
+	 * @return This User's username.
 	 */
 	public String getUsername() {
 		
@@ -20,7 +20,7 @@ public abstract class User {
 	
 	/**
 	 * Set this User's username.
-	 * @param username The User's new username
+	 * @param username This User's new username
 	 */
 	public void setUsername(String username) {
 		
@@ -29,7 +29,7 @@ public abstract class User {
 	
 	/**
 	 * Get this User's Password.
-	 * @return The User's Password.
+	 * @return This User's Password.
 	 */
 	public String getPassword() {
 		
@@ -38,7 +38,7 @@ public abstract class User {
 	
 	/**
 	 * Set this User's password
-	 * @param password The User's new password
+	 * @param password This User's new password
 	 */
 	public void setPassword(String password) {
 		

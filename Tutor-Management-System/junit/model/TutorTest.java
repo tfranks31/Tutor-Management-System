@@ -16,13 +16,13 @@ public class TutorTest {
 	@Test
 	public void testSetGetName() {
 		model.setName("Ethan");
-		assertTrue(model.getName() == "Ethan");
+		assertTrue(model.getName().equals("Ethan"));
 	}
 
 	@Test
 	public void testSetGetEmail() {
 		model.setEmail("testemail@gmail.com");
-		assertTrue(model.getEmail() == "testemail@gmail.com");
+		assertTrue(model.getEmail().equals("testemail@gmail.com"));
 	}
 
 	@Test
@@ -34,7 +34,7 @@ public class TutorTest {
 	@Test
 	public void testSetGetSubject() {
 		model.setSubject("Computer Science");
-		assertTrue(model.getSubject() == "Computer Science");
+		assertTrue(model.getSubject().equals("Computer Science"));
 	}
 
 	@Test
@@ -44,10 +44,18 @@ public class TutorTest {
 	}
 
 	@Test
-	public void testSetAccountNumber(){
-		int accountNumber = 55;
+	public void testSetAccountNumber() {
+		String accountNumber = "55";
 		model.setAccountNumber(accountNumber);
-		assertTrue(model.getAccountNumber() == accountNumber);
+		assertTrue(model.getAccountNumber().equals(accountNumber));
+	}
+	
+	@Test
+	public void testGetSetStudentID() {
+		
+		String studentID = "55";
+		model.setStudentID(studentID);
+		assertTrue(model.getStudentID().equals(studentID));
 	}
 	// test submit payvoucher test
 	// get payvoucher test
