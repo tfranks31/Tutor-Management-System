@@ -52,6 +52,7 @@ public class AddTutorServlet extends HttpServlet {
 			req.setAttribute("username", req.getParameter("username"));
 			req.setAttribute("password", req.getParameter("password"));
 			req.setAttribute("email", req.getParameter("email"));
+			req.setAttribute("studentID", req.getParameter("studentID"));
 			req.setAttribute("accountNumber", req.getParameter("accountNumber"));
 			req.setAttribute("subject", req.getParameter("subject"));
 			req.setAttribute("payRate", req.getParameter("payRate"));
@@ -73,14 +74,15 @@ public class AddTutorServlet extends HttpServlet {
 		String username = req.getParameter("username");
 		String password = req.getParameter("password");
 		String email = req.getParameter("email");
+		String studentID = req.getParameter("studentID");
 		String accountNumber = req.getParameter("accountNumber");
 		String subject = req.getParameter("subject");
 		String payRate = req.getParameter("payRate");
 		
 		// Assemble inputs into an array to check for empty inputs
 		String[] inputs = new String[] {firstName, lastName, username,
-										password, email, accountNumber,
-										subject, payRate};
+										password, email, studentID,
+										accountNumber, subject, payRate};
 		
 		// Check all inputs to see if any are empty
 		for (String input : inputs) {
@@ -95,44 +97,28 @@ public class AddTutorServlet extends HttpServlet {
 		// Check that firstName only contains letters
 		if (!firstName.matches("^[a-zA-Z]*$")) {
 			
-			req.setAttribute("errorMessage",
-							 "First Name can only contain letters");
+			req.setAttribute("errorMessage", "First Name can only contain letters");
 			return false;
 		}
 		
 		// Check that lastName only contains letters
 		if (!lastName.matches("^[a-zA-Z]*$")) {
 			
-			req.setAttribute("errorMessage",
-							 "Last Name can only contain letters");
+			req.setAttribute("errorMessage", "Last Name can only contain letters");
 			return false;
 		}
 		
 		// Check that email is in a valid email format
 		if (!email.matches("^[\\w-_\\.+]*[\\w-_\\.]\\@([\\w]+\\.)+[\\w]+[\\w]$")) {
 			
-			req.setAttribute("errorMessage",
-					 		 "Please enter a valid Email address");
+			req.setAttribute("errorMessage", "Please enter a valid Email address");
 			return false;
 		}
 		
-		// Check that accountNumber is an integer
-		try {
+		// Check that student ID only contains numbers
+		if (!studentID.matches("^[0-9]*$")) {
 			
-			Integer.valueOf(accountNumber);
-		}
-		catch (NumberFormatException e) {
-			
-			req.setAttribute("errorMessage",
-			 		 		 "Account Number can only contain integer numbers");
-			return false;
-		}
-		
-		// Check that accountNumber is positive
-		if (Integer.valueOf(accountNumber) <= 0) {
-			
-			req.setAttribute("errorMessage",
-	 		 		 		 "Account Number must be positive");
+			req.setAttribute("errorMessage", "Student ID can only contain numbers");
 			return false;
 		}
 		
@@ -143,16 +129,14 @@ public class AddTutorServlet extends HttpServlet {
 		}
 		catch (NumberFormatException e) {
 			
-			req.setAttribute("errorMessage",
-			 		 		 "Pay Rate can only contain decimal numbers");
+			req.setAttribute("errorMessage", "Pay Rate can only contain decimal numbers");
 			return false;
 		}
 		
 		// Check that payRate is positive
 		if (Double.valueOf(payRate) <= 0) {
 			
-			req.setAttribute("errorMessage",
-	 		 		 		 "Pay Rate must be positive");
+			req.setAttribute("errorMessage", "Pay Rate must be positive");
 			return false;
 		}
 		

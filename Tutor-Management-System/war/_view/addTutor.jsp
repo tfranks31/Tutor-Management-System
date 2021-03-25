@@ -53,6 +53,14 @@
         		</tr>
         		<tr>
         			<td>
+        				<label for="studentID" class="label">Student ID:</label>
+        			</td>
+        			<td>
+        				<input type="text" id="studentID" name="studentID" value="${studentID}">
+        			</td>
+        		</tr>
+        		<tr>
+        			<td>
         				<label for="accountNumber" class="label">Account Number:</label>
         			</td>
         			<td>
