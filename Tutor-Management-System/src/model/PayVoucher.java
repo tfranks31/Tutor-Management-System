@@ -14,6 +14,7 @@ public class PayVoucher {
     private final int defaultVoucherSize = 10; //10 entries per blank voucher
 
     private String dueDate;
+    private String startDate;
     private double totalHours;
     private double totalPay;
     private boolean isSubmitted;
@@ -24,6 +25,7 @@ public class PayVoucher {
 
     public PayVoucher(){
         dueDate = "null";
+        startDate = "null";
         totalHours = 0.0;
         totalPay = 0.0;
         isSubmitted = false;
@@ -112,5 +114,23 @@ public class PayVoucher {
     
     public void setEntry(int entryNum, Entry entry){
        entries.set(entryNum, entry);
+    }
+    
+    /**
+     * Get this PayVoucher's starting date
+     * @return This PayVoucher's starting date
+     */
+    public String getStartDate() {
+    	
+    	return startDate;
+    }
+    
+    /**
+     * Set this PayVoucher's starting date
+     * @param startDate This PayVoucher's starting date
+     */
+    public void setStartDate(String startDate) {
+    	
+    	this.startDate = startDate;
     }
 }

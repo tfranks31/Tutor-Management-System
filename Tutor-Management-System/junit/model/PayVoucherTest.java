@@ -41,8 +41,8 @@ public class PayVoucherTest{
 
     @Test
     public void testSetGetDueDate(){
-        model.setDueDate("3/20/21");
-        assertTrue(model.getDueDate() == "3/20/21");
+        model.setDueDate("03/20/21");
+        assertTrue(model.getDueDate() == "03/20/21");
     }
 
     @Test
@@ -74,11 +74,18 @@ public class PayVoucherTest{
     @Test
     public void testSetEntry() {
     	Entry entry = new Entry();
-    	entry.setDate("3/14/2021");
+    	entry.setDate("03/14/2021");
     	entry.setHours(2.0);
     	entry.setServicePerformed("Tutoring");
     	entry.setWherePerformed("zoom");
     	model.setEntry(0, entry);
     	assertEquals(model.getEntry(0), entry);
+    }
+    
+    @Test
+    public void testGetSetStartDate() {
+    	
+    	model.setStartDate("3/14/2021");
+    	assertEquals("3/14/2021", model.getStartDate());
     }
 }
