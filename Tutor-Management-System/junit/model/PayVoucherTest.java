@@ -51,6 +51,12 @@ public class PayVoucherTest{
         model.calculatePay(25, 7.25);
         assertTrue(model.getTotalPay() == pay);
     }
+    
+    @Test void testGetSetTotalPay() {
+    	
+    	model.setTotalPay(15.5);
+    	assertTrue(model.getTotalPay() == 15.5);
+    }
 
     @Test
     public void testCalculateTotalHours(){
@@ -87,5 +93,19 @@ public class PayVoucherTest{
     	
     	model.setStartDate("3/14/2021");
     	assertEquals("3/14/2021", model.getStartDate());
+    }
+    
+    @Test
+    public void testGetSetPayVoucherID() {
+    	
+    	model.setPayVoucherID(1);
+    	assertEquals(1, model.getPayVoucherID());
+    }
+    
+    @Test
+    public void testGetSetAccountID() {
+    	
+    	model.setAccountID(1);
+    	assertEquals(1, model.getAccountID());
     }
 }

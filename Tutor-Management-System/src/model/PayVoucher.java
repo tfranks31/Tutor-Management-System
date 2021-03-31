@@ -21,6 +21,8 @@ public class PayVoucher {
     private boolean isSigned;
     private boolean isNew;
     private boolean isAdminEdited;
+    private int payVoucherID;
+    private int accountID;
     private ArrayList<Entry> entries = new ArrayList<Entry>();
 
     public PayVoucher(){
@@ -32,6 +34,8 @@ public class PayVoucher {
         isSigned = false;
         isNew = false;
         isAdminEdited = false;
+        payVoucherID = -1;
+        accountID = -1;
 
         //initializes default number of entries per voucher, currently 10
         for (int i = 0; i < defaultVoucherSize; i++){
@@ -86,6 +90,10 @@ public class PayVoucher {
     public double getTotalPay(){
         return totalPay;
     }
+    
+    public void setTotalPay(double totalPay) {
+    	this.totalPay = totalPay;
+    }
 
     public void setTotalHours(double totalHours){
         this.totalHours = totalHours; 
@@ -117,8 +125,8 @@ public class PayVoucher {
     }
     
     /**
-     * Get this PayVoucher's starting date
-     * @return This PayVoucher's starting date
+     * Get this PayVoucher's starting date.
+     * @return This PayVoucher's starting date.
      */
     public String getStartDate() {
     	
@@ -126,11 +134,47 @@ public class PayVoucher {
     }
     
     /**
-     * Set this PayVoucher's starting date
-     * @param startDate This PayVoucher's starting date
+     * Set this PayVoucher's starting date.
+     * @param startDate This PayVoucher's starting date.
      */
     public void setStartDate(String startDate) {
     	
     	this.startDate = startDate;
+    }
+    
+    /**
+     * Get this PayVoucher's pay voucher ID.
+     * @return This PayVoucher's pay voucher ID.
+     */
+    public int getPayVoucherID() {
+    	
+    	return payVoucherID;
+    }
+    
+    /**
+     * Set this PayVoucher's pay voucher ID.
+     * @param payVoucherID This PayVoucher's new pay voucher ID.
+     */
+    public void setPayVoucherID(int payVoucherID) {
+    	
+    	this.payVoucherID = payVoucherID;
+    }
+    
+    /**
+     * Get this PayVoucher's account ID.
+     * @return This Payvoucher's account ID.
+     */
+    public int getAccountID() {
+    	
+    	return accountID;
+    }
+    
+    /**
+     * Set this PayVoucher's account ID.
+     * @param accountID This PayVoucher's new account ID.
+     */
+    public void setAccountID(int accountID) {
+    	
+    	this.accountID = accountID;
     }
 }

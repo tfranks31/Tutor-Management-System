@@ -10,7 +10,7 @@ package model;
  */
 
 
-public class Admin extends User {
+public class Admin extends UserAccount {
     private Tutor tutor = new Tutor();
 
     // Constructor

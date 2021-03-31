@@ -1,5 +1,6 @@
 package model;
 
+import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 import org.junit.Before;
 import org.junit.Test;
@@ -57,7 +58,13 @@ public class TutorTest {
 		model.setStudentID(studentID);
 		assertTrue(model.getStudentID().equals(studentID));
 	}
+	
+	@Test
+	public void testGetSetAccountID() {
+		
+		model.setAccountID(1);
+		assertEquals(1, model.getAccountID());
+	}
 	// test submit payvoucher test
 	// get payvoucher test
-	// edit payvoucher test
 }

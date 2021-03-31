@@ -5,12 +5,13 @@ package model;
  * payrate and tutorID
  */
 
-public class Tutor extends User {
+public class Tutor extends UserAccount {
 	private String name;
 	private String email;
 	private String subject;
 	private double payRate;
 	private int tutorID;
+	private int accountID;
 	private String accountNumber;
 	private PayVoucher payVoucher = new PayVoucher();
 	private String studentID;
@@ -92,12 +93,29 @@ public class Tutor extends User {
 	}
 	
 	/**
-	 * Set this Tutor's Student ID
-	 * @param studentID This Tutor's new Student ID
+	 * Set this Tutor's Student ID.
+	 * @param studentID This Tutor's new Student ID.
 	 */
 	public void setStudentID(String studentID) {
 		
 		this.studentID = studentID;
 	}
-	// editPayVoucher()
+	
+	/**
+	 * Get this Tutor's Account ID.
+	 * @return This Tutor's Account ID.
+	 */
+	public int getAccountID() {
+		
+		return accountID;
+	}
+	
+	/**
+	 * Set this Tutor's Account ID.
+	 * @param accountID This Tutor's new Account ID.
+	 */
+	public void setAccountID(int accountID) {
+		
+		this.accountID = accountID;
+	}
 }
