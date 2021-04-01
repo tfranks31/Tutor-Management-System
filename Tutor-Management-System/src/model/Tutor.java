@@ -13,7 +13,7 @@ public class Tutor extends UserAccount {
 	private int tutorID;
 	private int accountID;
 	private String accountNumber;
-	private PayVoucher payVoucher = new PayVoucher();
+//	private PayVoucher payVoucher = new PayVoucher();
 	private String studentID;
 
 	// Constructors
@@ -67,13 +67,13 @@ public class Tutor extends UserAccount {
 		return subject;
 	}
 
-	public void submitPayVoucher() {
-		payVoucher.setIsSubmitted(true);
-	}
-
-	public PayVoucher getPayVoucher() {
-		return payVoucher;
-	}
+//	public void submitPayVoucher() {
+//		payVoucher.setIsSubmitted(true);
+//	}
+//
+//	public PayVoucher getPayVoucher() {
+//		return payVoucher;
+//	}
 
 	public void setAccountNumber(String accountNumber){
 		this.accountNumber = accountNumber;

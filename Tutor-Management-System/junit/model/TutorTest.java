@@ -46,7 +46,7 @@ public class TutorTest {
 
 	@Test
 	public void testSetAccountNumber() {
-		String accountNumber = "55";
+		String accountNumber = "ab55";
 		model.setAccountNumber(accountNumber);
 		assertTrue(model.getAccountNumber().equals(accountNumber));
 	}

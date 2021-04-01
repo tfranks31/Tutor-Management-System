@@ -13,9 +13,9 @@ public class Entry {
 	private int payVoucherID;
 	
 	public Entry(){
-		date = "null";
-		servicePerformed = "null";
-		wherePerformed = "null";
+		date = null;
+		servicePerformed = null;
+		wherePerformed = null;
 		hours = 0.0;
 		entryID = -1;
 		payVoucherID = -1;

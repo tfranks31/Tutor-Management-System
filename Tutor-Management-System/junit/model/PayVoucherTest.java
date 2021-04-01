@@ -45,12 +45,12 @@ public class PayVoucherTest{
         assertTrue(model.getDueDate() == "03/20/21");
     }
 
-    @Test
-    public void testCalculatePay(){
-        double pay = 25 * 7.25;
-        model.calculatePay(25, 7.25);
-        assertTrue(model.getTotalPay() == pay);
-    }
+//    @Test
+//    public void testCalculatePay(){
+//        double pay = 25 * 7.25;
+//        model.calculatePay(25, 7.25);
+//        assertTrue(model.getTotalPay() == pay);
+//    }
     
     @Test void testGetSetTotalPay() {
     	
@@ -58,35 +58,35 @@ public class PayVoucherTest{
     	assertTrue(model.getTotalPay() == 15.5);
     }
 
-    @Test
-    public void testCalculateTotalHours(){
-        //Sets hours of each entry to its index in the default entry array in
-        //the payVoucher. Then calls getTotalHours()
-        for (int i = 0; i < 10; i++){ 
-            entry.setHours((double) 2);
-            model.setEntry(i, entry);
-        }
-        
-        model.CalculateTotalHours();
-        assertTrue(model.getTotalHours() == 20.0);
-    }
+//    @Test
+//    public void testCalculateTotalHours(){
+//        //Sets hours of each entry to its index in the default entry array in
+//        //the payVoucher. Then calls getTotalHours()
+//        for (int i = 0; i < 10; i++){ 
+//            entry.setHours((double) 2);
+//            model.setEntry(i, entry);
+//        }
+//        
+//        model.CalculateTotalHours();
+//        assertTrue(model.getTotalHours() == 20.0);
+//    }
     
     @Test
-    public void testSetTotalHours(){
+    public void testGetSetTotalHours(){
         model.setTotalHours(13);
         assertTrue(model.getTotalHours() == 13);
     }
     
-    @Test
-    public void testSetEntry() {
-    	Entry entry = new Entry();
-    	entry.setDate("03/14/2021");
-    	entry.setHours(2.0);
-    	entry.setServicePerformed("Tutoring");
-    	entry.setWherePerformed("zoom");
-    	model.setEntry(0, entry);
-    	assertEquals(model.getEntry(0), entry);
-    }
+//    @Test
+//    public void testSetEntry() {
+//    	Entry entry = new Entry();
+//    	entry.setDate("03/14/2021");
+//    	entry.setHours(2.0);
+//    	entry.setServicePerformed("Tutoring");
+//    	entry.setWherePerformed("zoom");
+//    	model.setEntry(0, entry);
+//    	assertEquals(model.getEntry(0), entry);
+//    }
     
     @Test
     public void testGetSetStartDate() {

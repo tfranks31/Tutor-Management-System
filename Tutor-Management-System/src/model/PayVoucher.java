@@ -11,7 +11,7 @@ import java.util.ArrayList;
 
 public class PayVoucher {
     
-    private final int defaultVoucherSize = 10; //10 entries per blank voucher
+//    private final int defaultVoucherSize = 10; //10 entries per blank voucher
 
     private String dueDate;
     private String startDate;
@@ -23,11 +23,11 @@ public class PayVoucher {
     private boolean isAdminEdited;
     private int payVoucherID;
     private int tutorID;
-    private ArrayList<Entry> entries = new ArrayList<Entry>();
+//    private ArrayList<Entry> entries = new ArrayList<Entry>();
 
     public PayVoucher(){
-        dueDate = "null";
-        startDate = "null";
+        dueDate = null;
+        startDate = null;
         totalHours = 0.0;
         totalPay = 0.0;
         isSubmitted = false;
@@ -38,9 +38,9 @@ public class PayVoucher {
         tutorID = -1;
 
         //initializes default number of entries per voucher, currently 10
-        for (int i = 0; i < defaultVoucherSize; i++){
-            addEntry();
-        }
+//        for (int i = 0; i < defaultVoucherSize; i++){
+//            addEntry();
+//        }
     }
 
     public void setIsSubmitted(boolean isSubmitted){
@@ -83,9 +83,9 @@ public class PayVoucher {
         return dueDate;
     }
 
-    public void calculatePay(double hours, double payRate){
-        totalPay = hours * payRate;
-    }
+//    public void calculatePay(double hours, double payRate){
+//        totalPay = hours * payRate;
+//    }
 
     public double getTotalPay(){
         return totalPay;
@@ -103,26 +103,26 @@ public class PayVoucher {
         return totalHours;
     }
     
-    //iterates over every entry in the voucher, sums the hours
-    public void CalculateTotalHours(){
-    	for (Entry entry: entries){
-            totalHours += entry.getHours();
-        }   
-    }
-
-    // generates a blank entry object and adds it to the array list
-    public void addEntry(){
-        Entry entry = new Entry();
-        entries.add(entry); 
-    }
-
-    public Entry getEntry(int entryNum){
-        return entries.get(entryNum);
-    } 
-    
-    public void setEntry(int entryNum, Entry entry){
-       entries.set(entryNum, entry);
-    }
+//    //iterates over every entry in the voucher, sums the hours
+//    public void CalculateTotalHours(){
+//    	for (Entry entry: entries){
+//            totalHours += entry.getHours();
+//        }   
+//    }
+//
+//    // generates a blank entry object and adds it to the array list
+//    public void addEntry(){
+//        Entry entry = new Entry();
+//        entries.add(entry); 
+//    }
+//
+//    public Entry getEntry(int entryNum){
+//        return entries.get(entryNum);
+//    } 
+//    
+//    public void setEntry(int entryNum, Entry entry){
+//       entries.set(entryNum, entry);
+//    }
     
     /**
      * Get this PayVoucher's starting date.
