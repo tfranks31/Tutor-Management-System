@@ -22,7 +22,7 @@ public class PayVoucher {
     private boolean isNew;
     private boolean isAdminEdited;
     private int payVoucherID;
-    private int accountID;
+    private int tutorID;
     private ArrayList<Entry> entries = new ArrayList<Entry>();
 
     public PayVoucher(){
@@ -35,7 +35,7 @@ public class PayVoucher {
         isNew = false;
         isAdminEdited = false;
         payVoucherID = -1;
-        accountID = -1;
+        tutorID = -1;
 
         //initializes default number of entries per voucher, currently 10
         for (int i = 0; i < defaultVoucherSize; i++){
@@ -161,20 +161,20 @@ public class PayVoucher {
     }
     
     /**
-     * Get this PayVoucher's account ID.
-     * @return This Payvoucher's account ID.
+     * Get this PayVoucher's tutor ID.
+     * @return This Payvoucher's tutor ID.
      */
-    public int getAccountID() {
+    public int getTutorID() {
     	
-    	return accountID;
+    	return tutorID;
     }
     
     /**
-     * Set this PayVoucher's account ID.
-     * @param accountID This PayVoucher's new account ID.
+     * Set this PayVoucher's tutor ID.
+     * @param accountID This PayVoucher's new tutor ID.
      */
-    public void setAccountID(int accountID) {
+    public void setTutorID(int tutorID) {
     	
-    	this.accountID = accountID;
+    	this.tutorID = tutorID;
     }
 }

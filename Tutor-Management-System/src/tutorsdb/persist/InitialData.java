@@ -91,7 +91,7 @@ public class InitialData {
 				
 				// auto-generate pay voucher ID
 				payVoucher.setPayVoucherID(payVoucherID++);
-				payVoucher.setAccountID(Integer.parseInt(i.next()));
+				payVoucher.setTutorID(Integer.parseInt(i.next()));
 				payVoucher.setStartDate(i.next());
 				payVoucher.setDueDate(i.next());
 				payVoucher.setTotalHours(Integer.parseInt(i.next()));

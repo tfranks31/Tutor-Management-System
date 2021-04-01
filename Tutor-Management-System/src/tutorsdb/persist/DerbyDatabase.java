@@ -3,7 +3,15 @@ package tutorsdb.persist;
 import java.io.IOException;
 import java.sql.Connection;
 import java.sql.DriverManager;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.List;
+
+import model.Entry;
+import model.PayVoucher;
+import model.Tutor;
+import model.UserAccount;
 
 // Initially refactored from Library Example
 public class DerbyDatabase implements IDatabase {
@@ -80,13 +88,123 @@ public class DerbyDatabase implements IDatabase {
 		return conn;
 	}
 	
+	private void loadUserAccount(UserAccount account, ResultSet resultSet, int index) throws SQLException {
+		
+		account.setAccountID(resultSet.getInt(index++));				
+		account.setUsername(resultSet.getString(index++));
+		account.setPassword(resultSet.getString(index++));
+	}
+	
+	private void loadTutor(Tutor tutor, ResultSet resultSet, int index) throws SQLException {
+		
+		tutor.setTutorID(resultSet.getInt(index++));
+		tutor.setAccountID(resultSet.getInt(index++));
+		tutor.setName(resultSet.getString(index++));
+		tutor.setEmail(resultSet.getString(index++));
+		tutor.setStudentID(resultSet.getString(index++));
+		tutor.setAccountNumber(resultSet.getString(index++));
+		tutor.setSubject(resultSet.getString(index++));
+		tutor.setPayRate(resultSet.getDouble(index++));
+	}
+	
+	private void loadPayVoucher(PayVoucher payVoucher, ResultSet resultSet, int index) throws SQLException {
+		
+		payVoucher.setPayVoucherID(resultSet.getInt(index++));
+		payVoucher.setTutorID(resultSet.getInt(index++));
+		payVoucher.setStartDate(resultSet.getString(index++));
+		payVoucher.setDueDate(resultSet.getString(index++));
+		payVoucher.setTotalHours(resultSet.getInt(index++));
+		payVoucher.setTotalPay(resultSet.getDouble(index++));
+		payVoucher.setIsSubmitted(resultSet.getBoolean(index++));
+		payVoucher.setIsSigned(resultSet.getBoolean(index++));
+		payVoucher.setIsNew(resultSet.getBoolean(index++));
+		payVoucher.setIsAdminEdited(resultSet.getBoolean(index++));
+	}
+	
+	private void loadEntry(Entry entry, ResultSet resultSet, int index) throws SQLException {
+		
+		entry.setEntryID(resultSet.getInt(index++));
+		entry.setPayVoucherID(resultSet.getInt(index++));
+		entry.setDate(resultSet.getString(index++));
+		entry.setServicePerformed(resultSet.getString(index++));
+		entry.setWherePerformed(resultSet.getString(index++));
+		entry.setHours(resultSet.getDouble(index++));
+	}
+	
 	//  creates the Tutors, Accounts and PayVouchers tables
 	public void createTables() {
 		executeTransaction(new Transaction<Boolean>() {
 			@Override
 			public Boolean execute(Connection conn) throws SQLException {
 				
-				throw new UnsupportedOperationException("Not Yet Implemented");
+				PreparedStatement stmt1 = null;
+				PreparedStatement stmt2 = null;
+				PreparedStatement stmt3 = null;
+				PreparedStatement stmt4 = null;
+				
+				try {
+					stmt1 = conn.prepareStatement(
+						"create table user_accounts (" +
+						"	user_account_id integer primary key " +
+						"		generated always as identity (start with 1, increment by 1), " +									
+						"	username varchar(40)," +
+						"	password varchar(40)" +
+						")"
+					);	
+					stmt1.executeUpdate();
+					
+					stmt2 = conn.prepareStatement(
+						"create table tutors (" +
+						"	tutor_id integer primary key " +
+						"		generated always as identity (start with 1, increment by 1), " +
+						"	user_account_id integer constraint user_account_id references user_accounts, " +
+						"	name varchar(80)," +
+						"	email varchar(80)," +
+						"   student_id varchar(16), " +
+						"   account_number varchar(16), " +
+						"   subject varchar(40), " +
+						"   pay_rate double" +
+						")"
+					);
+					stmt2.executeUpdate();
+					
+					stmt3 = conn.prepareStatement(
+						"create table pay_vouchers (" +
+						"	pay_voucher_id integer primary key " +
+						"		generated always as identity (start with 1, increment by 1), " +									
+						"	tutor_id integer constraint tutor_id references tutors, " +
+						"	start_date varchar(12)," +
+						"	due_date varchar(12)," +
+						"   total_hours double," +
+						"   total_pay double," +
+						"   is_submitted boolean," +
+						"   is_signed boolean," +
+						"   is_new boolean," +
+						"   is_admin_edited boolean" +
+						")"
+					);	
+					stmt3.executeUpdate();
+					
+					stmt4 = conn.prepareStatement(
+						"create table entries (" +
+						"	entry_id integer primary key " +
+						"		generated always as identity (start with 1, increment by 1), " +
+						"	pay_voucher_id integer constraint pay_voucher_id references pay_vouchers, " +
+						"	date varchar(12)," +
+						"	service_performed varchar(250)," +
+						"   where_performed varchar(120), " +
+						"   hours double" +
+						")"
+					);
+					stmt4.executeUpdate();
+					
+					return true;
+				} finally {
+					DBUtil.closeQuietly(stmt1);
+					DBUtil.closeQuietly(stmt2);
+					DBUtil.closeQuietly(stmt3);
+					DBUtil.closeQuietly(stmt4);
+				}
 			}
 		});
 	}
@@ -97,7 +215,87 @@ public class DerbyDatabase implements IDatabase {
 			@Override
 			public Boolean execute(Connection conn) throws SQLException {
 				
-				throw new UnsupportedOperationException("Not Yet Implemented");
+				List<UserAccount> accountList;
+				List<Tutor> tutorList;
+				List<PayVoucher> payVoucherList;
+				List<Entry> entryList;
+				
+				try {
+					accountList = InitialData.getUserAccounts();
+					tutorList = InitialData.getTutors();
+					payVoucherList = InitialData.getPayVouchers();
+					entryList = InitialData.getEntries();
+				} catch (IOException e) {
+					throw new SQLException("Couldn't read initial data", e);
+				}
+				
+				PreparedStatement insertUserAccount = null;
+				PreparedStatement insertTutor = null;
+				PreparedStatement insertPayVoucher = null;
+				PreparedStatement insertEntry = null;
+				
+				try {
+					// populate user_accounts table (do user_accounts first, since account_id is foreign key in tutors and pay_voucher tables)
+					insertUserAccount = conn.prepareStatement("insert into user_accounts (username, password) values (?, ?)");
+					for (UserAccount account : accountList) {
+						insertUserAccount.setString(1, account.getUsername());
+						insertUserAccount.setString(2, account.getPassword());
+						insertUserAccount.addBatch();
+					}
+					insertUserAccount.executeBatch();
+					
+					// populate tutors table
+					insertTutor = conn.prepareStatement("insert into tutors (user_account_id, name, email, student_id, account_number, subject, pay_rate)" +
+														"values (?, ?, ?, ?, ?, ?, ?)");
+					for (Tutor tutor : tutorList) {
+						insertTutor.setInt(1, tutor.getAccountID());
+						insertTutor.setString(2, tutor.getName());
+						insertTutor.setString(3, tutor.getEmail());
+						insertTutor.setString(4, tutor.getStudentID());
+						insertTutor.setString(5, tutor.getAccountNumber());
+						insertTutor.setString(6, tutor.getSubject());
+						insertTutor.setDouble(7, tutor.getPayRate());
+						insertTutor.addBatch();
+					}
+					insertTutor.executeBatch();
+					
+					// populate pay_vouchers table
+					insertPayVoucher = conn.prepareStatement("insert into pay_vouchers (tutor_id, start_date, due_date, total_hours, total_pay, is_submitted, is_signed, is_new, is_admin_edited)" +
+															 "values (?, ?, ?, ?, ?, ?, ?, ?, ?)");
+					for (PayVoucher payVoucher : payVoucherList) {
+						insertPayVoucher.setInt(1, payVoucher.getTutorID());
+						insertPayVoucher.setString(2, payVoucher.getStartDate());
+						insertPayVoucher.setString(3, payVoucher.getDueDate());
+						insertPayVoucher.setDouble(4, payVoucher.getTotalHours());
+						insertPayVoucher.setDouble(5, payVoucher.getTotalPay());
+						insertPayVoucher.setBoolean(6, payVoucher.getIsSubmitted());
+						insertPayVoucher.setBoolean(7, payVoucher.getIsSigned());
+						insertPayVoucher.setBoolean(8, payVoucher.getIsNew());
+						insertPayVoucher.setBoolean(9, payVoucher.getIsAdminEdited());
+						insertPayVoucher.addBatch();
+					}
+					insertPayVoucher.executeBatch();
+					
+					// populate entries table
+					insertEntry = conn.prepareStatement("insert into entries (pay_voucher_id, date, service_performed, where_performed, hours)" +
+														"values (?, ?, ?, ?, ?)");
+					for (Entry entry : entryList) {
+						insertEntry.setInt(1, entry.getPayVoucherID());
+						insertEntry.setString(2, entry.getDate());
+						insertEntry.setString(3, entry.getServicePerformed());
+						insertEntry.setString(4, entry.getWherePerformed());
+						insertEntry.setDouble(5, entry.getHours());
+						insertEntry.addBatch();
+					}
+					insertEntry.executeBatch();
+					
+					return true;
+				} finally {
+					DBUtil.closeQuietly(insertUserAccount);
+					DBUtil.closeQuietly(insertTutor);
+					DBUtil.closeQuietly(insertPayVoucher);
+					DBUtil.closeQuietly(insertEntry);
+				}
 			}
 		});
 	}
@@ -111,6 +309,6 @@ public class DerbyDatabase implements IDatabase {
 		System.out.println("Loading initial data...");
 		db.loadInitialData();
 		
-		System.out.println("Library DB successfully initialized!");
+		System.out.println("Tutor DB successfully initialized!");
 	}
 }

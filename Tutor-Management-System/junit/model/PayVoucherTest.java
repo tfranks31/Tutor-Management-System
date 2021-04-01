@@ -103,9 +103,9 @@ public class PayVoucherTest{
     }
     
     @Test
-    public void testGetSetAccountID() {
+    public void testGetSetTutorID() {
     	
-    	model.setAccountID(1);
-    	assertEquals(1, model.getAccountID());
+    	model.setTutorID(1);
+    	assertEquals(1, model.getTutorID());
     }
 }
