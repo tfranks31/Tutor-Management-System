@@ -93,6 +93,7 @@ public class DerbyDatabase implements IDatabase {
 		account.setAccountID(resultSet.getInt(index++));				
 		account.setUsername(resultSet.getString(index++));
 		account.setPassword(resultSet.getString(index++));
+		account.setIsAdmin(resultSet.getBoolean(index++));
 	}
 	
 	private void loadTutor(Tutor tutor, ResultSet resultSet, int index) throws SQLException {
@@ -148,7 +149,8 @@ public class DerbyDatabase implements IDatabase {
 						"	user_account_id integer primary key " +
 						"		generated always as identity (start with 1, increment by 1), " +									
 						"	username varchar(40)," +
-						"	password varchar(40)" +
+						"	password varchar(40)," +
+						"	is_admin boolean" +
 						")"
 					);	
 					stmt1.executeUpdate();
@@ -236,10 +238,11 @@ public class DerbyDatabase implements IDatabase {
 				
 				try {
 					// populate user_accounts table (do user_accounts first, since account_id is foreign key in tutors and pay_voucher tables)
-					insertUserAccount = conn.prepareStatement("insert into user_accounts (username, password) values (?, ?)");
+					insertUserAccount = conn.prepareStatement("insert into user_accounts (username, password, is_admin) values (?, ?, ?)");
 					for (UserAccount account : accountList) {
 						insertUserAccount.setString(1, account.getUsername());
 						insertUserAccount.setString(2, account.getPassword());
+						insertUserAccount.setBoolean(3, account.getIsAdmin());
 						insertUserAccount.addBatch();
 					}
 					insertUserAccount.executeBatch();

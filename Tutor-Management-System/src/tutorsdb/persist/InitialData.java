@@ -31,6 +31,7 @@ public class InitialData {
 				account.setAccountID(accountID++);				
 				account.setUsername(i.next());
 				account.setPassword(i.next());
+				account.setIsAdmin(Boolean.parseBoolean(i.next()));
 				accountList.add(account);
 			}
 			System.out.println("accountList loaded from CSV file");

@@ -9,6 +9,7 @@ public class UserAccount {
 	private String username;
 	private String password;
 	private int accountID;
+	private boolean isAdmin;
 	
 	/**
 	 * Empty UserAccount Constructor
@@ -18,6 +19,7 @@ public class UserAccount {
 		username = null;
 		password = null;
 		accountID = -1;
+		isAdmin = false;
 	}
 	
 	/**
@@ -26,11 +28,12 @@ public class UserAccount {
 	 * @param password This UserAccount's password
 	 * @param accountId This UserAccount's account ID
 	 */
-	public UserAccount(String username, String password, int accountID) {
+	public UserAccount(String username, String password, int accountID, boolean isAdmin) {
 		
 		this.username = username;
 		this.password = password;
 		this.accountID = accountID;
+		this.isAdmin = isAdmin;
 	}
 	
 	/**
@@ -85,5 +88,23 @@ public class UserAccount {
 	public void setAccountID(int accountID) {
 		
 		this.accountID = accountID;
+	}
+	
+	/**
+	 * Get if this UserAccount is an admin or not.
+	 * @return True if UserAccount is admin, false if not.
+	 */
+	public boolean getIsAdmin() {
+		
+		return isAdmin;
+	}
+	
+	/**
+	 * Set if this UserAccount is an admin or not
+	 * @param isAdmin True if UserAccount should be admin, false if not.
+	 */
+	public void setIsAdmin(boolean isAdmin) {
+		
+		this.isAdmin = isAdmin;
 	}
 }

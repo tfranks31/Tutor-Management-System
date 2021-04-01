@@ -1,6 +1,8 @@
 package model;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -13,7 +15,7 @@ public class UserAccountTest {
     public void setUp() {
 		
         emptyAccount = new UserAccount();
-        initialAccount = new UserAccount("123abc", "123abc", 1);
+        initialAccount = new UserAccount("123abc", "123abc", 1, false);
     }
 	
 	@Test
@@ -38,5 +40,13 @@ public class UserAccountTest {
 		emptyAccount.setAccountID(1);
 		assertEquals(1, emptyAccount.getAccountID());
 		assertEquals(1, initialAccount.getAccountID());
+	}
+	
+	@Test
+	public void testGetSetIsAdmin() {
+		
+		emptyAccount.setIsAdmin(true);
+		assertTrue(emptyAccount.getIsAdmin());
+		assertFalse(initialAccount.getIsAdmin());
 	}
 }
