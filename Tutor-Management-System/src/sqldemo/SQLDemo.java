@@ -231,13 +231,21 @@ public class SQLDemo {
 // DJH2-3-12-17: Added 'published' as an attribute of books table
 // DJH2-3-12-17: changed attributes to 'lastname' and 'firstname' for authors table
 				System.out.println("Importing data for table: <" + tableName + ">");
-				if (tableName.toLowerCase().equals("books"))
+				if (tableName.toLowerCase().equals("user_accounts"))
 				{
-					buf.append("insert into " + tableName + " (author_id, title, isbn, published) values (");
+					buf.append("insert into " + tableName + " (username, password) values (");
 				}
-				else if (tableName.toLowerCase().equals("authors"))
+				else if (tableName.toLowerCase().equals("tutors"))
 				{
-					buf.append("insert into " + tableName + " (lastname, firstname) values (");
+					buf.append("insert into " + tableName + " (user_account_id, name, email, student_id, account_number, subject, pay_rate) values (");
+				}
+				else if (tableName.toLowerCase().equals("pay_vouchers"))
+				{
+					buf.append("insert into " + tableName + " (tutor_id, start_date, due_date, total_hours, total_pay, is_submitted, is_signed, is_new, is_admin_edited) values (");
+				}
+				else if (tableName.toLowerCase().equals("entries"))
+				{
+					buf.append("insert into " + tableName + " (pay_voucher_id, date, service_performed, where_performed, hours) values (");
 				}
 // DJH2: this is the original code - it will not import into a table with an auto-incrementing primary key
 // DJH2: The primary key values must be manually determined and included in the CSV file.
