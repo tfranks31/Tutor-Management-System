@@ -34,7 +34,7 @@ public class PayVoucherServlet extends HttpServlet{
 	protected void doPost(HttpServletRequest req, HttpServletResponse resp)
 			throws ServletException, IOException {
 
-		System.out.println("PayVoucher Servlet: doGet");	
+		System.out.println("PayVoucher Servlet: doPost");	
 
 		// Go back to search
 		if (req.getParameter("addRow") != null) {	

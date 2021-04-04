@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
+import javafx.util.Pair;
 import model.Entry;
 import model.PayVoucher;
 import model.Tutor;
@@ -41,5 +42,16 @@ public class FakeDatabase implements IDatabase {
 		} catch (IOException e) {
 			throw new IllegalStateException("Couldn't read initial data", e);
 		}
+	}
+
+	@Override
+	public List<Entry> findEntryByVoucher(int voucherID) {
+		List<Entry> result = new ArrayList<Entry>();
+		for (Entry entry: entryList) {
+			if (entry.getPayVoucherID() == voucherID) {
+				result.add(entry);
+			}
+		}
+		return result;
 	}
 }
