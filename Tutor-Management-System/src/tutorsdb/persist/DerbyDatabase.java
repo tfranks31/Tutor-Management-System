@@ -333,4 +333,11 @@ public class DerbyDatabase implements IDatabase {
 		return null;
 	}
 
+	@Override
+	public void AddTutor(String firstname, String lastname, String username, String password,
+			String email, int studentID, int accountNumber, String subject, double payRate) throws UnsupportedOperationException {
+		// TODO Auto-generated method stub
+		
+	}
+
 }

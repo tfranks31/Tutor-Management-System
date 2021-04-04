@@ -109,5 +109,32 @@ public class FakeDatabase implements IDatabase {
 		return result;
 	}
 
+	@Override
+	public void AddTutor(String firstname, String lastname, String username, String password,
+			String email, int studentID, int accountNumber, String subject, double payRate) {
+		//generates new user
+		UserAccount user = new UserAccount();
+		user.setUsername(username);
+		user.setPassword(password);
+		user.setIsAdmin(false);
+		user.setAccountID(accountList.size());
+		
+		//generates new tutor
+		Tutor tutor = new Tutor();
+		tutor.setAccountID(user.getAccountID());
+		tutor.setTutorID(tutorList.size());
+		String name = firstname + " " + lastname;
+		tutor.setName(name);
+		tutor.setEmail(email);
+		tutor.setStudentID(String.valueOf(studentID));
+		tutor.setAccountNumber(String.valueOf(accountNumber));
+		tutor.setSubject(subject);
+		tutor.setPayRate(payRate);
+		
+		//adds tutor and user to respective lists
+		accountList.add(user);
+		tutorList.add(tutor);
+	}
+
 
 }
