@@ -6,6 +6,7 @@ import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.List;
 
 import model.Entry;
@@ -343,8 +344,50 @@ public class DerbyDatabase implements IDatabase {
 
 	@Override
 	public List<Pair<Tutor, PayVoucher>> findAllPayVouchers() throws UnsupportedOperationException {
-		// TODO Auto-generated method stub
-		return null;
+		return executeTransaction(new Transaction<List<Pair<Tutor,PayVoucher>>>() {
+			@Override
+			public List<Pair<Tutor, PayVoucher>> execute(Connection conn) throws SQLException {
+				PreparedStatement stmt = null;
+				ResultSet resultSet = null;
+				
+				try {
+					// retreive all attributes from pay_voucher
+					stmt = conn.prepareStatement(
+						"select pay_vouchers.*, tutors.* " +
+						"  from pay_vouchers, tutors " +
+						" where pay_vouchers.tutor_id = tutors.tutor_id "
+					);
+					
+					List<Pair<Tutor, PayVoucher>> result = new ArrayList<Pair<Tutor,PayVoucher>>();
+					
+					resultSet = stmt.executeQuery();
+					
+					// for testing that a result was returned
+					Boolean found = false;
+					
+					while (resultSet.next()) {
+						found = true;
+						// create new payVoucher 
+						// retrieve attributes from resultSet starting with index 1
+						PayVoucher PayVoucher = new PayVoucher();
+						loadPayVoucher(PayVoucher, resultSet, 1);
+						Tutor Tutor = new Tutor();
+						loadTutor(Tutor, resultSet, 11);
+						
+						result.add(new Pair<Tutor, PayVoucher>(Tutor, PayVoucher));
+					}
+					
+					// check if the title was found
+					if (!found) {
+						System.out.println("No pay vouchers were found");
+					}
+					return result;
+				} finally {
+					DBUtil.closeQuietly(resultSet);
+					DBUtil.closeQuietly(stmt);
+				}
+			}
+		});
 	}
 
 	@Override
