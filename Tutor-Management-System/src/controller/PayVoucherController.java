@@ -22,11 +22,6 @@ public class PayVoucherController {
 		
 		List<Entry> entryList = db.findEntryByVoucher(voucherID);
 		
-		if (entryList.isEmpty()) {
-			
-			return null;
-		}
-		
 		ArrayList<Entry> entries = new ArrayList<Entry>();
 		for (Entry entry : entryList) {
 			
