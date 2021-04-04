@@ -3,7 +3,9 @@ package tutorsdb;
 import java.util.List;
 import java.util.Scanner;
 
+import model.Pair;
 import model.PayVoucher;
+import model.Tutor;
 import tutorsdb.persist.DatabaseProvider;
 import tutorsdb.persist.IDatabase;
 
@@ -22,13 +24,15 @@ public class VoucherFromSearchQuery {
 
 		// get the DB instance and execute transaction
 		IDatabase db = DatabaseProvider.getInstance();
-		List<PayVoucher> VoucherList = db.findVoucherBySearch(search);
+		List<Pair<Tutor, PayVoucher>> VoucherList = db.findVoucherBySearch(search);
 		
 		if (VoucherList.isEmpty()) {
 			System.out.println("No Voucher found with Search Paramter: " + search);
 		}else {
-			for (PayVoucher voucher : VoucherList) {
-				System.out.println(voucher.getPayVoucherID() + "," + voucher.getTotalHours() + "," + voucher.getTotalPay() + "," + voucher.getStartDate() + "," + voucher.getDueDate());
+			for (Pair<Tutor, PayVoucher> tutorVoucher : VoucherList) {
+				Tutor tutor = tutorVoucher.getLeft();
+				PayVoucher voucher = tutorVoucher.getRight();
+				System.out.println(tutor.getName() + "," + tutor.getSubject() + ',' + voucher.getIsSubmitted() + "," + voucher.getDueDate());
 			}
 		}
 	}

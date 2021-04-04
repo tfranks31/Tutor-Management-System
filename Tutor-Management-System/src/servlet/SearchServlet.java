@@ -9,7 +9,9 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import controller.SearchController;
+import model.Pair;
 import model.PayVoucher;
+import model.Tutor;
 
 public class SearchServlet extends HttpServlet{
 	private static final long serialVersionUID = 1L;
@@ -28,23 +30,30 @@ public class SearchServlet extends HttpServlet{
 		}
 		else {
 			controller = new SearchController();
+			ArrayList<Pair<Tutor, PayVoucher>> tutorVoucherList = new ArrayList<Pair<Tutor, PayVoucher>>();
+			ArrayList<Tutor> tutorList = new ArrayList<Tutor>();
 			ArrayList<PayVoucher> voucherList = new ArrayList<PayVoucher>();
 			
 			searchParameter = req.getParameter("search");
 			
 			if (searchParameter == null) {
 				//call all pay vouchers
-				voucherList = controller.getAllVouchers();
+				tutorVoucherList = controller.getAllVouchers();
 			}else {
 				//call pay voucher per search
-				voucherList = controller.getVoucherFromSearch(searchParameter);
+				tutorVoucherList = controller.getVoucherFromSearch(searchParameter);
 			}
 			
-			if(voucherList.isEmpty()) {
+			if(tutorVoucherList.isEmpty()) {
 				System.out.println("Search Servlet: no Voucher Found");
 			}
 			
-			req.setAttribute("payVouhcers", voucherList);
+			for (Pair<Tutor, PayVoucher> tutorVoucher : tutorVoucherList) {
+				tutorList.add(tutorVoucher.getLeft());
+				voucherList.add(tutorVoucher.getRight());
+			}
+			
+			req.setAttribute("payVouhcers", tutorVoucherList);
 			req.getRequestDispatcher("/_view/search.jsp").forward(req, resp);
 		}
 	}

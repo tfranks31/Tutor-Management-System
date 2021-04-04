@@ -4,7 +4,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
-import javafx.util.Pair;
+import model.Pair;
 import model.Entry;
 import model.PayVoucher;
 import model.Tutor;
@@ -67,15 +67,15 @@ public class FakeDatabase implements IDatabase {
 	}
 
 	@Override
-	public List<PayVoucher> findVoucherBySearch(String search) {
-		List<PayVoucher> result = new ArrayList<PayVoucher>();
+	public List<Pair<Tutor, PayVoucher>> findVoucherBySearch(String search) {
+		List<Pair<Tutor, PayVoucher>> result = new ArrayList<Pair<Tutor, PayVoucher>>();
 		
 		//checks for vouchers by username
 		for (Tutor tutor : tutorList) {
 			if (tutor.getName().equals(search)) {
 				for (PayVoucher voucher : payVoucherList) {
 					if (tutor.getTutorID() == voucher.getTutorID()) {
-						result.add(voucher);
+						result.add(new Pair<Tutor, PayVoucher>(tutor, voucher));
 					}
 				}
 			}
@@ -84,15 +84,21 @@ public class FakeDatabase implements IDatabase {
 		//checks for vouchers by start or due date
 		for (PayVoucher voucher: payVoucherList) {
 			if (voucher.getDueDate().equals(search) || voucher.getStartDate().equals(search)) {
-				result.add(voucher);
+				for (Tutor tutor : tutorList) {
+					if (voucher.getTutorID() == tutor.getTutorID()) {
+						result.add(new Pair<Tutor, PayVoucher>(tutor, voucher));
+					}
+				}
 			}
 		}
 		
 		//checks for vouchers by submitted
 		if (search.equals("submitted") || search.equals("Submitted")) {
 			for (PayVoucher voucher : payVoucherList) {
-				if(voucher.getIsSubmitted()) {
-					result.add(voucher);
+				for (Tutor tutor : tutorList) {
+					if(voucher.getIsSubmitted()) {
+						result.add(new Pair<Tutor, PayVoucher>(tutor, voucher));
+					}
 				}
 			}
 		}
@@ -100,8 +106,10 @@ public class FakeDatabase implements IDatabase {
 		//checks for vouchers by signed
 		if (search.equals("signed") || search.equals("Signed")) {
 			for (PayVoucher voucher : payVoucherList) {
-				if (voucher.getIsSigned()) {
-					result.add(voucher);
+				for (Tutor tutor : tutorList) {
+					if (voucher.getTutorID() == tutor.getTutorID()) {
+						result.add(new Pair<Tutor, PayVoucher>(tutor, voucher));
+					}
 				}
 			}
 		}
@@ -137,9 +145,15 @@ public class FakeDatabase implements IDatabase {
 	}
 
 	@Override
-	public List<PayVoucher> findAllPayVouchers() {
-		List<PayVoucher>  result = new ArrayList<PayVoucher>();
-		result = payVoucherList;
+	public List<Pair<Tutor, PayVoucher>> findAllPayVouchers() {
+		List<Pair<Tutor, PayVoucher>>  result = new ArrayList<Pair<Tutor, PayVoucher>>();
+		for (Tutor tutor : tutorList) {
+			for (PayVoucher voucher: payVoucherList) {
+				if (tutor.getTutorID() == voucher.getTutorID()) {
+					result.add(new Pair<Tutor, PayVoucher>(tutor, voucher));
+				}
+			}
+		}
 		return result;
 	}
 

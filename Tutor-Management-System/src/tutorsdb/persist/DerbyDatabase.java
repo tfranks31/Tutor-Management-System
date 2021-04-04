@@ -12,6 +12,7 @@ import model.Entry;
 import model.PayVoucher;
 import model.Tutor;
 import model.UserAccount;
+import model.Pair;
 
 // Initially refactored from Library Example
 public class DerbyDatabase implements IDatabase {
@@ -328,7 +329,7 @@ public class DerbyDatabase implements IDatabase {
 	}
 
 	@Override
-	public List<PayVoucher> findVoucherBySearch(String search) throws UnsupportedOperationException {
+	public List<Pair<Tutor, PayVoucher>> findVoucherBySearch(String search) throws UnsupportedOperationException {
 		// TODO Auto-generated method stub
 		return null;
 	}
@@ -341,7 +342,7 @@ public class DerbyDatabase implements IDatabase {
 	}
 
 	@Override
-	public List<PayVoucher> findAllPayVouchers() throws UnsupportedOperationException {
+	public List<Pair<Tutor, PayVoucher>> findAllPayVouchers() throws UnsupportedOperationException {
 		// TODO Auto-generated method stub
 		return null;
 	}

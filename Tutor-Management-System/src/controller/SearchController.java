@@ -4,6 +4,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 import model.PayVoucher;
+import model.Tutor;
+import model.Pair;
 import tutorsdb.persist.DatabaseProvider;
 import tutorsdb.persist.FakeDatabase;
 import tutorsdb.persist.IDatabase;
@@ -17,9 +19,9 @@ public class SearchController {
 		db = DatabaseProvider.getInstance();
 	}
 	
-	public ArrayList<PayVoucher> getAllVouchers() {
+	public ArrayList<Pair<Tutor, PayVoucher>> getAllVouchers() {
 		
-		ArrayList<PayVoucher> allVouchers = (ArrayList<PayVoucher>) db.findAllPayVouchers();
+		ArrayList<Pair<Tutor, PayVoucher>> allVouchers = (ArrayList<Pair<Tutor, PayVoucher>>) db.findAllPayVouchers();
 		
 		if (allVouchers.isEmpty()) {
 			return null;
@@ -28,9 +30,9 @@ public class SearchController {
 		return  allVouchers;
 	}
 	
-	public ArrayList<PayVoucher> getVoucherFromSearch(String search){
+	public ArrayList<Pair<Tutor, PayVoucher>> getVoucherFromSearch(String search){
 		
-		ArrayList<PayVoucher> result = (ArrayList<PayVoucher>) db.findVoucherBySearch(search);
+		ArrayList<Pair<Tutor, PayVoucher>> result = (ArrayList<Pair<Tutor, PayVoucher>>) db.findVoucherBySearch(search);
 		
 		if (result.isEmpty()) {
 			return null;

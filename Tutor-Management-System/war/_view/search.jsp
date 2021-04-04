@@ -34,10 +34,11 @@
         </tr>
         <c:forEach items="${payVouhcers}" var="voucher">
             <tr>
-                <td> TO DO </td>
-                <td> To Do </td>
-                <td> ${voucher.isSubmitted} </td>
-                <td> ${voucher.dueDate}</td>
+
+                <td> ${voucher.left.name} </td>
+                <td> ${voucher.left.subject} </td>
+                <td> ${voucher.right.isSubmitted} </td>
+                <td> ${voucher.right.dueDate}</td>
             </tr>
         </c:forEach>
     </table>
