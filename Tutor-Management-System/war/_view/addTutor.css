@@ -1,8 +1,23 @@
-body {
-    max-width: fit-content;
-    margin: auto;
+html {
+	background-image: url("tutorBackground.jpg");
+	background-size: 1920px 1325px;
+	background-position: center;
 }
 
+body {
+	margin: auto;
+	width: 515px;
+	height: 340;
+	margin-top: 100px;
+	border: 2px solid #e1eae2;
+	border-radius: 20px;
+	background-color: #e1eae2;
+}
+
+table {
+	margin: auto;
+}
+	
 td {
 	font-size: 20px;
 }
@@ -10,10 +25,89 @@ td {
 #title {
     font-size: 48px;
     text-align: center;
+    padding: 7px;
+}
+
+input[type='text'] {
+	border: none;
+	background: none;
+	border-bottom: solid 1px #000000;
+}
+
+#firstName {
+	float: left;
+	padding: 3px;
+	margin: 4px;
+}
+
+#lastName {
+	float: right;
+	padding: 3px;
+	margin: 6px;
+}
+
+#username {
+	float: left;
+	padding: 3px;
+	margin: 6px;
+}
+
+#password {
+	float: right;
+	padding: 3px;
+	margin: 6px;
+}
+
+
+#email {
+	width: 192%;
+	padding: 3px;
+	margin: 6px;
+}
+
+#studentID {
+	float: left;
+	padding: 3px;
+	margin: 6px;
+}
+
+#accountNumber {
+	float: right;
+	padding: 3px;
+	margin: 6px;
+}
+
+#subject {
+	float: left;
+	padding: 3px;
+	margin: 6px;
+}
+
+#payRate {
+	float: right;
+	padding: 3px;
+	margin: 6px;
 }
 
 #buttons {
+	float: right;
+	width: 162px;
     text-align: center;
+}
+
+#backBtn {
+	width: 65px;
+	margin-left: 35px;
+}
+
+input[type='submit'] {
+	background-color: black;
+	color: white;
+	font-size: 15px;
+	text-align: center;
+	height: 30px;
+	border-radius: 35px;
+	border: 0px;
 }
 
 .error {
