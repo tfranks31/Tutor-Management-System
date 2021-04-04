@@ -1,9 +1,14 @@
 package tutorsdb;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
 
 import model.Entry;
+import model.Pair;
+import model.PayVoucher;
+import model.Tuple;
+import model.Tutor;
 import tutorsdb.persist.DatabaseProvider;
 import tutorsdb.persist.IDatabase;
 
@@ -18,13 +23,20 @@ public class EntryByVoucherIdQuery {
 
 		// get the DB instance and execute transaction
 		IDatabase db = DatabaseProvider.getInstance();
-		List<Entry> entryList = db.findEntryByVoucher(voucherID);
 		
-		if (entryList.isEmpty()) {
+		//generates required lists and object
+		ArrayList<Tuple<Tutor, PayVoucher, Entry>> tutorVoucherEntryList = (ArrayList<Tuple<Tutor, PayVoucher, Entry>>) db.findEntryByVoucher(voucherID);
+		
+		if (tutorVoucherEntryList.isEmpty()) {
 			System.out.println("No entrys found with Voucher ID: " + voucherID);
 		}else {
-			for (Entry entry : entryList) {
-				System.out.println(entry.getDate() + "," + entry.getHours() + "," + entry.getServicePerformed() + "," + entry.getWherePerformed());
+			for (Tuple<Tutor, PayVoucher, Entry> tutorvoucherEntry : tutorVoucherEntryList) {
+				Tutor tutor = tutorvoucherEntry.getLeft();
+				PayVoucher voucher = tutorvoucherEntry.getMiddle();
+				Entry entry = tutorvoucherEntry.getRight();
+				
+				System.out.println(tutor.getName() + "," + tutor.getAccountID() + "," + tutor.getStudentID() + "," + entry.getDate() + "," 
+									+ entry.getHours() + "," + entry.getServicePerformed() + "," + entry.getWherePerformed());
 			}
 		}
 	}

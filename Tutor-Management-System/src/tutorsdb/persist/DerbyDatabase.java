@@ -11,6 +11,7 @@ import java.util.List;
 
 import model.Entry;
 import model.PayVoucher;
+import model.Tuple;
 import model.Tutor;
 import model.UserAccount;
 import model.Pair;
@@ -318,7 +319,7 @@ public class DerbyDatabase implements IDatabase {
 	}
 
 	@Override
-	public List<Entry> findEntryByVoucher(int voucherID) throws UnsupportedOperationException{
+	public List<Tuple<Tutor, PayVoucher, Entry>> findEntryByVoucher(int voucherID) throws UnsupportedOperationException{
 		// TODO Auto-generated method stub
 		return null;
 	}

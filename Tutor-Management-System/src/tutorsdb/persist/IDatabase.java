@@ -4,12 +4,13 @@ import java.util.List;
 
 import model.Entry;
 import model.PayVoucher;
+import model.Tuple;
 import model.Tutor;
 import model.UserAccount;
 import model.Pair;
 
 public interface IDatabase {
-	public List<Entry> findEntryByVoucher(int voucherID);
+	public List<Tuple<Tutor, PayVoucher, Entry>> findEntryByVoucher(int voucherID);
 	public UserAccount accountByLogin(String username, String password);
 	public List<Pair<Tutor, PayVoucher>> findVoucherBySearch(String search);
 	public void AddTutor (String firstname, String lastname, String username, String password,

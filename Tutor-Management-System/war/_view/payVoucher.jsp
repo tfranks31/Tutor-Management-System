@@ -15,8 +15,8 @@
     <h1 class = "Header"> Pay Voucher</h1>
     
     <div class ="studentInfo">
-        Tutor name: <br />
-        Student ID#:
+        Tutor name:  ${tutorName}<br />
+        Student ID#: ${studentID}
     </div>
 
 	<div class = "back">
@@ -26,7 +26,7 @@
 	</div>
 	
     <div class = "dueDate">
-        DueDate:
+        DueDate: ${dueDate}
     </div>
     <form action="${pageContext.servletContext.contextPath}/payVoucher"method="post" >
         <table>   
@@ -56,10 +56,10 @@
   
     <div class = "payInfo">
         <p> 
-           Account Number = ##&#160;&#160;&#160; 
-           Total Hours = ##&#160;&#160;&#160; 
-           Pay Rate = $7.25&#160;&#160;&#160;
-           Total Pay = ### 
+           Account Number = ${accountNumber}&#160;&#160;&#160; 
+           Total Hours = ${totalHours}&#160;&#160;&#160; 
+           Pay Rate = $ ${payRate}&#160;&#160;&#160;
+           Total Pay = $ ${totalPay}
         </p>
     </div>
 

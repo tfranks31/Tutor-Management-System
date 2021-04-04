@@ -7,6 +7,7 @@ import java.util.List;
 import model.Pair;
 import model.Entry;
 import model.PayVoucher;
+import model.Tuple;
 import model.Tutor;
 import model.UserAccount;
 
@@ -45,11 +46,19 @@ public class FakeDatabase implements IDatabase {
 	}
 
 	@Override
-	public List<Entry> findEntryByVoucher(int voucherID) {
-		List<Entry> result = new ArrayList<Entry>();
-		for (Entry entry: entryList) {
-			if (entry.getPayVoucherID() == voucherID) {
-				result.add(entry);
+	public List<Tuple<Tutor, PayVoucher, Entry>> findEntryByVoucher(int voucherID) {
+		List<Tuple<Tutor, PayVoucher, Entry>> result = new ArrayList<Tuple<Tutor, PayVoucher, Entry>>();
+		for (PayVoucher voucher: payVoucherList) {
+			for (Tutor tutor : tutorList) {
+				if (voucher.getTutorID() == tutor.getTutorID()) {
+					if (voucher.getPayVoucherID() == voucherID) {
+						for (Entry entry: entryList) {
+							if (entry.getPayVoucherID() == voucher.getPayVoucherID()) {
+								result.add(new Tuple<Tutor, PayVoucher, Entry>(tutor, voucher, entry));
+							}
+						}
+					}
+				}
 			}
 		}
 		return result;

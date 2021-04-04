@@ -2,6 +2,7 @@ package servlet;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.List;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
@@ -10,6 +11,9 @@ import javax.servlet.http.HttpServletResponse;
 
 import controller.PayVoucherController;
 import model.Entry;
+import model.PayVoucher;
+import model.Tuple;
+import model.Tutor;
 
 public class PayVoucherServlet extends HttpServlet{
 	private static final long serialVersionUID = 1L;
@@ -30,8 +34,15 @@ public class PayVoucherServlet extends HttpServlet{
 		else {
 			
 			controller = new PayVoucherController();
-			ArrayList<Entry> entries = controller.getPayVoucherEntries(1);
+			ArrayList<Tuple<Tutor, PayVoucher, Entry>> tutorVoucherEntryList = (ArrayList<Tuple<Tutor, PayVoucher, Entry>>) controller.getPayVoucherEntries(1);
+			ArrayList<Entry> entries = new ArrayList<Entry>();
+			PayVoucher voucher = tutorVoucherEntryList.get(0).getMiddle(); //all voucher instances are identical
+			Tutor tutor = tutorVoucherEntryList.get(0).getLeft(); //add tutor instances are identical
 			
+			for (Tuple<Tutor, PayVoucher, Entry> tutorVoucherEntry : tutorVoucherEntryList) {
+				entries.add(tutorVoucherEntry.getRight());
+			}
+
 			if (entries.size() < 10) {
 				tableSize = 10 - entries.size();
 			}
@@ -40,8 +51,14 @@ public class PayVoucherServlet extends HttpServlet{
 			}
 			
 			req.setAttribute("tableSize", tableSize);
-			
 			req.setAttribute("entries", entries);
+			req.setAttribute("tutorName", tutor.getName());
+			req.setAttribute("studentID", tutor.getStudentID());
+			req.setAttribute("dueDate", voucher.getDueDate());
+			req.setAttribute("accountNumber", tutor.getAccountID());
+			req.setAttribute("totalHours",voucher.getTotalHours());
+			req.setAttribute("payRate", tutor.getPayRate());
+			req.setAttribute("totalPay", voucher.getTotalPay());
 			
 			// Call JSP to generate empty form
 			req.getRequestDispatcher("/_view/payVoucher.jsp").forward(req, resp);
@@ -58,8 +75,12 @@ public class PayVoucherServlet extends HttpServlet{
 		if (req.getParameter("addRow") != null) {	
 			
 			controller = new PayVoucherController();
-			ArrayList<Entry> entries = new ArrayList<Entry>();
+			ArrayList<Tuple<Tutor, PayVoucher, Entry>> tutorVoucherEntryList = (ArrayList<Tuple<Tutor, PayVoucher, Entry>>) controller.getPayVoucherEntries(1);
 			
+			ArrayList<Entry> entries = new ArrayList<Entry>();
+			PayVoucher voucher = tutorVoucherEntryList.get(0).getMiddle(); //all voucher instances are identical
+			Tutor tutor = tutorVoucherEntryList.get(0).getLeft(); //add tutor instances are identical
+						
 			String[] cells = req.getParameterValues("cell");
 			for (int i = 0; i < cells.length; i += 4) {
 				
@@ -75,18 +96,27 @@ public class PayVoucherServlet extends HttpServlet{
 				}
 			}
 			
+			
 			tableSize = cells.length / 4 - entries.size() + 1;
 
 			if(tableSize + entries.size() > 15) {
 				tableSize = cells.length / 4 - entries.size();
 			}
-			req.setAttribute("tableSize", tableSize);
+			
+			req.setAttribute("tableSize", tableSize);	
+			
 			req.setAttribute("entries", entries);
+			req.setAttribute("tutorName", tutor.getName());
+			req.setAttribute("studentID", tutor.getStudentID());
+			req.setAttribute("dueDate", voucher.getDueDate());
+			req.setAttribute("accountNumber", tutor.getAccountID());
+			req.setAttribute("totalHours",voucher.getTotalHours());
+			req.setAttribute("payRate", tutor.getPayRate());
+			req.setAttribute("totalPay", voucher.getTotalPay());
 			
 			req.getRequestDispatcher("/_view/payVoucher.jsp").forward(req, resp);
 		}
 		
 	}
-	
 
 }

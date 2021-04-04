@@ -4,6 +4,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 import model.Entry;
+import model.PayVoucher;
+import model.Tuple;
+import model.Tutor;
 import tutorsdb.persist.DatabaseProvider;
 import tutorsdb.persist.FakeDatabase;
 import tutorsdb.persist.IDatabase;
@@ -18,16 +21,16 @@ public class PayVoucherController {
 		db = DatabaseProvider.getInstance();
 	}
 	
-	public ArrayList<Entry> getPayVoucherEntries(int voucherID) {
+	public List<Tuple<Tutor, PayVoucher, Entry>> getPayVoucherEntries(int voucherID) {
 		
-		List<Entry> entryList = db.findEntryByVoucher(voucherID);
+		List<Tuple<Tutor, PayVoucher, Entry>> tutorVoucherList = db.findEntryByVoucher(voucherID);
 		
-		ArrayList<Entry> entries = new ArrayList<Entry>();
-		for (Entry entry : entryList) {
-			
-			entries.add(entry);
+		if (tutorVoucherList.isEmpty()) {
+			return null;
+		} else {
+			return tutorVoucherList;
 		}
 		
-		return entries;
+		
 	}
 }
