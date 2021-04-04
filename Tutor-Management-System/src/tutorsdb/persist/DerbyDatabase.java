@@ -314,4 +314,17 @@ public class DerbyDatabase implements IDatabase {
 		
 		System.out.println("Tutor DB successfully initialized!");
 	}
+
+	@Override
+	public List<Entry> findEntryByVoucher(int voucherID) throws UnsupportedOperationException{
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public UserAccount accountByLogin(String username, String password) throws UnsupportedOperationException {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
 }

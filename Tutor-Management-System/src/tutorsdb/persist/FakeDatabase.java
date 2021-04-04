@@ -54,4 +54,17 @@ public class FakeDatabase implements IDatabase {
 		}
 		return result;
 	}
+
+	@Override
+	public UserAccount accountByLogin(String username, String password) {
+		UserAccount result = new UserAccount();
+		for (UserAccount account: accountList) {
+			if (account.getUsername().equals(username) && account.getPassword().equals(password)) {
+				result = account;
+			}
+		}
+		return result;
+	}
+
+
 }
