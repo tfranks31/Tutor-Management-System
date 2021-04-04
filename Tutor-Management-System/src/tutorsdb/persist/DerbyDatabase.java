@@ -300,8 +300,49 @@ public class DerbyDatabase implements IDatabase {
 
 	@Override
 	public List<Entry> findEntryByVoucher(int voucherID) throws UnsupportedOperationException {
-		// TODO Auto-generated method stub
-		return null;
+		return executeTransaction(new Transaction<List<Entry>>() {
+			@Override
+			public List<Entry> execute(Connection conn) throws SQLException {
+				PreparedStatement stmt = null;
+				ResultSet resultSet = null;
+
+				try {
+					// Retrieve the entries with the given voucher id
+					stmt = conn.prepareStatement(
+						"select entries.*" + 
+						"from entries " + 
+						"where entries.pay_voucher_id = ? "
+					);
+					
+					stmt.setLong(1, voucherID);
+
+					List<Entry> result = new ArrayList<Entry>();
+
+					resultSet = stmt.executeQuery();
+
+					// for testing that a result was returned
+					Boolean found = false;
+
+					while (resultSet.next()) {
+						found = true;
+						// Create and then load a new entry object
+						Entry Entry = new Entry();
+						loadEntry(Entry, resultSet, 1);
+
+						result.add(Entry);
+					}
+
+					// check if any users were found
+					if (!found) {
+						System.out.println("No user was found for the given username and password.");
+					}
+					return result;
+				} finally {
+					DBUtil.closeQuietly(resultSet);
+					DBUtil.closeQuietly(stmt);
+				}
+			}
+		});
 	}
 
 	@Override
@@ -314,8 +355,12 @@ public class DerbyDatabase implements IDatabase {
 
 				try {
 					// Retrieve the users account
-					stmt = conn.prepareStatement("select user_accounts.*" + "  from user_accounts "
-							+ " where user_accounts.username = ? " + "AND user_accounts.password = ? ");
+					stmt = conn.prepareStatement(
+							"select user_accounts.*" + 
+							"  from user_accounts " + 
+							" where user_accounts.username = ? " + 
+							"AND user_accounts.password = ? "
+					);
 					stmt.setString(1, username);
 					stmt.setString(2, password);
 
@@ -371,8 +416,11 @@ public class DerbyDatabase implements IDatabase {
 
 				try {
 					// Retrieve all attributes from pay_voucher
-					stmt = conn.prepareStatement("select pay_vouchers.*, tutors.* " + "  from pay_vouchers, tutors "
-							+ " where pay_vouchers.tutor_id = tutors.tutor_id ");
+					stmt = conn.prepareStatement(
+							"select pay_vouchers.*, tutors.* " + 
+							"  from pay_vouchers, tutors " + 
+							" where pay_vouchers.tutor_id = tutors.tutor_id "
+					);
 
 					List<Pair<Tutor, PayVoucher>> result = new ArrayList<Pair<Tutor, PayVoucher>>();
 
