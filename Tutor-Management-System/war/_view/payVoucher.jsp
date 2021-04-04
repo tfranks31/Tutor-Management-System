@@ -28,23 +28,30 @@
     <div class = "dueDate">
         DueDate:
     </div>
-        <form action="${pageContext.servletContext.contextPath}/payVoucher"method="post" >
-            <table>   
-                <th>Date</th>
-                <th>Hours</th>
-                <th>Service Preformed</th>
-                <th>Where Preformed</th>
-                </tr>
-                <c:forEach var = "counter" begin = "1" end = "${tableSize}" step = "1">
-                	<tr>
-                		<c:forEach var = "counter2" begin = "1" end = "4" step = "1">
-                			<td><input type="text" name="cell"></td>
-                		</c:forEach>
-                	</tr>
-                </c:forEach>
-               
-                </table>
-                <input type="submit" name="addRow" value="Add Row">
+    <form action="${pageContext.servletContext.contextPath}/payVoucher"method="post" >
+        <table>   
+            <th>Date</th>
+            <th>Hours</th>
+            <th>Service Performed</th>
+            <th>Where Performed</th>
+            <c:forEach items="${entries}" var="entry">
+		        <tr>
+		            <td><input type="text" name="cell" value="${entry.date}"></td>
+		            <td><input type="text" name="cell" value="${entry.hours}"></td>
+		            <td><input type="text" name="cell" value="${entry.servicePerformed}"></td>
+		            <td><input type="text" name="cell" value="${entry.wherePerformed}"></td>			            
+		        </tr>
+		    </c:forEach>
+            <c:forEach var="i" begin="1" end="${tableSize}" step="1">
+            	<tr>
+            		<c:forEach var="j" begin="1" end="4" step="1">
+            			<td><input type="text" name="cell"></td>
+            		</c:forEach>
+            	</tr>
+            </c:forEach>
+           
+       	</table>
+        <input type="submit" name="addRow" value="Add Row">
     </form>
   
     <div class = "payInfo">
