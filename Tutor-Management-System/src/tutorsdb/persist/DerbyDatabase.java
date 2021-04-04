@@ -327,4 +327,10 @@ public class DerbyDatabase implements IDatabase {
 		return null;
 	}
 
+	@Override
+	public List<PayVoucher> findVoucherBySearch(String search) throws UnsupportedOperationException {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
 }

@@ -66,5 +66,48 @@ public class FakeDatabase implements IDatabase {
 		return result;
 	}
 
+	@Override
+	public List<PayVoucher> findVoucherBySearch(String search) {
+		List<PayVoucher> result = new ArrayList<PayVoucher>();
+		
+		//checks for vouchers by username
+		for (Tutor tutor : tutorList) {
+			if (tutor.getName().equals(search)) {
+				for (PayVoucher voucher : payVoucherList) {
+					if (tutor.getTutorID() == voucher.getTutorID()) {
+						result.add(voucher);
+					}
+				}
+			}
+		}
+		
+		//checks for vouchers by start or due date
+		for (PayVoucher voucher: payVoucherList) {
+			if (voucher.getDueDate().equals(search) || voucher.getStartDate().equals(search)) {
+				result.add(voucher);
+			}
+		}
+		
+		//checks for vouchers by submitted
+		if (search.equals("submitted") || search.equals("Submitted")) {
+			for (PayVoucher voucher : payVoucherList) {
+				if(voucher.getIsSubmitted()) {
+					result.add(voucher);
+				}
+			}
+		}
+		
+		//checks for vouchers by signed
+		if (search.equals("signed") || search.equals("Signed")) {
+			for (PayVoucher voucher : payVoucherList) {
+				if (voucher.getIsSigned()) {
+					result.add(voucher);
+				}
+			}
+		}
+
+		return result;
+	}
+
 
 }
