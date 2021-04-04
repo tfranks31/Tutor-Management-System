@@ -136,5 +136,12 @@ public class FakeDatabase implements IDatabase {
 		tutorList.add(tutor);
 	}
 
+	@Override
+	public List<PayVoucher> findAllPayVouchers() {
+		List<PayVoucher>  result = new ArrayList<PayVoucher>();
+		result = payVoucherList;
+		return result;
+	}
+
 
 }

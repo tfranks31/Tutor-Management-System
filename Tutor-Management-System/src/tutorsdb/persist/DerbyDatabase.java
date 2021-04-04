@@ -340,4 +340,10 @@ public class DerbyDatabase implements IDatabase {
 		
 	}
 
+	@Override
+	public List<PayVoucher> findAllPayVouchers() throws UnsupportedOperationException {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
 }
