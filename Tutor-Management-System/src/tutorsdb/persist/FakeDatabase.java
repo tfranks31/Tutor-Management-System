@@ -95,9 +95,11 @@ public class FakeDatabase implements IDatabase {
 		//checks for vouchers by submitted
 		if (search.equals("submitted") || search.equals("Submitted")) {
 			for (PayVoucher voucher : payVoucherList) {
-				for (Tutor tutor : tutorList) {
-					if(voucher.getIsSubmitted()) {
-						result.add(new Pair<Tutor, PayVoucher>(tutor, voucher));
+				if(voucher.getIsSubmitted()) {
+					for (Tutor tutor : tutorList) {
+						if (tutor.getTutorID() == voucher.getTutorID()) {
+							result.add(new Pair<Tutor, PayVoucher>(tutor, voucher));
+						}
 					}
 				}
 			}

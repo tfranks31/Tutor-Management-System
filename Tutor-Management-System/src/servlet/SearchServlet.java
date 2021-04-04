@@ -31,8 +31,6 @@ public class SearchServlet extends HttpServlet{
 		else {
 			controller = new SearchController();
 			ArrayList<Pair<Tutor, PayVoucher>> tutorVoucherList = new ArrayList<Pair<Tutor, PayVoucher>>();
-			ArrayList<Tutor> tutorList = new ArrayList<Tutor>();
-			ArrayList<PayVoucher> voucherList = new ArrayList<PayVoucher>();
 			
 			searchParameter = req.getParameter("search");
 			
@@ -47,12 +45,7 @@ public class SearchServlet extends HttpServlet{
 			if(tutorVoucherList.isEmpty()) {
 				System.out.println("Search Servlet: no Voucher Found");
 			}
-			
-			for (Pair<Tutor, PayVoucher> tutorVoucher : tutorVoucherList) {
-				tutorList.add(tutorVoucher.getLeft());
-				voucherList.add(tutorVoucher.getRight());
-			}
-			
+					
 			req.setAttribute("payVouhcers", tutorVoucherList);
 			req.getRequestDispatcher("/_view/search.jsp").forward(req, resp);
 		}
