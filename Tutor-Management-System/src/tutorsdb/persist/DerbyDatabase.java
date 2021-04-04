@@ -346,4 +346,10 @@ public class DerbyDatabase implements IDatabase {
 		return null;
 	}
 
+	@Override
+	public PayVoucher submitPayVoucher(int voucherID) throws UnsupportedOperationException {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
 }

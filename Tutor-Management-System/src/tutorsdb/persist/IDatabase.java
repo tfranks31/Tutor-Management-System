@@ -13,4 +13,5 @@ public interface IDatabase {
 	public void AddTutor (String firstname, String lastname, String username, String password,
 							String email, int studentID, int accountNumber, String subject, double payRate);
 	public List<PayVoucher> findAllPayVouchers();
+	public PayVoucher submitPayVoucher(int voucherID);
 }

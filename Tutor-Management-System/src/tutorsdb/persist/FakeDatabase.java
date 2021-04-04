@@ -143,5 +143,16 @@ public class FakeDatabase implements IDatabase {
 		return result;
 	}
 
+	@Override
+	public PayVoucher submitPayVoucher(int voucherID) {
+		for (PayVoucher voucher: payVoucherList) {
+			if (voucher.getPayVoucherID() == voucherID) {
+				voucher.setIsSubmitted(true);
+				return voucher;
+			}
+		}
+		return null;
+	}
+
 
 }
