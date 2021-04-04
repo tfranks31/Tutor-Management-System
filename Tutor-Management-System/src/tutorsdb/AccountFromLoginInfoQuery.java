@@ -21,7 +21,7 @@ public class AccountFromLoginInfoQuery {
 		IDatabase db = DatabaseProvider.getInstance();
 		UserAccount account = db.accountByLogin(username, password);
 		
-		if (account.getAccountID() == -1) {
+		if (account == null) {
 			System.out.println("No accounts found with Username: " + username + " Password: " + password);
 		}else {
 			System.out.println(account.getAccountID() + "," + account.getIsAdmin());		

@@ -57,10 +57,10 @@ public class PayVoucherServlet extends HttpServlet{
 
 		// Go back to search
 		if (req.getParameter("addRow") != null) {	
-			tableSize += 1;
-			if(tableSize > 15) {
-				tableSize = 15;
+			if(tableSize < 15) {
+				tableSize += 1;
 			}
+
 			req.setAttribute("tableSize", tableSize);
 			req.getRequestDispatcher("/_view/payVoucher.jsp").forward(req, resp);
 		}
