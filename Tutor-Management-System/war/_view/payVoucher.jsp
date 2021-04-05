@@ -18,12 +18,6 @@
         Tutor name:  ${tutorName}<br />
         Student ID#: ${studentID}
     </div>
-
-	<div class = "back">
-		<form action="${pageContext.servletContext.contextPath}/payVoucher" method="get">
-   	     	<input type="submit" name="back" value="Back">
-   		 </form>
-	</div>
 	
     <div class = "dueDate">
         DueDate: ${dueDate}
@@ -51,7 +45,7 @@
             </c:forEach>
            
        	</table>
-        <input type="submit" name="addRow" value="Add Row">
+        </br><input type="submit" id="addRow" name="addRow" value="Add Row">
     </form>
   
     <div class = "payInfo">
@@ -62,15 +56,18 @@
            Total Pay = $ ${totalPay}
         </p>
     </div>
-
-    <form action="${pageContext.servletContext.contextPath}/payVoucher" method="post">
-        <input type="submit" class="submit" name="updateVoucher" value="Update Pay Voucher">
-    </form>
+    
+	<form action="${pageContext.servletContext.contextPath}/payVoucher" method="get">
+   	     <input type="submit" id="back" name="back" value="Back">
+   	</form>
 
     <form action="${pageContext.servletContext.contextPath}/payVoucher"method="post">
-        <input type="submit" class="submit" name="submitVoucher" value="Submit Pay Voucher">
+        <input type="submit" class="submit" name="submitVoucher" value="Submit Pay Voucher"></br></br></br>
     </form>
-    
+
+ 	<form action="${pageContext.servletContext.contextPath}/payVoucher" method="post">
+        <input type="submit" class="submit" name="updateVoucher" value="Update Pay Voucher">
+    </form>
 
 
 </body>

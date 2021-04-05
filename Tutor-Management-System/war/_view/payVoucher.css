@@ -1,51 +1,36 @@
 html{
     margin-top: 20px;
-    margin-left: 20%;
-    margin-right: 20%;
+    margin-left: 17%;
+    margin-right: 17%;
     margin-bottom: 20px;
+    background-image: url("payVoucherBackground.jpg");
+	background-size: 1920px 1325px;
+	background-position: center;
+}
+
+body {
+	width: 925px;
+	height: 775px;
+	margin: auto;
+	border: 2px solid #e1eae2;
+	border-radius: 20px;
+	border-height: 12px;
+	background-color: #e1eae2;
 }
 
 .Header{
     text-align: center;
     margin: 0;
     font-size: 50px;
-
 }
 
-.back{
-    float: right;
-    padding: 15px;
-}
-
-table{
-    width: 100%;
-    margin-top: 100px;
-}
-th,
-td{
-    padding: 10px;
-    text-align: center;
-}
-
-input { 
-    text-align: center; 
-}
-
-.addRow {
-    height: 50px;
-    width: 150px;
-    margin: 0;
-    position: relative;
-    bottom: auto;
-    left: 43%;
-}
-
-.studentInfo{
-    padding: 15px;
+.studentInfo {
+	padding: 15px;
     width: 240px;
     font-size: 20px;
-    text-align: right;
+    text-align: left;
     float: left;
+    margin-left: 62px;
 }
 
 .dueDate{
@@ -56,25 +41,74 @@ input {
     float: right;
 }
 
+table{
+	margin: auto;
+    width: 85%;
+    margin-top: 0px;
+}
+
+form {
+	margin: auto;
+	text-align: center;
+}
+
+input[type='text'] {
+	border: none;
+	background: none;
+	width: 175px;
+	border-bottom: solid 1px #000000;
+}
+
+input {
+	text-align: center;
+}
+
+th, td{
+    padding: 8px;
+    text-align: center;
+}
+
+#addRow {
+	margin: auto;
+   	background-color: black;
+	color: white;
+	font-size: 15px;
+	text-align: center;
+	height: 42px;
+	width: 185px;
+	border-radius: 35px;
+	border: 0px;
+}
+
 .payInfo{
     padding: 5px;
     margin: 0;
     position: relative;
     text-align:center;
 }
-.addRow {
-    height: 25px;
-    width: 150px;
-    margin: 0;
-    position: relative;
-    bottom: auto;
-    left: 43%;
+
+#back {
+	float: left;
+	margin-left: 98px;
+   	background-color: black;
+	color: white;
+	font-size: 15px;
+	text-align: center;
+	height: 42px;
+	width: 185px;
+	border-radius: 35px;
+	border: 0px;
 }
+
 .submit{
-    height: 25px;
-    width: 150px;
-    margin: 0;
-    position: relative;
-    bottom: auto;
-    left: 43%;
+	float: right;
+	margin-right: 98px;
+   	background-color: black;
+	color: white;
+	font-size: 15px;
+	text-align: center;
+	height: 42px;
+	width: 185px;
+	border-radius: 35px;
+	border: 0px;
 }
