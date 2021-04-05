@@ -18,4 +18,5 @@ public interface IDatabase {
 	public List<Pair<Tutor, PayVoucher>> findAllPayVouchers();
 	public PayVoucher submitPayVoucher(int voucherID);
 	public void updateVoucher(List<Entry> entries);
+	public void assignVoucher(String startDate, String dueDate);
 }

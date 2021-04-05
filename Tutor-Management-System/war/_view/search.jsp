@@ -15,7 +15,7 @@
     <h1 class = "Header"> Search</h1>
     
     <div class = "search">
-        <form action="${pageContext.servletContext.contextPath}/search" method="get">
+        <form action="${pageContext.servletContext.contextPath}/search" method="post">
             <input type="text" name="search" value="${searchParameter}">
             </br>
             <button id= "searchBTN">Search</button>

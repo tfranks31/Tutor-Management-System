@@ -32,17 +32,10 @@ public class SearchServlet extends HttpServlet{
 			controller = new SearchController();
 			ArrayList<Pair<Tutor, PayVoucher>> tutorVoucherList = new ArrayList<Pair<Tutor, PayVoucher>>();
 			
-			searchParameter = req.getParameter("search");
-			
-			if (searchParameter == null) {
-				//call all pay vouchers
-				tutorVoucherList = controller.getAllVouchers();
-			}else {
-				//call pay voucher per search
-				tutorVoucherList = controller.getVoucherFromSearch(searchParameter);
-			}
+			tutorVoucherList = controller.getAllVouchers();
 			
 			if(tutorVoucherList.isEmpty()) {
+				
 				System.out.println("Search Servlet: no Voucher Found");
 			}
 					
@@ -62,6 +55,37 @@ public class SearchServlet extends HttpServlet{
 		if (req.getParameter("ID") != null) {
 			
 			req.getRequestDispatcher("/payVoucher").forward(req, resp);
+		}
+		else if (req.getParameter("assignVoucher") != null) {
+			
+			controller.assignPayVoucher(req.getParameter("startDate"), req.getParameter("dueDate"));
+			
+			ArrayList<Pair<Tutor, PayVoucher>> tutorVoucherList = controller.getAllVouchers();
+			req.setAttribute("payVouchers", tutorVoucherList);
+			
+			req.getRequestDispatcher("/_view/search.jsp").forward(req, resp);
+		}
+		else if (req.getParameter("search") != null) {
+			
+			controller = new SearchController();
+			ArrayList<Pair<Tutor, PayVoucher>> tutorVoucherList = new ArrayList<Pair<Tutor, PayVoucher>>();
+			
+			searchParameter = req.getParameter("search");
+			
+			if (searchParameter == null) {
+				//call all pay vouchers
+				tutorVoucherList = controller.getAllVouchers();
+			}else {
+				//call pay voucher per search
+				tutorVoucherList = controller.getVoucherFromSearch(searchParameter);
+			}
+			
+			if(tutorVoucherList.isEmpty()) {
+				System.out.println("Search Servlet: no Voucher Found");
+			}
+					
+			req.setAttribute("payVouchers", tutorVoucherList);
+			req.getRequestDispatcher("/_view/search.jsp").forward(req, resp);
 		}
 	}
 }

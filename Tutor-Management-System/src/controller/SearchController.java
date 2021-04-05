@@ -43,4 +43,9 @@ public class SearchController {
 		
 		return result;
 	}
+	
+	public void assignPayVoucher(String startDate, String dueDate) {
+		
+		db.assignVoucher(startDate, dueDate);
+	}
 }
