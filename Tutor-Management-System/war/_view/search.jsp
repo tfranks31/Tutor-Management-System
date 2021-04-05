@@ -27,14 +27,20 @@
     </form>
     
     <table id = "searchResults">
+    	<th>Pay Vouchers</th>
         <th>Tutor Name</th>
         <th>Subject</th>
         <th>Voucher Submitted</th>
         <th>Due Date</th>
         </tr>
-        <c:forEach items="${payVouhcers}" var="voucher">
+        <c:forEach items="${payVouchers}" var="voucher">
             <tr>
-
+				<td>
+					<form action="${pageContext.servletContext.contextPath}/search" method="post">
+						<input type="submit" name="viewPayVoucher" value="View Pay Voucher"></input>
+						<input type="hidden" name="ID" value="${voucher.right.payVoucherID}"/>
+					</form>
+				</td>
                 <td> ${voucher.left.name} </td>
                 <td> ${voucher.left.subject} </td>
                 <td> ${voucher.right.isSubmitted} </td>

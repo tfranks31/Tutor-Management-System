@@ -46,8 +46,22 @@ public class SearchServlet extends HttpServlet{
 				System.out.println("Search Servlet: no Voucher Found");
 			}
 					
-			req.setAttribute("payVouhcers", tutorVoucherList);
+			req.setAttribute("payVouchers", tutorVoucherList);
 			req.getRequestDispatcher("/_view/search.jsp").forward(req, resp);
+		}
+	}
+	
+	@Override
+	protected void doPost(HttpServletRequest req, HttpServletResponse resp)
+			throws ServletException, IOException {
+
+		System.out.println("Search Servlet: doPost");	
+		
+		controller = new SearchController();
+		
+		if (req.getParameter("ID") != null) {
+			
+			req.getRequestDispatcher("/payVoucher").forward(req, resp);
 		}
 	}
 }
