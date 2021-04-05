@@ -46,8 +46,7 @@ public class EntryTest {
     
     @Test
     public void testGetSetPayVoucherID() {
-    	
     	entry.setPayVoucherID(1);
-    	assertEquals(1, entry.getEntryID());
+    	assertEquals(1, entry.getPayVoucherID());
     }
 }

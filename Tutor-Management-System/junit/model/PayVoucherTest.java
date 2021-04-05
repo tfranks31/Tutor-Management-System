@@ -52,7 +52,8 @@ public class PayVoucherTest{
 //        assertTrue(model.getTotalPay() == pay);
 //    }
     
-    @Test void testGetSetTotalPay() {
+    @Test 
+    public void testGetSetTotalPay() {
     	
     	model.setTotalPay(15.5);
     	assertTrue(model.getTotalPay() == 15.5);
