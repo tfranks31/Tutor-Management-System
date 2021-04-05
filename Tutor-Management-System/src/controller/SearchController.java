@@ -21,22 +21,27 @@ public class SearchController {
 	
 	public ArrayList<Pair<Tutor, PayVoucher>> getAllVouchers() {
 		
-		ArrayList<Pair<Tutor, PayVoucher>> allVouchers = (ArrayList<Pair<Tutor, PayVoucher>>) db.findAllPayVouchers();
+		List<Pair<Tutor, PayVoucher>> allVouchersList = db.findAllPayVouchers();
 		
-		if (allVouchers.isEmpty()) {
-			return null;
+		ArrayList<Pair<Tutor, PayVoucher>> allVouchers = new ArrayList<Pair<Tutor, PayVoucher>>();
+		for (Pair<Tutor, PayVoucher> voucherPair : allVouchersList) {
+			
+			allVouchers.add(voucherPair);
 		}
 		
-		return  allVouchers;
+		return allVouchers;
 	}
 	
 	public ArrayList<Pair<Tutor, PayVoucher>> getVoucherFromSearch(String search){
 		
-		ArrayList<Pair<Tutor, PayVoucher>> result = (ArrayList<Pair<Tutor, PayVoucher>>) db.findVoucherBySearch(search);
+		List<Pair<Tutor, PayVoucher>> resultList = db.findVoucherBySearch(search);
 		
-		if (result.isEmpty()) {
-			return null;
+		ArrayList<Pair<Tutor, PayVoucher>> result = new ArrayList<Pair<Tutor, PayVoucher>>();
+		for (Pair<Tutor, PayVoucher> voucherPair : resultList) {
+			
+			result.add(voucherPair);
 		}
+		
 		return result;
 	}
 }

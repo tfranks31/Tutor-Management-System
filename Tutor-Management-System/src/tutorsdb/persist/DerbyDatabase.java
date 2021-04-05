@@ -150,33 +150,60 @@ public class DerbyDatabase implements IDatabase {
 				PreparedStatement stmt4 = null;
 
 				try {
-					stmt1 = conn.prepareStatement("create table user_accounts ("
-							+ "	user_account_id integer primary key "
-							+ "		generated always as identity (start with 1, increment by 1), "
-							+ "	username varchar(40)," + "	password varchar(40)," + "	is_admin boolean" + ")");
+					stmt1 = conn.prepareStatement(
+						"create table user_accounts (" + 
+						"	user_account_id integer primary key " +
+						"		generated always as identity (start with 1, increment by 1), " +
+						"	username varchar(40)," + 
+						"	password varchar(40)," + 
+						"	is_admin boolean" + 
+						")"
+					);
 					stmt1.executeUpdate();
 
-					stmt2 = conn.prepareStatement("create table tutors (" + "	tutor_id integer primary key "
-							+ "		generated always as identity (start with 1, increment by 1), "
-							+ "	user_account_id integer constraint user_account_id references user_accounts, "
-							+ "	name varchar(80)," + "	email varchar(80)," + "   student_id varchar(16), "
-							+ "   account_number varchar(16), " + "   subject varchar(40), " + "   pay_rate double"
-							+ ")");
+					stmt2 = conn.prepareStatement(
+						"create table tutors (" + 
+						"	tutor_id integer primary key " + 
+						"		generated always as identity (start with 1, increment by 1), " + 
+						"	user_account_id integer constraint user_account_id references user_accounts, " + 
+						"	name varchar(80)," + 
+						"	email varchar(80)," + 
+						"   student_id varchar(16), " +
+						"   account_number varchar(16), " + 
+						"   subject varchar(40), " + 
+						"   pay_rate double" + 
+						")"
+					);
 					stmt2.executeUpdate();
 
-					stmt3 = conn.prepareStatement("create table pay_vouchers (" + "	pay_voucher_id integer primary key "
-							+ "		generated always as identity (start with 1, increment by 1), "
-							+ "	tutor_id integer constraint tutor_id references tutors, " + "	start_date varchar(12),"
-							+ "	due_date varchar(12)," + "   total_hours double," + "   total_pay double,"
-							+ "   is_submitted boolean," + "   is_signed boolean," + "   is_new boolean,"
-							+ "   is_admin_edited boolean" + ")");
+					stmt3 = conn.prepareStatement(
+						"create table pay_vouchers (" + 
+						"	pay_voucher_id integer primary key " + 
+						"		generated always as identity (start with 1, increment by 1), " + 
+						"	tutor_id integer constraint tutor_id references tutors, " + 
+						"	start_date varchar(12)," + 
+						"	due_date varchar(12)," + 
+						"   total_hours double," + 
+						"   total_pay double," + 
+						"   is_submitted boolean," + 
+						"   is_signed boolean," + 
+						"   is_new boolean," + 
+						"   is_admin_edited boolean" + 
+						")"
+					);
 					stmt3.executeUpdate();
 
-					stmt4 = conn.prepareStatement("create table entries (" + "	entry_id integer primary key "
-							+ "		generated always as identity (start with 1, increment by 1), "
-							+ "	pay_voucher_id integer constraint pay_voucher_id references pay_vouchers, "
-							+ "	date varchar(12)," + "	service_performed varchar(250),"
-							+ "   where_performed varchar(120), " + "   hours double" + ")");
+					stmt4 = conn.prepareStatement(
+						"create table entries (" + 
+						"	entry_id integer primary key " + 
+						"		generated always as identity (start with 1, increment by 1), " + 
+						"	pay_voucher_id integer constraint pay_voucher_id references pay_vouchers, " + 
+						"	date varchar(12)," + 
+						"	service_performed varchar(250)," + 
+						"   where_performed varchar(120), " + 
+						"   hours double" + 
+						")"
+					);
 					stmt4.executeUpdate();
 
 					return true;

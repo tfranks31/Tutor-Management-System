@@ -21,16 +21,16 @@ public class PayVoucherController {
 		db = DatabaseProvider.getInstance();
 	}
 	
-	public List<Tuple<Tutor, PayVoucher, Entry>> getPayVoucherEntries(int voucherID) {
+	public ArrayList<Tuple<Tutor, PayVoucher, Entry>> getPayVoucherEntries(int voucherID) {
 		
-		List<Tuple<Tutor, PayVoucher, Entry>> tutorVoucherList = db.findEntryByVoucher(voucherID);
+		List<Tuple<Tutor, PayVoucher, Entry>> tutorVoucherEntriesList = db.findEntryByVoucher(voucherID);
 		
-		if (tutorVoucherList.isEmpty()) {
-			return null;
-		} else {
-			return tutorVoucherList;
+		ArrayList<Tuple<Tutor, PayVoucher, Entry>> tutorVoucherEntries = new ArrayList<Tuple<Tutor, PayVoucher, Entry>>();
+		for (Tuple<Tutor, PayVoucher, Entry> tutorVoucherEntry : tutorVoucherEntriesList) {
+			
+			tutorVoucherEntries.add(tutorVoucherEntry);
 		}
 		
-		
+		return tutorVoucherEntries;
 	}
 }
