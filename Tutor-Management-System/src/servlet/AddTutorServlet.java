@@ -7,8 +7,11 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import controller.AddTutorController;
+
 public class AddTutorServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
+	private AddTutorController controller = null; 
 
 	@Override
 	protected void doGet(HttpServletRequest req, HttpServletResponse resp)
@@ -39,6 +42,18 @@ public class AddTutorServlet extends HttpServlet {
 		
 		// If the tutor information is valid, continue to the search page
 		if (tutorValidate(req)) {
+			controller = new AddTutorController();
+			String firstName = req.getParameter("firstName");
+			String lastName = req.getParameter("lastName");
+			String username = req.getParameter("username");
+			String password = req.getParameter("password");
+			String email = req.getParameter("email");
+			int studentID = Integer.parseInt(req.getParameter("studentID")); 
+			int accountNumber = Integer.parseInt(req.getParameter("accountNumber"));
+			String subject = req.getParameter("subject");
+			String payRate = req.getParameter("payRate");
+			
+			controller.addTutor(firstName, lastName, username, password, email, studentID, accountNumber, subject, accountNumber);
 			
 			resp.sendRedirect("search");
 		}
@@ -56,6 +71,7 @@ public class AddTutorServlet extends HttpServlet {
 			req.setAttribute("accountNumber", req.getParameter("accountNumber"));
 			req.setAttribute("subject", req.getParameter("subject"));
 			req.setAttribute("payRate", req.getParameter("payRate"));
+			
 			
 			req.getRequestDispatcher("/_view/addTutor.jsp").forward(req, resp);
 		}
