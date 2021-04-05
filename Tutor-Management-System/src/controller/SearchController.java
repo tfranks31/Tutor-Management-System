@@ -15,7 +15,6 @@ public class SearchController {
 	
 	public SearchController() {
 		
-		DatabaseProvider.setInstance(new FakeDatabase());
 		db = DatabaseProvider.getInstance();
 	}
 	

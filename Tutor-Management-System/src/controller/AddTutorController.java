@@ -9,7 +9,6 @@ public class AddTutorController {
 	
 	public AddTutorController() {
 		
-		DatabaseProvider.setInstance(new FakeDatabase());
 		db = DatabaseProvider.getInstance();
 	}
 	

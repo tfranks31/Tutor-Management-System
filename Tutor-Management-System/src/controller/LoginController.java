@@ -10,7 +10,6 @@ public class LoginController {
 	
 	public LoginController() {
 		
-		DatabaseProvider.setInstance(new FakeDatabase());
 		db = DatabaseProvider.getInstance();
 	}
 	

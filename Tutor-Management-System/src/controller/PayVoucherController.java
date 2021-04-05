@@ -17,7 +17,6 @@ public class PayVoucherController {
 	
 	public PayVoucherController() {
 		
-		DatabaseProvider.setInstance(new FakeDatabase());
 		db = DatabaseProvider.getInstance();
 	}
 	
