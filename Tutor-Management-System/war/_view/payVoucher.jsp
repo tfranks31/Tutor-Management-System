@@ -63,7 +63,14 @@
         </p>
     </div>
 
-    <button class="submit">Submit Pay Voucher</button>
+    <form action="${pageContext.servletContext.contextPath}/payVoucher" method="post">
+        <input type="submit" class="submit" name="updateVoucher" value="Update Pay Voucher">
+    </form>
+
+    <form action="${pageContext.servletContext.contextPath}/payVoucher"method="post">
+        <input type="submit" class="submit" name="submitVoucher" value="Submit Pay Voucher">
+    </form>
+    
 
 
 </body>
