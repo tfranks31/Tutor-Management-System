@@ -483,4 +483,28 @@ public class DerbyDatabase implements IDatabase {
 		return null;
 	}
 
+	@Override
+	public void deleteUserAccount(UserAccount userAccounts) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void deleteTutor(Tutor tutors) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void deletePayVoucher(PayVoucher payVouchers) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void deleteEntry(Entry entries) {
+		// TODO Auto-generated method stub
+		
+	}
+
 }

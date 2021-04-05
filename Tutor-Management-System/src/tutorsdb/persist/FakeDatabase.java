@@ -68,6 +68,30 @@ public class FakeDatabase implements IDatabase {
 		
 		return entryList;
 	}
+	
+	@Override
+	public void deleteUserAccount(UserAccount userAccount) {
+
+		accountList.remove(userAccount);
+	}
+
+	@Override
+	public void deleteTutor(Tutor tutor) {
+
+		tutorList.remove(tutor);
+	}
+
+	@Override
+	public void deletePayVoucher(PayVoucher payVoucher) {
+			
+		payVoucherList.remove(payVoucher);
+	}
+
+	@Override
+	public void deleteEntry(Entry entry) {
+		
+		entryList.remove(entry);
+	}
 
 	@Override
 	public List<Tuple<Tutor, PayVoucher, Entry>> findEntryByVoucher(int voucherID) {

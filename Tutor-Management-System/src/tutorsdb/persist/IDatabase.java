@@ -23,4 +23,8 @@ public interface IDatabase {
 	public List<Tutor> getTutors();
 	public List<PayVoucher> getPayVouchers();
 	public List<Entry> getEntries();
+	public void deleteUserAccount(UserAccount userAccount);
+	public void deleteTutor(Tutor tutor);
+	public void deletePayVoucher(PayVoucher payVoucher);
+	public void deleteEntry(Entry entry);
 }

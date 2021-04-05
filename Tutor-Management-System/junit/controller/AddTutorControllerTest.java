@@ -55,5 +55,8 @@ public class AddTutorControllerTest {
 		assertTrue(newTutor.getAccountNumber().equals(accountNumber));
 		assertTrue(newTutor.getSubject().equals(subject));
 		assertTrue(newTutor.getPayRate() == payRate);
+		
+		db.deleteUserAccount(newAccount);
+		db.deleteTutor(newTutor);
 	}
 }
