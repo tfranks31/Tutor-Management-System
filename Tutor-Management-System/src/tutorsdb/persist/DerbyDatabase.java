@@ -388,7 +388,7 @@ public class DerbyDatabase implements IDatabase {
 
 	@Override
 	public void AddTutor(String firstname, String lastname, String username, String password, String email,
-			int studentID, int accountNumber, String subject, double payRate) throws UnsupportedOperationException {
+			String studentID, String accountNumber, String subject, double payRate) throws UnsupportedOperationException {
 		// TODO Auto-generated method stub
 
 	}
@@ -457,6 +457,30 @@ public class DerbyDatabase implements IDatabase {
 	public void assignVoucher(String startDate, String dueDate) {
 		// TODO Auto-generated method stub
 		
+	}
+
+	@Override
+	public List<UserAccount> getUserAccounts() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public List<Tutor> getTutors() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public List<PayVoucher> getPayVouchers() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public List<Entry> getEntries() {
+		// TODO Auto-generated method stub
+		return null;
 	}
 
 }

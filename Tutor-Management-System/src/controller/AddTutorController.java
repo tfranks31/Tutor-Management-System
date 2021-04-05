@@ -13,7 +13,7 @@ public class AddTutorController {
 	}
 	
 	public void addTutor(String firstname, String lastname, String username, String password,
-			String email, int studentID, int accountNumber, String subject, double payRate){
+			String email, String studentID, String accountNumber, String subject, double payRate){
 		
 		db.AddTutor(firstname, lastname, username, password, email, studentID, accountNumber, subject, payRate);
 		

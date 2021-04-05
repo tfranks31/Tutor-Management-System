@@ -44,6 +44,30 @@ public class FakeDatabase implements IDatabase {
 			throw new IllegalStateException("Couldn't read initial data", e);
 		}
 	}
+	
+	@Override
+	public List<UserAccount> getUserAccounts() {
+		
+		return accountList;
+	}
+	
+	@Override
+	public List<Tutor> getTutors() {
+		
+		return tutorList;
+	}
+	
+	@Override
+	public List<PayVoucher> getPayVouchers() {
+		
+		return payVoucherList;
+	}
+	
+	@Override
+	public List<Entry> getEntries() {
+		
+		return entryList;
+	}
 
 	@Override
 	public List<Tuple<Tutor, PayVoucher, Entry>> findEntryByVoucher(int voucherID) {
@@ -147,7 +171,7 @@ public class FakeDatabase implements IDatabase {
 
 	@Override
 	public void AddTutor(String firstname, String lastname, String username, String password,
-			String email, int studentID, int accountNumber, String subject, double payRate) {
+			String email, String studentID, String accountNumber, String subject, double payRate) {
 		//generates new user
 		UserAccount user = new UserAccount();
 		user.setUsername(username);
@@ -162,8 +186,8 @@ public class FakeDatabase implements IDatabase {
 		String name = firstname + " " + lastname;
 		tutor.setName(name);
 		tutor.setEmail(email);
-		tutor.setStudentID(String.valueOf(studentID));
-		tutor.setAccountNumber(String.valueOf(accountNumber));
+		tutor.setStudentID(studentID);
+		tutor.setAccountNumber(accountNumber);
 		tutor.setSubject(subject);
 		tutor.setPayRate(payRate);
 		

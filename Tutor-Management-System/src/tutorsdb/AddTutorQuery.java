@@ -22,9 +22,9 @@ public class AddTutorQuery {
 		System.out.print("Enter tutor's email: ");
 		String email = keyBoard.nextLine();
 		System.out.print("Enter tutor's student ID: ");
-		int studentID = keyBoard.nextInt();
+		String studentID = keyBoard.nextLine();
 		System.out.print("Enter tutor's account number: ");
-		int accountNumber = keyBoard.nextInt();
+		String accountNumber = keyBoard.nextLine();
 		System.out.print("Enter tutor's subject: ");
 		String subject = keyBoard.nextLine();
 		System.out.print("Enter tutor's rate of pay: ");

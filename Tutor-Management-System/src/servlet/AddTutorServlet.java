@@ -48,12 +48,12 @@ public class AddTutorServlet extends HttpServlet {
 			String username = req.getParameter("username");
 			String password = req.getParameter("password");
 			String email = req.getParameter("email");
-			int studentID = Integer.parseInt(req.getParameter("studentID")); 
-			int accountNumber = Integer.parseInt(req.getParameter("accountNumber"));
+			String studentID = req.getParameter("studentID"); 
+			String accountNumber = req.getParameter("accountNumber");
 			String subject = req.getParameter("subject");
-			String payRate = req.getParameter("payRate");
+			double payRate = Double.parseDouble(req.getParameter("payRate"));
 			
-			controller.addTutor(firstName, lastName, username, password, email, studentID, accountNumber, subject, accountNumber);
+			controller.addTutor(firstName, lastName, username, password, email, studentID, accountNumber, subject, payRate);
 			
 			resp.sendRedirect("search");
 		}
