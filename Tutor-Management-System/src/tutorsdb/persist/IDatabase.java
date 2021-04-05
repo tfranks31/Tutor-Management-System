@@ -14,9 +14,13 @@ public interface IDatabase {
 	public UserAccount accountByLogin(String username, String password);
 	public List<Pair<Tutor, PayVoucher>> findVoucherBySearch(String search);
 	public void AddTutor (String firstname, String lastname, String username, String password,
-							String email, int studentID, int accountNumber, String subject, double payRate);
+							String email, String studentID, String accountNumber, String subject, double payRate);
 	public List<Pair<Tutor, PayVoucher>> findAllPayVouchers();
 	public PayVoucher submitPayVoucher(int voucherID);
 	public void updateVoucher(List<Entry> entries);
 	public void assignVoucher(String startDate, String dueDate);
+	public List<UserAccount> getUserAccounts();
+	public List<Tutor> getTutors();
+	public List<PayVoucher> getPayVouchers();
+	public List<Entry> getEntries();
 }
