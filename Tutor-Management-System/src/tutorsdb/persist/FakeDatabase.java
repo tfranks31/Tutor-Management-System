@@ -48,6 +48,7 @@ public class FakeDatabase implements IDatabase {
 	@Override
 	public List<Tuple<Tutor, PayVoucher, Entry>> findEntryByVoucher(int voucherID) {
 		List<Tuple<Tutor, PayVoucher, Entry>> result = new ArrayList<Tuple<Tutor, PayVoucher, Entry>>();
+		
 		for (PayVoucher voucher: payVoucherList) {
 			for (Tutor tutor : tutorList) {
 				if (voucher.getTutorID() == tutor.getTutorID()) {
@@ -61,6 +62,22 @@ public class FakeDatabase implements IDatabase {
 				}
 			}
 		}
+		
+		//if voucher is empty returns tutor and voucher info with blank entry
+		if (result.isEmpty()) {
+			for (PayVoucher voucher: payVoucherList) {
+				for (Tutor tutor : tutorList) {
+					if (voucher.getTutorID() == tutor.getTutorID()) {
+						if (voucher.getPayVoucherID() == voucherID) {
+							Entry entry = new Entry();
+							entry.setEntryID(-1);
+							result.add(new Tuple<Tutor, PayVoucher, Entry>(tutor, voucher, entry));
+						}
+					}
+				}
+			}
+		}
+		
 		return result;
 	}
 

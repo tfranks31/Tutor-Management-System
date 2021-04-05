@@ -19,6 +19,12 @@ public class PayVoucherServlet extends HttpServlet{
 	private static final long serialVersionUID = 1L;
 	private int tableSize;
 	private PayVoucherController controller = null;
+
+	
+	public PayVoucherServlet(){
+		controller = new PayVoucherController();
+	}
+	
 	@Override
 	protected void doGet(HttpServletRequest req, HttpServletResponse resp)
 			throws ServletException, IOException {
@@ -33,14 +39,15 @@ public class PayVoucherServlet extends HttpServlet{
 		// Load addTutor
 		else {
 			
-			controller = new PayVoucherController();
-			ArrayList<Tuple<Tutor, PayVoucher, Entry>> tutorVoucherEntryList = (ArrayList<Tuple<Tutor, PayVoucher, Entry>>) controller.getPayVoucherEntries(1);
+			ArrayList<Tuple<Tutor, PayVoucher, Entry>> tutorVoucherEntryList = (ArrayList<Tuple<Tutor, PayVoucher, Entry>>) controller.getPayVoucherEntries(4);
 			ArrayList<Entry> entries = new ArrayList<Entry>();
 			PayVoucher voucher = tutorVoucherEntryList.get(0).getMiddle(); //all voucher instances are identical
 			Tutor tutor = tutorVoucherEntryList.get(0).getLeft(); //add tutor instances are identical
 			
 			for (Tuple<Tutor, PayVoucher, Entry> tutorVoucherEntry : tutorVoucherEntryList) {
-				entries.add(tutorVoucherEntry.getRight());
+				if (tutorVoucherEntry.getRight().getEntryID() != -1) {
+					entries.add(tutorVoucherEntry.getRight());
+				}
 			}
 
 			if (entries.size() < 10) {
@@ -74,16 +81,15 @@ public class PayVoucherServlet extends HttpServlet{
 		// Go back to search
 		if (req.getParameter("addRow") != null) {	
 			
-			controller = new PayVoucherController();
-			ArrayList<Tuple<Tutor, PayVoucher, Entry>> tutorVoucherEntryList = (ArrayList<Tuple<Tutor, PayVoucher, Entry>>) controller.getPayVoucherEntries(1);
+			ArrayList<Tuple<Tutor, PayVoucher, Entry>> tutorVoucherEntryList = (ArrayList<Tuple<Tutor, PayVoucher, Entry>>) controller.getPayVoucherEntries(4);
 			
 			ArrayList<Entry> entries = new ArrayList<Entry>();
 			PayVoucher voucher = tutorVoucherEntryList.get(0).getMiddle(); //all voucher instances are identical
-			Tutor tutor = tutorVoucherEntryList.get(0).getLeft(); //add tutor instances are identical
+			Tutor tutor = tutorVoucherEntryList.get(0).getLeft(); //all tutor instances are identical
 						
 			String[] cells = req.getParameterValues("cell");
-			for (int i = 0; i < cells.length; i += 4) {
-				
+			
+			for (int i = 0; i < cells.length; i += 4) {	
 				if (!cells[i].equals("") && !cells[i + 1].equals("") &&
 					!cells[i + 2].equals("") && !cells[i + 3].equals("")) {
 					
@@ -115,6 +121,7 @@ public class PayVoucherServlet extends HttpServlet{
 			req.setAttribute("totalPay", voucher.getTotalPay());
 			
 			req.getRequestDispatcher("/_view/payVoucher.jsp").forward(req, resp);
+		
 		}
 		
 	}
