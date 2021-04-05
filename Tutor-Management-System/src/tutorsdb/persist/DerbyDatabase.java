@@ -420,4 +420,10 @@ public class DerbyDatabase implements IDatabase {
 		return null;
 	}
 
+	@Override
+	public void updateVoucher(List<Entry> entries) throws UnsupportedOperationException {
+		// TODO Auto-generated method stub
+		
+	}
+
 }

@@ -34,7 +34,7 @@ public class InitialData {
 				account.setIsAdmin(Boolean.parseBoolean(i.next()));
 				accountList.add(account);
 			}
-			System.out.println("accountList loaded from CSV file");
+		//	System.out.println("accountList loaded from CSV file");
 			return accountList;
 		} finally {
 			readAccounts.close();
@@ -68,7 +68,7 @@ public class InitialData {
 				
 				tutorList.add(tutor);
 			}
-			System.out.println("tutorList loaded from CSV file");
+		//	System.out.println("tutorList loaded from CSV file");
 			return tutorList;
 		} finally {
 			readTutors.close();
@@ -104,7 +104,7 @@ public class InitialData {
 				
 				payVoucherList.add(payVoucher);
 			}
-			System.out.println("payVoucherList loaded from CSV file");
+		//	System.out.println("payVoucherList loaded from CSV file");
 			return payVoucherList;
 		} finally {
 			readPayVouchers.close();
@@ -136,7 +136,7 @@ public class InitialData {
 				
 				entryList.add(entry);
 			}
-			System.out.println("entryList loaded from CSV file");
+		//	System.out.println("entryList loaded from CSV file");
 			return entryList;
 		} finally {
 			readEntries.close();

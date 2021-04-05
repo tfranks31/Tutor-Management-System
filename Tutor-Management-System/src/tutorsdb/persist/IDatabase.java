@@ -17,4 +17,5 @@ public interface IDatabase {
 							String email, int studentID, int accountNumber, String subject, double payRate);
 	public List<Pair<Tutor, PayVoucher>> findAllPayVouchers();
 	public PayVoucher submitPayVoucher(int voucherID);
+	public void updateVoucher(List<Entry> entries);
 }

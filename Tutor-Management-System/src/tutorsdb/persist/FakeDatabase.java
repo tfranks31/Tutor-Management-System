@@ -179,5 +179,13 @@ public class FakeDatabase implements IDatabase {
 		return null;
 	}
 
+	@Override
+	public void updateVoucher(List<Entry> entries) {
+		for (Entry entry : entries) {
+			entry.setEntryID(entryList.size());
+			entryList.add(entry);
+		}
+	}
+
 
 }
