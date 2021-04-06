@@ -431,9 +431,9 @@ public class DerbyDatabase implements IDatabase {
 			boolean is_admin = false;
 			try {
 				stmt1 = conn.prepareStatement(
-						"INSERT INTO user_accounts (username, password, is_admin) " + 
-						"VALUES (?, ?, ?) "
-					);
+					"INSERT INTO user_accounts (username, password, is_admin) " + 
+					"VALUES (?, ?, ?) "
+				);
 				stmt1.setString(1, account.getUsername());
 				stmt1.setString(2, account.getPassword());
 				stmt1.setBoolean(3, is_admin);
@@ -441,11 +441,11 @@ public class DerbyDatabase implements IDatabase {
 				stmt1.executeUpdate();
 		
 				stmt2 = conn.prepareStatement(
-						"SELECT user_accounts.* " + 
-						"FROM user_accounts " + 
-						"WHERE user_accounts.username = ? " + 
-						"AND user_accounts.password = ? "
-					);
+					"SELECT user_accounts.* " + 
+					"FROM user_accounts " + 
+					"WHERE user_accounts.username = ? " + 
+					"AND user_accounts.password = ? "
+				);
 				
 				stmt2.setString(1, account.getUsername());
 				stmt2.setString(2, account.getPassword());
@@ -552,10 +552,10 @@ public class DerbyDatabase implements IDatabase {
 					stmt1.executeUpdate();
 					
 					stmt2 = conn.prepareStatement(
-							"SELECT pay_vouchers.* " + 
-							"FROM pay_vouchers " +
-							"WHERE pay_vouchers.pay_voucher_id = ? "
-						);
+						"SELECT pay_vouchers.* " + 
+						"FROM pay_vouchers " +
+						"WHERE pay_vouchers.pay_voucher_id = ? "
+					);
 					
 					stmt2.setLong(1, voucherID);
 					
@@ -582,7 +582,38 @@ public class DerbyDatabase implements IDatabase {
 
 	@Override
 	public void updateVoucher(List<Entry> entries, int voucherID) throws UnsupportedOperationException {
-		// TODO Auto-generated method stub
+		executeTransaction(new Transaction<Boolean>() {
+			
+			@Override
+			public Boolean execute(Connection conn) throws SQLException {
+				PreparedStatement stmt = null;
+				
+				try {
+					for (Entry entry : entries) {
+						stmt = conn.prepareStatement(
+							"UPDATE entries " + 
+							"SET entries.date = ?, entries.service_performed = ?, entries.where_performed = ?, entries.hours = ? " +
+							"WHERE entries.entry_id = ? " + 
+							"AND entries.pay_voucher_id = ? "
+						);
+						
+						stmt.setString(1, entry.getDate());
+						stmt.setString(2, entry.getServicePerformed());
+						stmt.setString(3, entry.getWherePerformed());
+						stmt.setDouble(4, entry.getHours());
+						stmt.setInt(5, entry.getEntryID());
+						stmt.setInt(6, voucherID);
+						
+						stmt.executeUpdate();
+				
+					}
+					return true;
+					
+				} finally {
+					DBUtil.closeQuietly(stmt);
+				}
+			}
+		});
 		
 	}
 
