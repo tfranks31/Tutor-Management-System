@@ -340,12 +340,11 @@ public class DerbyDatabase implements IDatabase {
 						"select tutors.*, pay_vouchers.*, entries.*" + 
 						"from tutors, pay_vouchers, entries " + 
 						"where entries.pay_voucher_id = ? " +
-						"AND pay_vouchers.pay_voucher_id = ?" +
-						"AND pay_vouchers.tutor_id = tutors.tutor_id"
+						"AND pay_vouchers.pay_voucher_id = entries.pay_voucher_id " +
+						"AND pay_vouchers.tutor_id = tutors.tutor_id "
 					);
 					
 					stmt.setLong(1, voucherID);
-					stmt.setLong(2, voucherID);
 					
 					List<Tuple<Tutor, PayVoucher, Entry>> result = new ArrayList<Tuple<Tutor, PayVoucher, Entry>>();
 
@@ -384,10 +383,10 @@ public class DerbyDatabase implements IDatabase {
 				try {
 					// Retrieve the users account
 					stmt = conn.prepareStatement(
-							"select user_accounts.*" + 
-							"  from user_accounts " + 
-							" where user_accounts.username = ? " + 
-							"AND user_accounts.password = ? "
+						"select user_accounts.*" + 
+						"from user_accounts " + 
+						"where user_accounts.username = ? " + 
+						"AND user_accounts.password = ? "
 					);
 					stmt.setString(1, username);
 					stmt.setString(2, password);
@@ -437,11 +436,11 @@ public class DerbyDatabase implements IDatabase {
 				try {
 					// Retrieve all attributes from pay_voucher
 					stmt = conn.prepareStatement(
-							"select pay_vouchers.*, tutors.* " + 
-							"  from pay_vouchers, tutors " + 
-							" where pay_vouchers.tutor_id = tutors.tutor_id "
+						"select pay_vouchers.*, tutors.* " + 
+						"from pay_vouchers, tutors " + 
+						"where pay_vouchers.tutor_id = tutors.tutor_id "
 					);
-
+					
 					List<Pair<Tutor, PayVoucher>> result = new ArrayList<Pair<Tutor, PayVoucher>>();
 
 					resultSet = stmt.executeQuery();
@@ -468,8 +467,51 @@ public class DerbyDatabase implements IDatabase {
 
 	@Override
 	public PayVoucher submitPayVoucher(int voucherID) throws UnsupportedOperationException {
-		// TODO Auto-generated method stub
-		return null;
+		return executeTransaction(new Transaction<PayVoucher>() {
+			@Override
+			public PayVoucher execute(Connection conn) throws SQLException {
+				PreparedStatement stmt1 = null;
+				PreparedStatement stmt2 = null;
+				ResultSet resultSet = null;
+
+				try {
+					// Retrieve all attributes from pay_voucher
+					stmt1 = conn.prepareStatement(
+						"UPDATE pay_vouchers " + 
+						"SET pay_vouchers.is_submitted = True " +
+						"WHERE pay_vouchers.pay_voucher_id = ? "
+					);
+					
+					stmt1.setLong(1, voucherID);
+					stmt1.executeUpdate();
+					
+					stmt2 = conn.prepareStatement(
+							"SELECT pay_vouchers.* " + 
+							"FROM pay_vouchers " +
+							"WHERE pay_vouchers.pay_voucher_id = ? "
+						);
+					
+					stmt2.setLong(1, voucherID);
+					
+					resultSet = stmt2.executeQuery();
+					
+					PayVoucher result = new PayVoucher();
+					
+					if (resultSet.next()) {
+						PayVoucher PayVoucher = new PayVoucher();
+						loadPayVoucher(PayVoucher, resultSet, 1);
+
+						result = PayVoucher;
+					}
+				
+					return result;
+				} finally {
+					DBUtil.closeQuietly(resultSet);
+					DBUtil.closeQuietly(stmt1);
+					DBUtil.closeQuietly(stmt2);
+				}
+			}
+		});
 	}
 
 	@Override
