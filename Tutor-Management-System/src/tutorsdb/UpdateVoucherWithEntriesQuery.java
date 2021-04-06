@@ -20,6 +20,7 @@ public class UpdateVoucherWithEntriesQuery {
 		//sets up test list
 		PayVoucher voucher = new PayVoucher();
 		voucher.setPayVoucherID(-1);
+		voucher.setTutorID(1);
 		Entry entry1 = new Entry();
 		entry1.setPayVoucherID(1);
 		entry1.setDate("01/03/2021");
