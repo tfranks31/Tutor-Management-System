@@ -619,8 +619,58 @@ public class DerbyDatabase implements IDatabase {
 
 	@Override
 	public void assignVoucher(String startDate, String dueDate) {
-		// TODO Auto-generated method stub
-		
+		executeTransaction(new Transaction<Boolean>() {
+			
+			@Override
+			public Boolean execute(Connection conn) throws SQLException {
+				PreparedStatement stmt1 = null;
+				PreparedStatement stmt2 = null;
+				ResultSet resultSet = null;
+				
+				try {
+					
+					stmt1 = conn.prepareStatement(
+						"SELECT tutors.* " + 
+						"FROM tutors " 
+					);
+					
+					resultSet = stmt1.executeQuery();
+					
+					List<Tutor> result = new ArrayList<Tutor>();
+					
+					while (resultSet.next()) {
+						Tutor Tutor = new Tutor();
+						loadTutor(Tutor, resultSet, 1);
+
+						result.add(Tutor);
+					}
+				
+					for (Tutor tutor : result) {
+						stmt2 = conn.prepareStatement(
+							"INSERT INTO pay_vouchers (tutor_id, start_date, due_date, total_hours, total_pay, is_submitted, is_signed, is_new, is_admin_edited) " +
+							"VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)"
+						);
+						stmt2.setInt(1, tutor.getTutorID());
+						stmt2.setString(2, startDate);
+						stmt2.setString(3, dueDate);
+						stmt2.setDouble(4, 0);
+						stmt2.setDouble(5, 0);
+						stmt2.setBoolean(6, false);
+						stmt2.setBoolean(7, false);
+						stmt2.setBoolean(8, true);
+						stmt2.setBoolean(9, false);
+						
+					}
+					
+					return true;
+					
+				} finally {
+					DBUtil.closeQuietly(resultSet);
+					DBUtil.closeQuietly(stmt1);
+					DBUtil.closeQuietly(stmt2);
+				}
+			}
+		});
 	}
 
 	@Override
