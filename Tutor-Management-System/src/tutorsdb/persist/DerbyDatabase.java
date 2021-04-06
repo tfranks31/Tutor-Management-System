@@ -328,8 +328,49 @@ public class DerbyDatabase implements IDatabase {
 
 	@Override
 	public List<Tuple<Tutor, PayVoucher, Entry>> findEntryByVoucher(int voucherID) throws UnsupportedOperationException{
-		// TODO Auto-generated method stub
-		return null;
+		return executeTransaction(new Transaction<List<Tuple<Tutor, PayVoucher, Entry>>>() {
+			@Override
+			public List<Tuple<Tutor, PayVoucher, Entry>> execute(Connection conn) throws SQLException {
+				PreparedStatement stmt = null;
+				ResultSet resultSet = null;
+
+				try {
+					// Retrieve the entries with the given voucher id
+					stmt = conn.prepareStatement(
+						"select tutors.*, pay_vouchers.*, entries.*" + 
+						"from tutors, pay_vouchers, entries " + 
+						"where entries.pay_voucher_id = ? " +
+						"AND pay_vouchers.pay_voucher_id = ?" +
+						"AND pay_vouchers.tutor_id = tutors.tutor_id"
+					);
+					
+					stmt.setLong(1, voucherID);
+					stmt.setLong(2, voucherID);
+					
+					List<Tuple<Tutor, PayVoucher, Entry>> result = new ArrayList<Tuple<Tutor, PayVoucher, Entry>>();
+
+					resultSet = stmt.executeQuery();
+
+					while (resultSet.next()) {
+						// Create and then load a new entry object
+						Tutor Tutor = new Tutor();
+						loadTutor(Tutor, resultSet, 1);
+						PayVoucher PayVoucher = new PayVoucher();
+						loadPayVoucher(PayVoucher, resultSet, 9);
+						Entry Entry = new Entry();
+						loadEntry(Entry, resultSet, 19);
+						result.add(new Tuple<Tutor, PayVoucher, Entry>(Tutor, PayVoucher, Entry));
+					}
+
+					return result;
+				} finally {
+					DBUtil.closeQuietly(resultSet);
+					DBUtil.closeQuietly(stmt);
+				}
+			}
+		});
+
+
 	}
 
 	@Override
