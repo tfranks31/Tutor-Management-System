@@ -1,7 +1,7 @@
 html{
     margin-top: 20px;
-    margin-left: 17%;
-    margin-right: 17%;
+    margin-left: 16%;
+    margin-right: 16%;
     margin-bottom: 20px;
     background-image: url("payVoucherBackground.jpg");
 	background-size: 1920px 1325px;
@@ -9,8 +9,7 @@ html{
 }
 
 body {
-	width: 925px;
-	height: 775px;
+	width: 900px;
 	margin: auto;
 	border: 2px solid #e1eae2;
 	border-radius: 20px;
@@ -89,7 +88,8 @@ th, td{
 
 #back {
 	float: left;
-	margin-left: 98px;
+	margin-top: -42px;
+	margin-left: 55px;
    	background-color: black;
 	color: white;
 	font-size: 15px;
@@ -100,9 +100,21 @@ th, td{
 	border: 0px;
 }
 
-.submit{
+#update {
+	margin-left: 235px;
+   	background-color: black;
+	color: white;
+	font-size: 15px;
+	text-align: center;
+	height: 42px;
+	width: 185px;
+	border-radius: 35px;
+	border: 0px;
+}
+
+#submit{
 	float: right;
-	margin-right: 98px;
+	margin-right: 50px;
    	background-color: black;
 	color: white;
 	font-size: 15px;
