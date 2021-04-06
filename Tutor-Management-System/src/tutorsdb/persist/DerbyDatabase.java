@@ -507,4 +507,28 @@ public class DerbyDatabase implements IDatabase {
 		
 	}
 
+	@Override
+	public void insertUserAccount(UserAccount userAccount) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void insertTutor(Tutor tutor) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void insertPayVoucher(PayVoucher payVoucher) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void insertEntry(Entry entry) {
+		// TODO Auto-generated method stub
+		
+	}
+
 }

@@ -31,18 +31,15 @@ public class LoginControllerTest {
 		
 		String username = "test";
 		String password = "test";
-		db.addTutor("test", "test", username, password, "test", "test", "test", "test", 1);
-		db.getUserAccounts();
+		UserAccount newAccount = new UserAccount();
+		newAccount.setAccountID(-1);
+		newAccount.setUsername(username);
+		newAccount.setPassword(password);
 		
-		List<UserAccount> accountList = db.getUserAccounts();
-		List<Tutor> tutorList = db.getTutors();
-		
-		UserAccount newAccount = accountList.get(accountList.size() - 1);
-		Tutor newTutor = tutorList.get(tutorList.size() - 1);
+		db.insertUserAccount(newAccount);
 		
 		assertEquals(newAccount, controller.getUserFromLogin(username, password));
 		
 		db.deleteUserAccount(newAccount);
-		db.deleteTutor(newTutor);
 	}
 }

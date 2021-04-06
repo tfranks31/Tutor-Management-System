@@ -94,6 +94,30 @@ public class FakeDatabase implements IDatabase {
 	}
 
 	@Override
+	public void insertUserAccount(UserAccount userAccount) {
+		
+		accountList.add(userAccount);
+	}
+
+	@Override
+	public void insertTutor(Tutor tutor) {
+
+		tutorList.add(tutor);
+	}
+
+	@Override
+	public void insertPayVoucher(PayVoucher payVoucher) {
+		
+		payVoucherList.add(payVoucher);
+	}
+
+	@Override
+	public void insertEntry(Entry entry) {
+		
+		entryList.add(entry);
+	}
+	
+	@Override
 	public List<Tuple<Tutor, PayVoucher, Entry>> findEntryByVoucher(int voucherID) {
 		List<Tuple<Tutor, PayVoucher, Entry>> result = new ArrayList<Tuple<Tutor, PayVoucher, Entry>>();
 		

@@ -27,4 +27,8 @@ public interface IDatabase {
 	public void deleteTutor(Tutor tutor);
 	public void deletePayVoucher(PayVoucher payVoucher);
 	public void deleteEntry(Entry entry);
+	public void insertUserAccount(UserAccount userAccount);
+	public void insertTutor(Tutor tutor);
+	public void insertPayVoucher(PayVoucher payVoucher);
+	public void insertEntry(Entry entry);
 }
