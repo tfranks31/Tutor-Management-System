@@ -74,8 +74,9 @@ public class PayVoucherControllerTest {
 		
 		List<Entry> dbEntries = db.getEntries();
 		
-		assertEquals(entry.getEntryID(), dbEntries.get(dbEntries.size()));
+		assertEquals(entry, dbEntries.get(dbEntries.size() - 1));
 		
 		db.deleteEntry(entry);
+		db.deletePayVoucher(payVoucher);
 	}
 }

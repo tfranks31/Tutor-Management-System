@@ -12,7 +12,7 @@ public class UserAccount {
 	private boolean isAdmin;
 	
 	/**
-	 * Empty UserAccount Constructor
+	 * Empty UserAccount Constructor.
 	 */
 	public UserAccount() {
 		
@@ -23,10 +23,10 @@ public class UserAccount {
 	}
 	
 	/**
-	 * Initialize UserAccount Constructor
-	 * @param username This UserAccount's username
-	 * @param password This UserAccount's password
-	 * @param accountId This UserAccount's account ID
+	 * Initialize UserAccount Constructor.
+	 * @param username This UserAccount's username.
+	 * @param password This UserAccount's password.
+	 * @param accountId This UserAccount's account ID.
 	 */
 	public UserAccount(String username, String password, int accountID, boolean isAdmin) {
 		

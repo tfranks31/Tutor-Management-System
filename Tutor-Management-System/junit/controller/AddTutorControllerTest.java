@@ -1,6 +1,6 @@
 package controller;
 
-import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.assertEquals;
 
 import java.util.List;
 
@@ -21,6 +21,7 @@ public class AddTutorControllerTest {
 	@Before
     public void setUp() {
 		
+		// Set and get the tutordb instance and initialize AddTutorController
 		DatabaseProvider.setInstance(new FakeDatabase());
 		db = DatabaseProvider.getInstance();
 		controller = new AddTutorController();
@@ -29,34 +30,24 @@ public class AddTutorControllerTest {
 	@Test
 	public void testAddTutor() {
 		
-		String firstname = "Add";
-		String lastname = "Tutor";
-		String username = "addTutor";
-		String password = "addTutor";
-		String email = "addTutor";
-		String studentID = "1234";
-		String accountNumber = "123";
-		String subject = "tutor";
-		double payRate = 7.50;
-		
-		controller.addTutor(firstname, lastname, username, password, email, studentID, accountNumber, subject, payRate);
+		// Create and add objects to tutorsdb
+		UserAccount newAccount = new UserAccount();
+		Tutor newTutor = new Tutor();
+		controller.addTutor(newAccount, newTutor);
 		
 		List<UserAccount> accountList = db.getUserAccounts();
 		List<Tutor> tutorList = db.getTutors();
 		
-		UserAccount newAccount = accountList.get(accountList.size() - 1);
-		Tutor newTutor = tutorList.get(tutorList.size() - 1);
+		// Newly added objects should be the last object in the list
+		UserAccount dbAccount = accountList.get(accountList.size() - 1);
+		Tutor dbTutor = tutorList.get(tutorList.size() - 1);
 		
-		assertTrue(newAccount.getUsername().equals(username));
-		assertTrue(newAccount.getPassword().equals(password));
-		assertTrue(newTutor.getName().equals(firstname + " " + lastname));
-		assertTrue(newTutor.getEmail().equals(email));
-		assertTrue(newTutor.getStudentID().equals(studentID));
-		assertTrue(newTutor.getAccountNumber().equals(accountNumber));
-		assertTrue(newTutor.getSubject().equals(subject));
-		assertTrue(newTutor.getPayRate() == payRate);
+		// Check that the objects were successfully entered
+		assertEquals(dbAccount, newAccount);
+		assertEquals(dbTutor, newTutor);
 		
-		db.deleteUserAccount(newAccount);
-		db.deleteTutor(newTutor);
+		// Remove test objects from tutorsdb
+		db.deleteUserAccount(dbAccount);
+		db.deleteTutor(dbTutor);
 	}
 }

@@ -217,29 +217,15 @@ public class FakeDatabase implements IDatabase {
 	}
 
 	@Override
-	public void addTutor(String firstname, String lastname, String username, String password,
-			String email, String studentID, String accountNumber, String subject, double payRate) {
-		//generates new user
-		UserAccount user = new UserAccount();
-		user.setUsername(username);
-		user.setPassword(password);
-		user.setIsAdmin(false);
-		user.setAccountID(accountList.size() + 1);
+	public void addTutor(UserAccount account, Tutor tutor) {
 		
-		//generates new tutor
-		Tutor tutor = new Tutor();
-		tutor.setAccountID(user.getAccountID());
+		// Set IDs
+		account.setAccountID(accountList.size() + 1);
+		tutor.setAccountID(account.getAccountID());
 		tutor.setTutorID(tutorList.size() + 1);
-		String name = firstname + " " + lastname;
-		tutor.setName(name);
-		tutor.setEmail(email);
-		tutor.setStudentID(studentID);
-		tutor.setAccountNumber(accountNumber);
-		tutor.setSubject(subject);
-		tutor.setPayRate(payRate);
-		
-		//adds tutor and user to respective lists
-		accountList.add(user);
+
+		// Adds Tutor and User to respective lists
+		accountList.add(account);
 		tutorList.add(tutor);
 	}
 
@@ -273,7 +259,7 @@ public class FakeDatabase implements IDatabase {
 			
 			if (entry.getEntryID() == -1) {
 				
-				entry.setEntryID(entryList.size());
+				entry.setEntryID(entryList.size() + 1);
 				entry.setPayVoucherID(voucherID);
 				entryList.add(entry);
 			}

@@ -8,6 +8,8 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import controller.AddTutorController;
+import model.Tutor;
+import model.UserAccount;
 
 public class AddTutorServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
@@ -40,20 +42,35 @@ public class AddTutorServlet extends HttpServlet {
 		
 		System.out.println("AddTutor Servlet: doPost");
 		
+		String firstName = req.getParameter("firstName");
+		String lastName = req.getParameter("lastName");
+		String username = req.getParameter("username");
+		String password = req.getParameter("password");
+		String email = req.getParameter("email");
+		String studentID = req.getParameter("studentID");
+		String accountNumber = req.getParameter("accountNumber");
+		String subject = req.getParameter("subject");
+		String payRate = req.getParameter("payRate");
+		
 		// If the tutor information is valid, continue to the search page
 		if (tutorValidate(req)) {
-			controller = new AddTutorController();
-			String firstName = req.getParameter("firstName");
-			String lastName = req.getParameter("lastName");
-			String username = req.getParameter("username");
-			String password = req.getParameter("password");
-			String email = req.getParameter("email");
-			String studentID = req.getParameter("studentID"); 
-			String accountNumber = req.getParameter("accountNumber");
-			String subject = req.getParameter("subject");
-			double payRate = Double.parseDouble(req.getParameter("payRate"));
 			
-			controller.addTutor(firstName, lastName, username, password, email, studentID, accountNumber, subject, payRate);
+			controller = new AddTutorController();
+			
+			UserAccount newAccount = new UserAccount();
+			newAccount.setUsername(username);
+			newAccount.setPassword(password);
+			newAccount.setIsAdmin(false);
+			
+			Tutor newTutor = new Tutor();
+			newTutor.setName(firstName + " " + lastName);
+			newTutor.setEmail(email);
+			newTutor.setStudentID(studentID);
+			newTutor.setAccountNumber(accountNumber);
+			newTutor.setSubject(subject);
+			newTutor.setPayRate(Double.parseDouble(payRate));
+			
+			controller.addTutor(newAccount, newTutor);
 			
 			resp.sendRedirect("search");
 		}
@@ -62,16 +79,15 @@ public class AddTutorServlet extends HttpServlet {
 		// parameters and reload the add tutor page with proper error message
 		else {
 			
-			req.setAttribute("firstName", req.getParameter("firstName"));
-			req.setAttribute("lastName", req.getParameter("lastName"));
-			req.setAttribute("username", req.getParameter("username"));
-			req.setAttribute("password", req.getParameter("password"));
-			req.setAttribute("email", req.getParameter("email"));
-			req.setAttribute("studentID", req.getParameter("studentID"));
-			req.setAttribute("accountNumber", req.getParameter("accountNumber"));
-			req.setAttribute("subject", req.getParameter("subject"));
-			req.setAttribute("payRate", req.getParameter("payRate"));
-			
+			req.setAttribute("firstName", firstName);
+			req.setAttribute("lastName", lastName);
+			req.setAttribute("username", username);
+			req.setAttribute("password", password);
+			req.setAttribute("email", email);
+			req.setAttribute("studentID", studentID);
+			req.setAttribute("accountNumber", accountNumber);
+			req.setAttribute("subject", subject);
+			req.setAttribute("payRate", payRate);
 			
 			req.getRequestDispatcher("/_view/addTutor.jsp").forward(req, resp);
 		}

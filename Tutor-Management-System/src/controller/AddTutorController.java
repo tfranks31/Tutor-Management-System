@@ -1,21 +1,33 @@
 package controller;
 
+import model.Tutor;
+import model.UserAccount;
 import tutorsdb.persist.DatabaseProvider;
-import tutorsdb.persist.FakeDatabase;
 import tutorsdb.persist.IDatabase;
 
+/**
+ * The AddTutorController class manages all database interactions with the 
+ * AddTutor page.
+ */
 public class AddTutorController {
+	
 	private IDatabase db = null;
 	
+	/**
+	 * Refresh the database instance when constructed.
+	 */
 	public AddTutorController() {
 		
 		db = DatabaseProvider.getInstance();
 	}
 	
-	public void addTutor(String firstname, String lastname, String username, String password,
-			String email, String studentID, String accountNumber, String subject, double payRate){
+	/**
+	 * Add a new Tutor and their UserAccount to the tutorsdb.
+	 * @param account New Tutor's UserAccount.
+	 * @param tutor	New Tutor.
+	 */
+	public void addTutor(UserAccount account, Tutor tutor){
 		
-		db.addTutor(firstname, lastname, username, password, email, studentID, accountNumber, subject, payRate);
-		
+		db.addTutor(account, tutor);
 	}
 }

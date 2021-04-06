@@ -419,8 +419,8 @@ public class DerbyDatabase implements IDatabase {
 	}
 
 	@Override
-	public void addTutor(String firstname, String lastname, String username, String password, String email,
-			String studentID, String accountNumber, String subject, double payRate) throws UnsupportedOperationException {
+	public void addTutor(UserAccount account, Tutor tutor) 
+			throws UnsupportedOperationException {
 		// TODO Auto-generated method stub
 
 	}

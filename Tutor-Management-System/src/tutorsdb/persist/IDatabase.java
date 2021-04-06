@@ -13,8 +13,14 @@ public interface IDatabase {
 	public List<Tuple<Tutor, PayVoucher, Entry>> findEntryByVoucher(int voucherID);
 	public UserAccount accountByLogin(String username, String password);
 	public List<Pair<Tutor, PayVoucher>> findVoucherBySearch(String search);
-	public void addTutor (String firstname, String lastname, String username, String password,
-							String email, String studentID, String accountNumber, String subject, double payRate);
+	
+	/**
+	 * Insert a new Tutor and their UserAccount into this database.
+	 * @param account New Tutor's UserAccount.
+	 * @param tutor New Tutor.
+	 */
+	public void addTutor (UserAccount account, Tutor tutor);
+	
 	public List<Pair<Tutor, PayVoucher>> findAllPayVouchers();
 	public PayVoucher submitPayVoucher(int voucherID);
 	public void updateVoucher(List<Entry> entries, int voucherID);
