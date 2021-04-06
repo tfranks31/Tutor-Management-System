@@ -22,6 +22,8 @@ public class LoginServlet extends HttpServlet{
 
 		System.out.println("Login Servlet: doGet");	
 		
+		req.getSession().setAttribute("user", null);
+		
 		req.getRequestDispatcher("/_view/login.jsp").forward(req, resp);
 	}
 	
@@ -53,6 +55,7 @@ public class LoginServlet extends HttpServlet{
         if (user == null) {
         	return false;
         }else {
+        	req.getSession().setAttribute("user", user);
         	return true;
         }
     }

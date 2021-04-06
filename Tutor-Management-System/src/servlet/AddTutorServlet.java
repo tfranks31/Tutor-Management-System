@@ -21,6 +21,17 @@ public class AddTutorServlet extends HttpServlet {
 
 		System.out.println("AddTutor Servlet: doGet");	
 		
+		UserAccount account = (UserAccount) req.getSession().getAttribute("user");
+		if (account == null) {
+			
+			resp.sendRedirect("login");
+			return;
+		}
+		else if (!account.getIsAdmin()) {
+			
+			resp.sendRedirect("search");
+		}
+		
 		// Go back to search
 		if (req.getParameter("back") != null) {
 			

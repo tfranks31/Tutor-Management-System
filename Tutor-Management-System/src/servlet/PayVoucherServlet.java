@@ -14,6 +14,7 @@ import model.Entry;
 import model.PayVoucher;
 import model.Tuple;
 import model.Tutor;
+import model.UserAccount;
 
 public class PayVoucherServlet extends HttpServlet{
 	private static final long serialVersionUID = 1L;
@@ -30,6 +31,18 @@ public class PayVoucherServlet extends HttpServlet{
 			throws ServletException, IOException {
 
 		System.out.println("PayVoucher Servlet: doGet");	
+		
+		UserAccount account = (UserAccount) req.getSession().getAttribute("user");
+		if (account == null) {
+			
+			resp.sendRedirect("login");
+			return;
+		}
+		
+		if (req.getParameter("ID") == null) {
+			
+			resp.sendRedirect("search");
+		}
 
 		// Go back to search
 		if (req.getParameter("back") != null) {

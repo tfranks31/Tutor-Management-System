@@ -12,6 +12,7 @@ import controller.SearchController;
 import model.Pair;
 import model.PayVoucher;
 import model.Tutor;
+import model.UserAccount;
 
 public class SearchServlet extends HttpServlet{
 	private static final long serialVersionUID = 1L;
@@ -24,6 +25,13 @@ public class SearchServlet extends HttpServlet{
 
 		System.out.println("Search Servlet: doGet");
 		
+		UserAccount account = (UserAccount) req.getSession().getAttribute("user");
+		if (account == null) {
+			
+			resp.sendRedirect("login");
+			return;
+		}
+		
 		if (req.getParameter("addTutor") != null) {
 			
 			resp.sendRedirect("addTutor");
@@ -32,13 +40,21 @@ public class SearchServlet extends HttpServlet{
 			controller = new SearchController();
 			ArrayList<Pair<Tutor, PayVoucher>> tutorVoucherList = new ArrayList<Pair<Tutor, PayVoucher>>();
 			
-			tutorVoucherList = controller.getAllVouchers();
+			ArrayList<Pair<Tutor, PayVoucher>> allTutorVoucherList = controller.getAllVouchers();
+			
+			for (Pair<Tutor, PayVoucher> tutorVoucher : allTutorVoucherList) {
+				
+				if (tutorVoucher.getLeft().getAccountID() == account.getAccountID() || account.getIsAdmin()) {
+					
+					tutorVoucherList.add(tutorVoucher);
+				}
+			}
 			
 			if(tutorVoucherList.isEmpty()) {
 				
 				System.out.println("Search Servlet: no Voucher Found");
 			}
-					
+			
 			req.setAttribute("payVouchers", tutorVoucherList);
 			req.getRequestDispatcher("/_view/search.jsp").forward(req, resp);
 		}
@@ -52,6 +68,8 @@ public class SearchServlet extends HttpServlet{
 		
 		controller = new SearchController();
 		
+		UserAccount account = (UserAccount) req.getSession().getAttribute("user");
+		
 		if (req.getParameter("ID") != null) {
 			
 			req.getRequestDispatcher("/payVoucher").forward(req, resp);
@@ -60,7 +78,16 @@ public class SearchServlet extends HttpServlet{
 			
 			controller.assignPayVoucher(req.getParameter("startDate"), req.getParameter("dueDate"));
 			
-			ArrayList<Pair<Tutor, PayVoucher>> tutorVoucherList = controller.getAllVouchers();
+			ArrayList<Pair<Tutor, PayVoucher>> tutorVoucherList = new ArrayList<Pair<Tutor, PayVoucher>>();
+			ArrayList<Pair<Tutor, PayVoucher>> allTutorVoucherList = controller.getAllVouchers();
+			
+			for (Pair<Tutor, PayVoucher> tutorVoucher : allTutorVoucherList) {
+				
+				if (tutorVoucher.getLeft().getAccountID() == account.getAccountID() || account.getIsAdmin()) {
+					
+					tutorVoucherList.add(tutorVoucher);
+				}
+			}
 			req.setAttribute("payVouchers", tutorVoucherList);
 			
 			req.getRequestDispatcher("/_view/search.jsp").forward(req, resp);
@@ -68,16 +95,25 @@ public class SearchServlet extends HttpServlet{
 		else if (req.getParameter("search") != null) {
 			
 			controller = new SearchController();
-			ArrayList<Pair<Tutor, PayVoucher>> tutorVoucherList = new ArrayList<Pair<Tutor, PayVoucher>>();
-			
 			searchParameter = req.getParameter("search");
+			
+			ArrayList<Pair<Tutor, PayVoucher>> tutorVoucherList = new ArrayList<Pair<Tutor, PayVoucher>>();
+			ArrayList<Pair<Tutor, PayVoucher>> allTutorVoucherList = controller.getAllVouchers();
 			
 			if (searchParameter == null) {
 				//call all pay vouchers
-				tutorVoucherList = controller.getAllVouchers();
+				allTutorVoucherList = controller.getAllVouchers();
 			}else {
 				//call pay voucher per search
-				tutorVoucherList = controller.getVoucherFromSearch(searchParameter);
+				allTutorVoucherList = controller.getVoucherFromSearch(searchParameter);
+			}
+			
+			for (Pair<Tutor, PayVoucher> tutorVoucher : allTutorVoucherList) {
+				
+				if (tutorVoucher.getLeft().getAccountID() == account.getAccountID() || account.getIsAdmin()) {
+					
+					tutorVoucherList.add(tutorVoucher);
+				}
 			}
 			
 			if(tutorVoucherList.isEmpty()) {
@@ -89,7 +125,16 @@ public class SearchServlet extends HttpServlet{
 		}
 		else {
 			
-			ArrayList<Pair<Tutor, PayVoucher>> tutorVoucherList = controller.getAllVouchers();
+			ArrayList<Pair<Tutor, PayVoucher>> tutorVoucherList = new ArrayList<Pair<Tutor, PayVoucher>>();
+			ArrayList<Pair<Tutor, PayVoucher>> allTutorVoucherList = controller.getAllVouchers();
+			
+			for (Pair<Tutor, PayVoucher> tutorVoucher : allTutorVoucherList) {
+				
+				if (tutorVoucher.getLeft().getAccountID() == account.getAccountID() || account.getIsAdmin()) {
+					
+					tutorVoucherList.add(tutorVoucher);
+				}
+			}
 			req.setAttribute("payVouchers", tutorVoucherList);
 			req.getRequestDispatcher("/_view/search.jsp").forward(req, resp);
 		}

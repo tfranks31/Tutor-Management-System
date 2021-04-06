@@ -22,9 +22,12 @@
         </form>
     </div>
     
-    <form action="${pageContext.servletContext.contextPath}/search" method="get">
-        <input type="submit" name="addTutor" value="Add Tutor" class="addTutor"></input>
-    </form>
+    <c:if test="${user.isAdmin}">
+    	<form action="${pageContext.servletContext.contextPath}/search" method="get">
+        	<input type="submit" name="addTutor" value="Add Tutor" class="addTutor"></input>
+    	</form>
+	</c:if>
+    
     
 	<c:if test="${! empty tutorName}">
     	<div class="successAdd">${tutorName} was added as a tutor</div>
@@ -57,15 +60,19 @@
     <div Class = "pageNum">
         <p> <<< &#160; Page # &#160; >>></p>
     </div>
-    <div id="assignVoucher">
-    	<form action="${pageContext.servletContext.contextPath}/search" method="post">
-    		<input type="submit" name="assignVoucher" value="Assign Pay Voucher"></input>
-    		<label for="startDate">Start Date:</label>
-            <input type="text" name="startDate" value="${startDate}"></input>
-            <label for="startDate">Due Date:</label>
-            <input type="text" name="dueDate" value="${dueDate}"></input>
-        </form>
-    </div>
+    
+    <c:if test="${user.isAdmin}">
+    	<div id="assignVoucher">
+			<form action="${pageContext.servletContext.contextPath}/search" method="post">
+				<input type="submit" name="assignVoucher" value="Assign Pay Voucher"></input>
+				<label for="startDate">Start Date:</label>
+		        <input type="text" name="startDate" value="${startDate}"></input>
+		        <label for="startDate">Due Date:</label>
+		        <input type="text" name="dueDate" value="${dueDate}"></input>
+		    </form>
+		</div>
+	</c:if>
+    
 </body>
 
 </html>
