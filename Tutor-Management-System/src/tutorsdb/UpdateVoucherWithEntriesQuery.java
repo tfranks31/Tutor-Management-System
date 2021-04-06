@@ -32,7 +32,7 @@ public class UpdateVoucherWithEntriesQuery {
 		
 		ArrayList<Entry> entries = new ArrayList<Entry>();
 		
-		db.updateVoucher(entries);
+		db.updateVoucher(entries, 1);
 				
 		System.out.println("Voucher Sucessfully Updated");
 	}

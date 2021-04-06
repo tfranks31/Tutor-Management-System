@@ -46,30 +46,22 @@
            
        	</table>
         </br><input type="submit" id="addRow" name="addRow" value="Add Row">
-    </form>
   
-    <div class = "payInfo">
-        <p> 
-           Account Number = ${accountNumber}&#160;&#160;&#160; 
-           Total Hours = ${totalHours}&#160;&#160;&#160; 
-           Pay Rate = $ ${payRate}&#160;&#160;&#160;
-           Total Pay = $ ${totalPay}
-        </p>
-    </div>
-    
+		<div class = "payInfo">
+		    <p> 
+		       Account Number = ${accountNumber}&#160;&#160;&#160; 
+		       Total Hours = ${totalHours}&#160;&#160;&#160; 
+		       Pay Rate = $ ${payRate}&#160;&#160;&#160;
+		       Total Pay = $ ${totalPay}
+		    </p>
+		</div>
+		
+		<input type="submit" class="submit" name="submitVoucher" value="Submit Pay Voucher"></br></br></br>
+		<input type="submit" class="submit" name="updateVoucher" value="Update Pay Voucher">
+    </form>
 	<form action="${pageContext.servletContext.contextPath}/payVoucher" method="get">
    	     <input type="submit" id="back" name="back" value="Back">
    	</form>
-
-    <form action="${pageContext.servletContext.contextPath}/payVoucher"method="post">
-        <input type="submit" class="submit" name="submitVoucher" value="Submit Pay Voucher"></br></br></br>
-    </form>
-
- 	<form action="${pageContext.servletContext.contextPath}/payVoucher" method="post">
-        <input type="submit" class="submit" name="updateVoucher" value="Update Pay Voucher">
-    </form>
-
-
 </body>
 
 </html>

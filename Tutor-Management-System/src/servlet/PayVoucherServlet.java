@@ -118,7 +118,7 @@ public class PayVoucherServlet extends HttpServlet{
 		}
 
 		// Go back to search
-		if (req.getParameter("addRow") != null) {	
+		else if (req.getParameter("addRow") != null) {	
 			
 			controller = new PayVoucherController();
 			ArrayList<Tuple<Tutor, PayVoucher, Entry>> tutorVoucherEntryList = controller.getPayVoucherEntries(payVoucherID);
@@ -129,7 +129,11 @@ public class PayVoucherServlet extends HttpServlet{
 						
 			String[] cells = req.getParameterValues("cell");
 			
-			for (int i = 0; i < cells.length; i += 4) {	
+			for (Tuple<Tutor, PayVoucher, Entry> tutorVoucherEntry : tutorVoucherEntryList) {
+				entries.add(tutorVoucherEntry.getRight());
+			}
+			
+			for (int i = entries.size() * 4; i < cells.length; i += 4) {	
 				if (!cells[i].equals("") && !cells[i + 1].equals("") &&
 					!cells[i + 2].equals("") && !cells[i + 3].equals("")) {
 					
@@ -162,6 +166,56 @@ public class PayVoucherServlet extends HttpServlet{
 			
 			req.getRequestDispatcher("/_view/payVoucher.jsp").forward(req, resp);
 		
+		}
+		else if (req.getParameter("updateVoucher") != null) {
+			
+			controller = new PayVoucherController();
+			ArrayList<Tuple<Tutor, PayVoucher, Entry>> tutorVoucherEntryList = controller.getPayVoucherEntries(payVoucherID);
+			
+			ArrayList<Entry> entries = new ArrayList<Entry>();
+			PayVoucher voucher = tutorVoucherEntryList.get(0).getMiddle(); //all voucher instances are identical
+			Tutor tutor = tutorVoucherEntryList.get(0).getLeft(); //all tutor instances are identical
+						
+			String[] cells = req.getParameterValues("cell");
+			
+			for (Tuple<Tutor, PayVoucher, Entry> tutorVoucherEntry : tutorVoucherEntryList) {
+				
+				if (tutorVoucherEntry.getRight() != null) {
+					
+					entries.add(tutorVoucherEntry.getRight());
+				}
+			}
+			
+			for (int i = entries.size() * 4; i < cells.length; i += 4) {
+				
+				if (!cells[i].equals("") && !cells[i + 1].equals("") &&
+					!cells[i + 2].equals("") && !cells[i + 3].equals("")) {
+					
+					Entry entry = new Entry();
+					entry.setDate(cells[i]);
+					entry.setHours(Double.parseDouble(cells[i + 1]));
+					entry.setServicePerformed(cells[i + 2]);
+					entry.setWherePerformed(cells[i + 3]);
+					entries.add(entry);
+				}
+			}
+			
+			controller.UpdateVoucherWithEntries(entries, payVoucherID);
+			
+			tableSize = cells.length / 4 - entries.size();
+			
+			req.setAttribute("tableSize", tableSize);	
+			
+			req.setAttribute("entries", entries);
+			req.setAttribute("tutorName", tutor.getName());
+			req.setAttribute("studentID", tutor.getStudentID());
+			req.setAttribute("dueDate", voucher.getDueDate());
+			req.setAttribute("accountNumber", tutor.getAccountID());
+			req.setAttribute("totalHours",voucher.getTotalHours());
+			req.setAttribute("payRate", tutor.getPayRate());
+			req.setAttribute("totalPay", voucher.getTotalPay());
+			
+			req.getRequestDispatcher("/_view/payVoucher.jsp").forward(req, resp);
 		}
 		
 	}

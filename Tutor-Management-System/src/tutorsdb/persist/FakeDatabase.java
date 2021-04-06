@@ -141,8 +141,7 @@ public class FakeDatabase implements IDatabase {
 				for (Tutor tutor : tutorList) {
 					if (voucher.getTutorID() == tutor.getTutorID()) {
 						if (voucher.getPayVoucherID() == voucherID) {
-							Entry entry = new Entry();
-							entry.setEntryID(-1);
+							Entry entry = null;
 							result.add(new Tuple<Tutor, PayVoucher, Entry>(tutor, voucher, entry));
 						}
 					}
@@ -269,10 +268,29 @@ public class FakeDatabase implements IDatabase {
 	}
 
 	@Override
-	public void updateVoucher(List<Entry> entries) {
+	public void updateVoucher(List<Entry> entries, int voucherID) {
 		for (Entry entry : entries) {
-			entry.setEntryID(entryList.size());
-			entryList.add(entry);
+			
+			if (entry.getEntryID() == -1) {
+				
+				entry.setEntryID(entryList.size());
+				entry.setPayVoucherID(voucherID);
+				entryList.add(entry);
+			}
+			else {
+				
+				for (Entry dbEntry : entryList) {
+					
+					if (dbEntry.getEntryID() == entry.getEntryID()) {
+						
+						dbEntry.setDate(entry.getDate());
+						dbEntry.setHours(entry.getHours());
+						dbEntry.setServicePerformed(entry.getServicePerformed());
+						dbEntry.setWherePerformed(entry.getWherePerformed());
+					}
+				}
+			}
+			
 		}
 	}
 

@@ -448,7 +448,7 @@ public class DerbyDatabase implements IDatabase {
 	}
 
 	@Override
-	public void updateVoucher(List<Entry> entries) throws UnsupportedOperationException {
+	public void updateVoucher(List<Entry> entries, int voucherID) throws UnsupportedOperationException {
 		// TODO Auto-generated method stub
 		
 	}

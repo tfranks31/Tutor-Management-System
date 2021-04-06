@@ -33,7 +33,7 @@ public class PayVoucherController {
 		return tutorVoucherEntries;
 	}
 	
-	public void UpdateVoucherWithEntries(List<Entry> entries) {
-		db.updateVoucher(entries);
+	public void UpdateVoucherWithEntries(List<Entry> entries, int voucherID) {
+		db.updateVoucher(entries, voucherID);
 	}
 }
