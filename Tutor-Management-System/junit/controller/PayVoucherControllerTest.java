@@ -1,8 +1,10 @@
 package controller;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -55,5 +57,25 @@ public class PayVoucherControllerTest {
 		db.deleteTutor(newTutor);
 		db.deletePayVoucher(newPayVoucher);
 		db.deleteEntry(newEntry);
+	}
+	
+	@Test
+	public void testUpdateVoucherWithEntries() {
+		
+		PayVoucher payVoucher = new PayVoucher();
+		payVoucher.setPayVoucherID(-1);
+		db.insertPayVoucher(payVoucher);
+		
+		Entry entry = new Entry();
+		ArrayList<Entry> entries = new ArrayList<Entry>();
+		entries.add(entry);
+		
+		controller.updateVoucherWithEntries(entries, -1);
+		
+		List<Entry> dbEntries = db.getEntries();
+		
+		assertEquals(entry.getEntryID(), dbEntries.get(dbEntries.size()));
+		
+		db.deleteEntry(entry);
 	}
 }

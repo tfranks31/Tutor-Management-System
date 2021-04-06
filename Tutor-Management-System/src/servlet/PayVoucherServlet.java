@@ -226,7 +226,7 @@ public class PayVoucherServlet extends HttpServlet{
 				}
 			}
 			
-			controller.UpdateVoucherWithEntries(entries, payVoucherID);
+			controller.updateVoucherWithEntries(entries, payVoucherID);
 			
 			tableSize = cells.length / 4 - entries.size();
 			
