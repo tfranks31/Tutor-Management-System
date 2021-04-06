@@ -133,16 +133,31 @@ public class PayVoucherServlet extends HttpServlet{
 				entries.add(tutorVoucherEntry.getRight());
 			}
 			
-			for (int i = entries.size() * 4; i < cells.length; i += 4) {	
+			for (int i = 0; i < cells.length; i += 4) {	
 				if (!cells[i].equals("") && !cells[i + 1].equals("") &&
 					!cells[i + 2].equals("") && !cells[i + 3].equals("")) {
 					
-					Entry entry = new Entry();
-					entry.setDate(cells[i]);
-					entry.setHours(Double.parseDouble(cells[i + 1]));
-					entry.setServicePerformed(cells[i + 2]);
-					entry.setWherePerformed(cells[i + 3]);
-					entries.add(entry);
+					Entry entry;
+					if (i < entries.size() * 4) {
+						
+						entry = entries.get(i / 4);
+						if (entry == null) {
+							
+							entry = new Entry();
+						}
+						entry.setDate(cells[i]);
+						entry.setHours(Double.parseDouble(cells[i + 1]));
+						entry.setServicePerformed(cells[i + 2]);
+						entry.setWherePerformed(cells[i + 3]);
+					}
+					else {
+						entry = new Entry();
+						entry.setDate(cells[i]);
+						entry.setHours(Double.parseDouble(cells[i + 1]));
+						entry.setServicePerformed(cells[i + 2]);
+						entry.setWherePerformed(cells[i + 3]);
+						entries.add(entry);
+					}
 				}
 			}
 			
@@ -191,12 +206,23 @@ public class PayVoucherServlet extends HttpServlet{
 				if (!cells[i].equals("") && !cells[i + 1].equals("") &&
 					!cells[i + 2].equals("") && !cells[i + 3].equals("")) {
 					
-					Entry entry = new Entry();
-					entry.setDate(cells[i]);
-					entry.setHours(Double.parseDouble(cells[i + 1]));
-					entry.setServicePerformed(cells[i + 2]);
-					entry.setWherePerformed(cells[i + 3]);
-					entries.add(entry);
+					Entry entry;
+					if (i < entries.size() * 4) {
+						
+						entry = entries.get(i / 4);
+						entry.setDate(cells[i]);
+						entry.setHours(Double.parseDouble(cells[i + 1]));
+						entry.setServicePerformed(cells[i + 2]);
+						entry.setWherePerformed(cells[i + 3]);
+					}
+					else {
+						entry = new Entry();
+						entry.setDate(cells[i]);
+						entry.setHours(Double.parseDouble(cells[i + 1]));
+						entry.setServicePerformed(cells[i + 2]);
+						entry.setWherePerformed(cells[i + 3]);
+						entries.add(entry);
+					}
 				}
 			}
 			

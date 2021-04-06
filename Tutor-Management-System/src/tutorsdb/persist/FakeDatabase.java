@@ -224,12 +224,12 @@ public class FakeDatabase implements IDatabase {
 		user.setUsername(username);
 		user.setPassword(password);
 		user.setIsAdmin(false);
-		user.setAccountID(accountList.size());
+		user.setAccountID(accountList.size() + 1);
 		
 		//generates new tutor
 		Tutor tutor = new Tutor();
 		tutor.setAccountID(user.getAccountID());
-		tutor.setTutorID(tutorList.size());
+		tutor.setTutorID(tutorList.size() + 1);
 		String name = firstname + " " + lastname;
 		tutor.setName(name);
 		tutor.setEmail(email);
@@ -305,7 +305,7 @@ public class FakeDatabase implements IDatabase {
 			voucher.setTutorID(tutor.getTutorID());
 			voucher.setIsAdminEdited(false);
 			voucher.setIsNew(true);
-			voucher.setPayVoucherID(payVoucherList.size());
+			voucher.setPayVoucherID(payVoucherList.size() + 1);
 			voucher.setIsSigned(false);
 			voucher.setIsSubmitted(false);
 			voucher.setTotalHours(0);
