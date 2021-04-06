@@ -194,7 +194,7 @@ public class FakeDatabase implements IDatabase {
 	}
 
 	@Override
-	public void AddTutor(String firstname, String lastname, String username, String password,
+	public void addTutor(String firstname, String lastname, String username, String password,
 			String email, String studentID, String accountNumber, String subject, double payRate) {
 		//generates new user
 		UserAccount user = new UserAccount();

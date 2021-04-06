@@ -32,7 +32,7 @@ public class AddTutorQuery {
 		
 		// get the DB instance and execute transaction
 		IDatabase db = DatabaseProvider.getInstance();
-		db.AddTutor(firstname, lastname, username, password, email, studentID, accountNumber, subject, payRate);
+		db.addTutor(firstname, lastname, username, password, email, studentID, accountNumber, subject, payRate);
 		
 		System.out.println("Tutor Sucessfully added");
 	}

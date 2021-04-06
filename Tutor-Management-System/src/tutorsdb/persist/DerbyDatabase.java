@@ -387,7 +387,7 @@ public class DerbyDatabase implements IDatabase {
 	}
 
 	@Override
-	public void AddTutor(String firstname, String lastname, String username, String password, String email,
+	public void addTutor(String firstname, String lastname, String username, String password, String email,
 			String studentID, String accountNumber, String subject, double payRate) throws UnsupportedOperationException {
 		// TODO Auto-generated method stub
 
