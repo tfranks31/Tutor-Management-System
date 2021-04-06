@@ -72,7 +72,9 @@ public class AddTutorServlet extends HttpServlet {
 			
 			controller.addTutor(newAccount, newTutor);
 			
-			resp.sendRedirect("search");
+			req.setAttribute("tutorName", firstName + " " + lastName);
+			
+			req.getRequestDispatcher("/search").forward(req, resp);
 		}
 		
 		// If the tutor information is invalid, set all parameters with inputed

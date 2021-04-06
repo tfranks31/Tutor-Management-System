@@ -87,5 +87,11 @@ public class SearchServlet extends HttpServlet{
 			req.setAttribute("payVouchers", tutorVoucherList);
 			req.getRequestDispatcher("/_view/search.jsp").forward(req, resp);
 		}
+		else {
+			
+			ArrayList<Pair<Tutor, PayVoucher>> tutorVoucherList = controller.getAllVouchers();
+			req.setAttribute("payVouchers", tutorVoucherList);
+			req.getRequestDispatcher("/_view/search.jsp").forward(req, resp);
+		}
 	}
 }

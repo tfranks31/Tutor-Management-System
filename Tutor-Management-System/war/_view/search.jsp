@@ -26,6 +26,10 @@
         <input type="submit" name="addTutor" value="Add Tutor" class="addTutor"></input>
     </form>
     
+	<c:if test="${! empty tutorName}">
+    	<div class="successAdd">${tutorName} was added as a tutor</div>
+	</c:if>
+    	
     <table id = "searchResults">
     	<th>Pay Vouchers</th>
         <th>Tutor Name</th>
