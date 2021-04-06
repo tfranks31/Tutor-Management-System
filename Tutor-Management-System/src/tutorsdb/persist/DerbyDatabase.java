@@ -419,11 +419,77 @@ public class DerbyDatabase implements IDatabase {
 	}
 
 	@Override
-	public void addTutor(UserAccount account, Tutor tutor) 
-			throws UnsupportedOperationException {
-		// TODO Auto-generated method stub
-
-	}
+	public void addTutor(UserAccount account, Tutor tutor) { 
+		executeTransaction(new Transaction<Boolean>() {
+		
+		@Override
+		public Boolean execute(Connection conn) throws SQLException {
+			PreparedStatement stmt1 = null;
+			PreparedStatement stmt2 = null;
+			PreparedStatement stmt3 = null;
+			ResultSet resultSet = null;
+			boolean is_admin = false;
+			try {
+				stmt1 = conn.prepareStatement(
+						"INSERT INTO user_accounts (username, password, is_admin) " + 
+						"VALUES (?, ?, ?) "
+					);
+				stmt1.setString(1, account.getUsername());
+				stmt1.setString(2, account.getPassword());
+				stmt1.setBoolean(3, is_admin);
+				
+				stmt1.executeUpdate();
+		
+				stmt2 = conn.prepareStatement(
+						"SELECT user_accounts.* " + 
+						"FROM user_accounts " + 
+						"WHERE user_accounts.username = ? " + 
+						"AND user_accounts.password = ? "
+					);
+				
+				stmt2.setString(1, account.getUsername());
+				stmt2.setString(2, account.getPassword());
+				
+				resultSet = stmt2.executeQuery();
+				
+				UserAccount result = null;
+				
+				while (resultSet.next()) {
+					// create new payVoucher
+					// retrieve attributes from resultSet starting with index 1
+					UserAccount UserAccount = new UserAccount();
+					loadUserAccount(UserAccount, resultSet, 1);
+					result = UserAccount;
+				}
+				
+				int accountID = result.getAccountID();
+				
+				stmt3 = conn.prepareStatement(
+						"INSERT into tutors (user_account_id, name, email, student_id, account_number, subject, pay_rate) " + 
+						"VALUES (?, ?, ?, ?, ?, ?, ?)"
+				);
+				
+				stmt3.setInt(1, accountID);
+				stmt3.setString(2, tutor.getName());
+				stmt3.setString(3, tutor.getEmail());
+				stmt3.setString(4, tutor.getStudentID());
+				stmt3.setString(5, tutor.getAccountNumber());
+				stmt3.setString(6, tutor.getSubject());
+				stmt3.setDouble(7, tutor.getPayRate());
+				
+				stmt3.executeUpdate();
+				
+				return true;
+				
+			} finally {
+				DBUtil.closeQuietly(resultSet);
+				DBUtil.closeQuietly(stmt1);
+				DBUtil.closeQuietly(stmt2);
+				DBUtil.closeQuietly(stmt3);
+			}
+		}
+	});
+}
 
 	@Override
 	public List<Pair<Tutor, PayVoucher>> findAllPayVouchers() throws UnsupportedOperationException {
@@ -503,7 +569,7 @@ public class DerbyDatabase implements IDatabase {
 
 						result = PayVoucher;
 					}
-				
+					
 					return result;
 				} finally {
 					DBUtil.closeQuietly(resultSet);
