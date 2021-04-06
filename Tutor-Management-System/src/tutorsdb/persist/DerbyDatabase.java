@@ -396,11 +396,7 @@ public class DerbyDatabase implements IDatabase {
 
 					resultSet = stmt.executeQuery();
 
-					// for testing that a result was returned
-					Boolean found = false;
-
 					if (resultSet.next()) {
-						found = true;
 						// Create and then load a new user Account
 						UserAccount UserAccount = new UserAccount();
 						loadUserAccount(UserAccount, resultSet, 1);
@@ -408,10 +404,6 @@ public class DerbyDatabase implements IDatabase {
 						result = UserAccount;
 					}
 
-					// check if any users were found
-					if (!found) {
-						System.out.println("No user was found for the given username and password.");
-					}
 					return result;
 				} finally {
 					DBUtil.closeQuietly(resultSet);
@@ -454,11 +446,7 @@ public class DerbyDatabase implements IDatabase {
 
 					resultSet = stmt.executeQuery();
 
-					// for testing that a result was returned
-					Boolean found = false;
-
 					while (resultSet.next()) {
-						found = true;
 						// create new payVoucher
 						// retrieve attributes from resultSet starting with index 1
 						PayVoucher PayVoucher = new PayVoucher();
@@ -469,10 +457,6 @@ public class DerbyDatabase implements IDatabase {
 						result.add(new Pair<Tutor, PayVoucher>(Tutor, PayVoucher));
 					}
 
-					// check if any pay vouchers were found
-					if (!found) {
-						System.out.println("No pay vouchers were found");
-					}
 					return result;
 				} finally {
 					DBUtil.closeQuietly(resultSet);
