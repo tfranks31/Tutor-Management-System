@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.Scanner;
 
 import model.Entry;
+import model.PayVoucher;
 import tutorsdb.persist.DatabaseProvider;
 import tutorsdb.persist.IDatabase;
 
@@ -17,6 +18,8 @@ public class UpdateVoucherWithEntriesQuery {
 		IDatabase db = DatabaseProvider.getInstance();
 		
 		//sets up test list
+		PayVoucher voucher = new PayVoucher();
+		voucher.setPayVoucherID(-1);
 		Entry entry1 = new Entry();
 		entry1.setPayVoucherID(1);
 		entry1.setDate("01/03/2021");
@@ -32,7 +35,7 @@ public class UpdateVoucherWithEntriesQuery {
 		
 		ArrayList<Entry> entries = new ArrayList<Entry>();
 		
-		db.updateVoucher(entries, 1);
+		db.updateVoucher(entries, voucher);
 				
 		System.out.println("Voucher Sucessfully Updated");
 	}

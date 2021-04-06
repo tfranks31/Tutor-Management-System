@@ -226,7 +226,10 @@ public class PayVoucherServlet extends HttpServlet{
 				}
 			}
 			
-			controller.updateVoucherWithEntries(entries, payVoucherID);
+			voucher.setTotalHours(controller.calculateTotalHours(entries));
+			voucher.setTotalPay(controller.calculateTotalPay(tutor, voucher));
+			
+			controller.updateVoucherWithEntries(entries, voucher);
 			
 			tableSize = cells.length / 4 - entries.size();
 			

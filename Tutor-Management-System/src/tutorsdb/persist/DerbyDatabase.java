@@ -581,9 +581,9 @@ public class DerbyDatabase implements IDatabase {
 	}
 
 	@Override
-	public void updateVoucher(List<Entry> entries, int voucherID) throws UnsupportedOperationException {
+	public void updateVoucher(List<Entry> entries, PayVoucher voucher) throws UnsupportedOperationException {
 		executeTransaction(new Transaction<Boolean>() {
-			
+
 			@Override
 			public Boolean execute(Connection conn) throws SQLException {
 				PreparedStatement stmt = null;
@@ -602,7 +602,7 @@ public class DerbyDatabase implements IDatabase {
 						stmt.setString(3, entry.getWherePerformed());
 						stmt.setDouble(4, entry.getHours());
 						stmt.setInt(5, entry.getEntryID());
-						stmt.setInt(6, voucherID);
+						stmt.setInt(6, voucher.getPayVoucherID());
 						
 						stmt.executeUpdate();
 				

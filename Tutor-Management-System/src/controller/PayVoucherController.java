@@ -33,7 +33,22 @@ public class PayVoucherController {
 		return tutorVoucherEntries;
 	}
 	
-	public void updateVoucherWithEntries(List<Entry> entries, int voucherID) {
-		db.updateVoucher(entries, voucherID);
+	public void updateVoucherWithEntries(List<Entry> entries, PayVoucher voucher) {
+		
+		db.updateVoucher(entries, voucher);
+	}
+	
+	public double calculateTotalHours(List<Entry> entries) {
+		double totalHours = 0.0;
+		
+		for (Entry entry: entries) {
+			totalHours += entry.getHours();
+		}
+		
+		return totalHours;
+	}
+	
+	public double calculateTotalPay(Tutor tutor, PayVoucher voucher){
+		return tutor.getPayRate() * voucher.getTotalHours();
 	}
 }

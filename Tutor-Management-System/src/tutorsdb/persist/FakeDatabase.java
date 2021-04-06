@@ -254,17 +254,18 @@ public class FakeDatabase implements IDatabase {
 	}
 
 	@Override
-	public void updateVoucher(List<Entry> entries, int voucherID) {
+	public void updateVoucher(List<Entry> entries, PayVoucher voucher) {
 		for (Entry entry : entries) {
-			
+			//checks if the entry is new, if new, it is assigned a corresponding ID
+			//and gets added to entry list
 			if (entry.getEntryID() == -1) {
 				
 				entry.setEntryID(entryList.size() + 1);
-				entry.setPayVoucherID(voucherID);
+				entry.setPayVoucherID(voucher.getPayVoucherID());
 				entryList.add(entry);
 			}
 			else {
-				
+				//if entry already exists, it updates the already existing entry in the database
 				for (Entry dbEntry : entryList) {
 					
 					if (dbEntry.getEntryID() == entry.getEntryID()) {
@@ -276,8 +277,16 @@ public class FakeDatabase implements IDatabase {
 					}
 				}
 			}
-			
 		}
+		
+		//updates voucher totalHour and totalPay
+		for (PayVoucher dbVoucher : payVoucherList) {
+			if (dbVoucher.getPayVoucherID() == voucher.getPayVoucherID()) {
+				dbVoucher.setTotalPay(voucher.getTotalPay());
+				dbVoucher.setTotalHours(voucher.getTotalHours());
+			}
+		}
+		
 	}
 
 	@Override

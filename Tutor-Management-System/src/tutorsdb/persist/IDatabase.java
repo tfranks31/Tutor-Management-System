@@ -23,7 +23,7 @@ public interface IDatabase {
 	
 	public List<Pair<Tutor, PayVoucher>> findAllPayVouchers();
 	public PayVoucher submitPayVoucher(int voucherID);
-	public void updateVoucher(List<Entry> entries, int voucherID);
+	public void updateVoucher(List<Entry> entries, PayVoucher voucher);
 	public void assignVoucher(String startDate, String dueDate);
 	public List<UserAccount> getUserAccounts();
 	public List<Tutor> getTutors();

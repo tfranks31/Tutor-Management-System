@@ -70,7 +70,7 @@ public class PayVoucherControllerTest {
 		ArrayList<Entry> entries = new ArrayList<Entry>();
 		entries.add(entry);
 		
-		controller.updateVoucherWithEntries(entries, -1);
+		controller.updateVoucherWithEntries(entries, payVoucher);
 		
 		List<Entry> dbEntries = db.getEntries();
 		
