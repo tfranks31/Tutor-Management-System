@@ -16,22 +16,10 @@
     
     <div class = "search">
         <form action="${pageContext.servletContext.contextPath}/search" method="post">
-            <input type="text" name="search" value="${searchParameter}">
-            </br>
-            <button id= "searchBTN">Search</button>
+            <input type="text" id="searchBox" name="search" value="${searchParameter}">
+            <button id= "searchBTN">&#128269</button>
         </form>
     </div>
-    
-    <c:if test="${user.isAdmin}">
-    	<form action="${pageContext.servletContext.contextPath}/search" method="get">
-        	<input type="submit" name="addTutor" value="Add Tutor" class="addTutor"></input>
-    	</form>
-	</c:if>
-    
-    
-	<c:if test="${! empty tutorName}">
-    	<div class="successAdd">${tutorName} was added as a tutor</div>
-	</c:if>
     	
     <table id = "searchResults">
     	<th>Pay Vouchers</th>
@@ -44,7 +32,7 @@
             <tr>
 				<td>
 					<form action="${pageContext.servletContext.contextPath}/search" method="post">
-						<input type="submit" name="viewPayVoucher" value="View Pay Voucher"></input>
+						<input type="submit" id="view" name="viewPayVoucher" value="View"></input>
 						<input type="hidden" name="ID" value="${voucher.right.payVoucherID}"/>
 					</form>
 				</td>
@@ -64,14 +52,27 @@
     <c:if test="${user.isAdmin}">
     	<div id="assignVoucher">
 			<form action="${pageContext.servletContext.contextPath}/search" method="post">
-				<input type="submit" name="assignVoucher" value="Assign Pay Voucher"></input>
-				<label for="startDate">Start Date:</label>
-		        <input type="text" name="startDate" value="${startDate}"></input>
-		        <label for="startDate">Due Date:</label>
-		        <input type="text" name="dueDate" value="${dueDate}"></input>
+				<input type="submit" id="assignVoucherBtn" name="assignVoucher" value="Assign Pay Voucher"></input></br></br></br>
+				<label for="startDate" id="assignVoucherDate">Start Date:</label>
+		        <input type="text" id="assignVoucherText" name="startDate" placeholder="MM/DD/YYYY" value="${startDate}"></input></br></br>
+		        <label for="startDate" id="assignVoucherDate">Due Date:</label>
+		        <input type="text" id="assignVoucherText" name="dueDate" placeholder="MM/DD/YYYY" value="${dueDate}"></input>
 		    </form>
 		</div>
 	</c:if>
+	
+	<c:if test="${user.isAdmin}">
+    	<form action="${pageContext.servletContext.contextPath}/search" method="get">
+        	<input type="submit" id="addTutor" name="addTutor" value="Add Tutor" class="addTutor"></input>
+        	</br></br></br></br></br></br></br></br></br></br>
+    	</form>
+	</c:if>
+      
+	<c:if test="${! empty tutorName}">
+    	<div class="successAdd">${tutorName} was added as a tutor</div>
+	</c:if>
+	
+
     
 </body>
 
