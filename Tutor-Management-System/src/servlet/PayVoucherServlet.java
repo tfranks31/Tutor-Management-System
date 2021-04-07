@@ -42,6 +42,7 @@ public class PayVoucherServlet extends HttpServlet{
 		if (req.getParameter("ID") == null) {
 			
 			resp.sendRedirect("search");
+			return;
 		}
 
 		// Go back to search
@@ -216,35 +217,56 @@ public class PayVoucherServlet extends HttpServlet{
 				}
 			}
 			
-			for (int i = entries.size() * 4; i < cells.length; i += 4) {
+			for (int i = 0; i < cells.length; i += 4) {
 				
-				if (!cells[i].equals("") && !cells[i + 1].equals("") &&
-					!cells[i + 2].equals("") && !cells[i + 3].equals("")) {
+				Entry entry;
+				
+				if (i < entries.size() * 4) {
 					
-					Entry entry;
-					if (i < entries.size() * 4) {
-						
-						entry = entries.get(i / 4);
-						entry.setDate(cells[i]);
-						entry.setHours(Double.parseDouble(cells[i + 1]));
-						entry.setServicePerformed(cells[i + 2]);
-						entry.setWherePerformed(cells[i + 3]);
+					entry = entries.get(i / 4);
+					entry.setDate(cells[i]);
+					if (cells[i + 1].equals("")) {
+						entry.setHours(0);
 					}
 					else {
+						entry.setHours(Double.parseDouble(cells[i + 1]));
+					}
+					
+					entry.setServicePerformed(cells[i + 2]);
+					entry.setWherePerformed(cells[i + 3]);
+				}
+				else {
+					if (!cells[i].equals("") && !cells[i + 1].equals("") &&
+						!cells[i + 2].equals("") && !cells[i + 3].equals("")) {
+							
 						entry = new Entry();
 						entry.setDate(cells[i]);
 						entry.setHours(Double.parseDouble(cells[i + 1]));
 						entry.setServicePerformed(cells[i + 2]);
 						entry.setWherePerformed(cells[i + 3]);
 						entries.add(entry);
+						
 					}
 				}
+				
+				
 			}
 			
 			voucher.setTotalHours(controller.calculateTotalHours(entries));
 			voucher.setTotalPay(controller.calculateTotalPay(tutor, voucher));
 			
 			controller.updateVoucherWithEntries(entries, voucher);
+			
+			tutorVoucherEntryList = controller.getPayVoucherEntries(payVoucherID);
+			entries = new ArrayList<Entry>();
+			for (Tuple<Tutor, PayVoucher, Entry> tutorVoucherEntry : tutorVoucherEntryList) {
+				
+				if (tutorVoucherEntry.getRight() != null) {
+					
+					entries.add(tutorVoucherEntry.getRight());
+				}
+			}
+			
 			
 			tableSize = cells.length / 4 - entries.size();
 			

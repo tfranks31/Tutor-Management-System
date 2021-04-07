@@ -20,7 +20,11 @@
             <button id= "searchBTN">&#128269</button>
         </form>
     </div>
-    	
+
+    <form action="${pageContext.servletContext.contextPath}/search" method="get">
+        <input type="submit" class="logout" id="logout" name="logout" value="Logout">
+    </form>
+
     <table id = "searchResults">
     	<th>Pay Vouchers</th>
         <th>Tutor Name</th>

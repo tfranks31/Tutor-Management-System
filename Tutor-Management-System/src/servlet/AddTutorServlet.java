@@ -30,6 +30,7 @@ public class AddTutorServlet extends HttpServlet {
 		else if (!account.getIsAdmin()) {
 			
 			resp.sendRedirect("search");
+			return;
 		}
 		
 		// Go back to search

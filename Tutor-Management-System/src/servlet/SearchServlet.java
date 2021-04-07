@@ -35,8 +35,9 @@ public class SearchServlet extends HttpServlet{
 		if (req.getParameter("addTutor") != null) {
 			
 			resp.sendRedirect("addTutor");
-		}
-		else {
+		}else if (req.getParameter("logout") != null) {
+			resp.sendRedirect("login");
+		}else {
 			controller = new SearchController();
 			ArrayList<Pair<Tutor, PayVoucher>> tutorVoucherList = new ArrayList<Pair<Tutor, PayVoucher>>();
 			
