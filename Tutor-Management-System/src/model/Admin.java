@@ -1,5 +1,14 @@
 package model;
 
+
+///////////////////////////////////////////////////////////////////////////////
+// Right now admin model class is not being used. Due to needing an isAdmin  //
+// field for our database, and admin having no meaningful data associated    //
+// with it, the admin class will be inactive, but will remain here incase we //
+// need it again.															 //
+///////////////////////////////////////////////////////////////////////////////
+
+
 /**
  * Admin class
  * 
@@ -9,8 +18,8 @@ package model;
  * 
  */
 
-
-public class Admin extends User {
+/*
+public class Admin extends UserAccount {
     private Tutor tutor = new Tutor();
 
     // Constructor
@@ -42,3 +51,4 @@ public class Admin extends User {
 
     }
 }
+*/

@@ -5,22 +5,26 @@ package model;
  * payrate and tutorID
  */
 
-public class Tutor extends User {
+public class Tutor{
 	private String name;
 	private String email;
 	private String subject;
 	private double payRate;
 	private int tutorID;
-	private int accountNumber;
-	private PayVoucher payVoucher = new PayVoucher();
+	private int accountID;
+	private String accountNumber;
+//	private PayVoucher payVoucher = new PayVoucher();
+	private String studentID;
 
 	// Constructors
 	public Tutor() {
-		name = "null";
-		email = "null";
-		subject = "null";
+		name = null;
+		email = null;
+		subject = null;
+		accountNumber = null;
 		payRate = 0.0;
 		tutorID = 0;
+		studentID = null;
 	}
 
 	public void setName(String name) {
@@ -63,20 +67,55 @@ public class Tutor extends User {
 		return subject;
 	}
 
-	public void submitPayVoucher() {
-		payVoucher.setIsSubmitted(true);
-	}
+//	public void submitPayVoucher() {
+//		payVoucher.setIsSubmitted(true);
+//	}
+//
+//	public PayVoucher getPayVoucher() {
+//		return payVoucher;
+//	}
 
-	public PayVoucher getPayVoucher() {
-		return payVoucher;
-	}
-
-	public void setAccountNumber(int accountNumber){
+	public void setAccountNumber(String accountNumber){
 		this.accountNumber = accountNumber;
 	}
 
-	public int getAccountNumber(){
+	public String getAccountNumber(){
 		return accountNumber;
 	}
-	// editPayVoucher()
+	
+	/**
+	 * Get this Tutor's Student ID
+	 * @return This Tutor's Student ID
+	 */
+	public String getStudentID() {
+		
+		return studentID;
+	}
+	
+	/**
+	 * Set this Tutor's Student ID.
+	 * @param studentID This Tutor's new Student ID.
+	 */
+	public void setStudentID(String studentID) {
+		
+		this.studentID = studentID;
+	}
+	
+	/**
+	 * Get this Tutor's Account ID.
+	 * @return This Tutor's Account ID.
+	 */
+	public int getAccountID() {
+		
+		return accountID;
+	}
+	
+	/**
+	 * Set this Tutor's Account ID.
+	 * @param accountID This Tutor's new Account ID.
+	 */
+	public void setAccountID(int accountID) {
+		
+		this.accountID = accountID;
+	}
 }

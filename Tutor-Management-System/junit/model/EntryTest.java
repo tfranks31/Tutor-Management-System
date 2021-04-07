@@ -36,4 +36,17 @@ public class EntryTest {
     	assertTrue(entry.getWherePerformed() == "zoom");
     	
     }
+    
+    @Test
+    public void testGetSetEntryID() {
+    	
+    	entry.setEntryID(1);
+    	assertEquals(1, entry.getEntryID());
+    }
+    
+    @Test
+    public void testGetSetPayVoucherID() {
+    	entry.setPayVoucherID(1);
+    	assertEquals(1, entry.getPayVoucherID());
+    }
 }

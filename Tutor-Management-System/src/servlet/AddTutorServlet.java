@@ -7,14 +7,31 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import controller.AddTutorController;
+import model.Tutor;
+import model.UserAccount;
+
 public class AddTutorServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
+	private AddTutorController controller = null; 
 
 	@Override
 	protected void doGet(HttpServletRequest req, HttpServletResponse resp)
 			throws ServletException, IOException {
 
 		System.out.println("AddTutor Servlet: doGet");	
+		
+		UserAccount account = (UserAccount) req.getSession().getAttribute("user");
+		if (account == null) {
+			
+			resp.sendRedirect("login");
+			return;
+		}
+		else if (!account.getIsAdmin()) {
+			
+			resp.sendRedirect("search");
+			return;
+		}
 		
 		// Go back to search
 		if (req.getParameter("back") != null) {
@@ -37,24 +54,54 @@ public class AddTutorServlet extends HttpServlet {
 		
 		System.out.println("AddTutor Servlet: doPost");
 		
+		String firstName = req.getParameter("firstName");
+		String lastName = req.getParameter("lastName");
+		String username = req.getParameter("username");
+		String password = req.getParameter("password");
+		String email = req.getParameter("email");
+		String studentID = req.getParameter("studentID");
+		String accountNumber = req.getParameter("accountNumber");
+		String subject = req.getParameter("subject");
+		String payRate = req.getParameter("payRate");
+		
 		// If the tutor information is valid, continue to the search page
 		if (tutorValidate(req)) {
 			
-			resp.sendRedirect("search");
+			controller = new AddTutorController();
+			
+			UserAccount newAccount = new UserAccount();
+			newAccount.setUsername(username);
+			newAccount.setPassword(password);
+			newAccount.setIsAdmin(false);
+			
+			Tutor newTutor = new Tutor();
+			newTutor.setName(firstName + " " + lastName);
+			newTutor.setEmail(email);
+			newTutor.setStudentID(studentID);
+			newTutor.setAccountNumber(accountNumber);
+			newTutor.setSubject(subject);
+			newTutor.setPayRate(Double.parseDouble(payRate));
+			
+			controller.addTutor(newAccount, newTutor);
+			
+			req.setAttribute("tutorName", firstName + " " + lastName);
+			
+			req.getRequestDispatcher("/search").forward(req, resp);
 		}
 		
 		// If the tutor information is invalid, set all parameters with inputed
 		// parameters and reload the add tutor page with proper error message
 		else {
 			
-			req.setAttribute("firstName", req.getParameter("firstName"));
-			req.setAttribute("lastName", req.getParameter("lastName"));
-			req.setAttribute("username", req.getParameter("username"));
-			req.setAttribute("password", req.getParameter("password"));
-			req.setAttribute("email", req.getParameter("email"));
-			req.setAttribute("accountNumber", req.getParameter("accountNumber"));
-			req.setAttribute("subject", req.getParameter("subject"));
-			req.setAttribute("payRate", req.getParameter("payRate"));
+			req.setAttribute("firstName", firstName);
+			req.setAttribute("lastName", lastName);
+			req.setAttribute("username", username);
+			req.setAttribute("password", password);
+			req.setAttribute("email", email);
+			req.setAttribute("studentID", studentID);
+			req.setAttribute("accountNumber", accountNumber);
+			req.setAttribute("subject", subject);
+			req.setAttribute("payRate", payRate);
 			
 			req.getRequestDispatcher("/_view/addTutor.jsp").forward(req, resp);
 		}
@@ -73,14 +120,15 @@ public class AddTutorServlet extends HttpServlet {
 		String username = req.getParameter("username");
 		String password = req.getParameter("password");
 		String email = req.getParameter("email");
+		String studentID = req.getParameter("studentID");
 		String accountNumber = req.getParameter("accountNumber");
 		String subject = req.getParameter("subject");
 		String payRate = req.getParameter("payRate");
 		
 		// Assemble inputs into an array to check for empty inputs
 		String[] inputs = new String[] {firstName, lastName, username,
-										password, email, accountNumber,
-										subject, payRate};
+										password, email, studentID,
+										accountNumber, subject, payRate};
 		
 		// Check all inputs to see if any are empty
 		for (String input : inputs) {
@@ -95,44 +143,28 @@ public class AddTutorServlet extends HttpServlet {
 		// Check that firstName only contains letters
 		if (!firstName.matches("^[a-zA-Z]*$")) {
 			
-			req.setAttribute("errorMessage",
-							 "First Name can only contain letters");
+			req.setAttribute("errorMessage", "First Name can only contain letters");
 			return false;
 		}
 		
 		// Check that lastName only contains letters
 		if (!lastName.matches("^[a-zA-Z]*$")) {
 			
-			req.setAttribute("errorMessage",
-							 "Last Name can only contain letters");
+			req.setAttribute("errorMessage", "Last Name can only contain letters");
 			return false;
 		}
 		
 		// Check that email is in a valid email format
 		if (!email.matches("^[\\w-_\\.+]*[\\w-_\\.]\\@([\\w]+\\.)+[\\w]+[\\w]$")) {
 			
-			req.setAttribute("errorMessage",
-					 		 "Please enter a valid Email address");
+			req.setAttribute("errorMessage", "Please enter a valid Email address");
 			return false;
 		}
 		
-		// Check that accountNumber is an integer
-		try {
+		// Check that student ID only contains numbers
+		if (!studentID.matches("^[0-9]*$")) {
 			
-			Integer.valueOf(accountNumber);
-		}
-		catch (NumberFormatException e) {
-			
-			req.setAttribute("errorMessage",
-			 		 		 "Account Number can only contain integer numbers");
-			return false;
-		}
-		
-		// Check that accountNumber is positive
-		if (Integer.valueOf(accountNumber) <= 0) {
-			
-			req.setAttribute("errorMessage",
-	 		 		 		 "Account Number must be positive");
+			req.setAttribute("errorMessage", "Student ID can only contain numbers");
 			return false;
 		}
 		
@@ -143,16 +175,14 @@ public class AddTutorServlet extends HttpServlet {
 		}
 		catch (NumberFormatException e) {
 			
-			req.setAttribute("errorMessage",
-			 		 		 "Pay Rate can only contain decimal numbers");
+			req.setAttribute("errorMessage", "Pay Rate can only contain decimal numbers");
 			return false;
 		}
 		
 		// Check that payRate is positive
 		if (Double.valueOf(payRate) <= 0) {
 			
-			req.setAttribute("errorMessage",
-	 		 		 		 "Pay Rate must be positive");
+			req.setAttribute("errorMessage", "Pay Rate must be positive");
 			return false;
 		}
 		

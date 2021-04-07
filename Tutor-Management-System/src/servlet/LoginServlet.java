@@ -7,14 +7,22 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import controller.LoginController;
+import model.UserAccount;
+
 public class LoginServlet extends HttpServlet{
 	private static final long serialVersionUID = 1L;
+	private LoginController controller = null;
+	private String username;
+	private String password;
 	
 	@Override
 	protected void doGet(HttpServletRequest req, HttpServletResponse resp)
 			throws ServletException, IOException {
 
 		System.out.println("Login Servlet: doGet");	
+		
+		req.getSession().setAttribute("user", null);
 		
 		req.getRequestDispatcher("/_view/login.jsp").forward(req, resp);
 	}
@@ -38,13 +46,17 @@ public class LoginServlet extends HttpServlet{
 	}
     
     private boolean loginValidate(HttpServletRequest req) {
-        String username = req.getParameter("username");
-        String password = req.getParameter("password");
-
-        if (username.equals("nickelback") && password.equals("nickelback")) {
-            return true;
-        } else {
-            return false;
+        username = req.getParameter("username");
+        password = req.getParameter("password");
+        
+        controller = new LoginController();
+        UserAccount user = controller.getUserFromLogin(username, password);
+        
+        if (user == null) {
+        	return false;
+        }else {
+        	req.getSession().setAttribute("user", user);
+        	return true;
         }
     }
 }
