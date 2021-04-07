@@ -79,4 +79,70 @@ public class PayVoucherControllerTest {
 		db.deleteEntry(entry);
 		db.deletePayVoucher(payVoucher);
 	}
+	
+	@Test
+	public void testCalculateTotalHours() {
+		Entry entry1 = new Entry();
+		Entry entry2 = new Entry();
+		ArrayList<Entry> entries = new ArrayList<Entry>();
+		
+		entry1.setHours(5);
+		entry2.setHours(2);
+		
+		entries.add(entry1);
+		entries.add(entry2);
+		
+		double totalhours = controller.calculateTotalHours(entries);
+		
+		assertTrue(totalhours == 7.0);
+		
+	}
+	
+	@Test
+	public void testCalculateTotalPay() {
+		PayVoucher voucher = new PayVoucher();
+		Tutor newTutor = new Tutor();
+		
+		newTutor.setPayRate(2.0);
+		voucher.setTotalHours(5.0);
+		
+		double totalPay = controller.calculateTotalPay(newTutor, voucher);
+		
+		assertTrue(totalPay == 10.0);
+	}
+	
+	@Test
+	public void testSubmitPayVoucher() {
+		PayVoucher payVoucher = new PayVoucher();
+		payVoucher.setPayVoucherID(-1);
+		
+		//vouchers is added to database before is Submit is updated
+		db.insertPayVoucher(payVoucher);
+		
+		payVoucher.setIsSubmitted(true);
+		
+		controller.submitPayVoucher(payVoucher.getPayVoucherID());
+		List<PayVoucher> dbPayVouchers = db.getPayVouchers();
+		
+		assertEquals(payVoucher, dbPayVouchers.get(dbPayVouchers.size() - 1));
+		
+		db.deletePayVoucher(payVoucher);
+	}
+	
+	@Test
+	public void testSignPayVoucher() {
+		PayVoucher payVoucher = new PayVoucher();
+		payVoucher.setPayVoucherID(-1);
+		
+		db.insertPayVoucher(payVoucher);
+		
+		payVoucher.setIsSigned(true);
+		
+		controller.submitPayVoucher(payVoucher.getPayVoucherID());
+		List<PayVoucher> dbPayVouchers = db.getPayVouchers();
+		
+		assertEquals(payVoucher, dbPayVouchers.get(dbPayVouchers.size() - 1));
+		
+		db.deletePayVoucher(payVoucher);
+	}
 }
