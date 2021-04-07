@@ -24,6 +24,10 @@
     <form action="${pageContext.servletContext.contextPath}/search" method="get">
         <input type="submit" class="logout" id="logout" name="logout" value="Logout">
     </form>
+    
+    <c:if test="${! empty tutorName}">
+    	<div class="successAdd">${tutorName} was added as a tutor</div>
+	</c:if>
 
     <table id = "searchResults">
     	<th>Pay Vouchers</th>
@@ -71,12 +75,6 @@
         	</br></br></br></br></br></br></br></br></br></br>
     	</form>
 	</c:if>
-      
-	<c:if test="${! empty tutorName}">
-    	<div class="successAdd">${tutorName} was added as a tutor</div>
-	</c:if>
-	
-
     
 </body>
 
