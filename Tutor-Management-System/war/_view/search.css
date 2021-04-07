@@ -28,31 +28,24 @@ body {
     margin-top: 15px;
     border: 2px solid black;
     width: 550px;
-    height: 45px;
-    border-radius: 25px;
+    height: 55px;
+    border-radius: 30px;
 }
 
 #searchBox {
-	margin-top: -5px;
-	width: 460px;
-	height: 38px;
-	font-size: 25px;
+	width: 450px;
+	height: 40px;
+	font-size: 28px;
 	border: none;
 	background: none;
 }
 
 #searchBTN{
  	font-size: 35px;
+ 	height: 49px;
 	border: none;
 	background: none;
 }
-
-.gwt-TextBox{
-    padding: 5x 4px;
-    font-size: small;
-    font-family: Arial Unicode MS, Arial, sans-serif;
-}
-
 
 #addTutor {
 	float: right;
