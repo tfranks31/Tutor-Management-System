@@ -586,31 +586,97 @@ public class DerbyDatabase implements IDatabase {
 
 			@Override
 			public Boolean execute(Connection conn) throws SQLException {
-				PreparedStatement stmt = null;
+				PreparedStatement stmt1 = null;
+				PreparedStatement stmt2 = null;
+				PreparedStatement stmt3 = null;
+				PreparedStatement stmt4 = null;
+				ResultSet resultSet1 = null;
+				ResultSet resultSet2 = null;
 				
 				try {
 					for (Entry entry : entries) {
-						stmt = conn.prepareStatement(
+						stmt1 = conn.prepareStatement(
 							"UPDATE entries " + 
 							"SET entries.date = ?, entries.service_performed = ?, entries.where_performed = ?, entries.hours = ? " +
 							"WHERE entries.entry_id = ? " + 
 							"AND entries.pay_voucher_id = ? "
 						);
 						
-						stmt.setString(1, entry.getDate());
-						stmt.setString(2, entry.getServicePerformed());
-						stmt.setString(3, entry.getWherePerformed());
-						stmt.setDouble(4, entry.getHours());
-						stmt.setInt(5, entry.getEntryID());
-						stmt.setInt(6, voucher.getPayVoucherID());
+						stmt1.setString(1, entry.getDate());
+						stmt1.setString(2, entry.getServicePerformed());
+						stmt1.setString(3, entry.getWherePerformed());
+						stmt1.setDouble(4, entry.getHours());
+						stmt1.setInt(5, entry.getEntryID());
+						stmt1.setInt(6, voucher.getPayVoucherID());
 						
-						stmt.executeUpdate();
-				
+						stmt1.executeUpdate();
 					}
+					
+					stmt2 = conn.prepareStatement(
+						"SELECT entries.* " + 
+						"FROM entries " +
+						"WHERE entries.pay_voucher_id = ? " 
+					);
+					
+					stmt2.setInt(1, voucher.getPayVoucherID());
+					
+					resultSet1 = stmt2.executeQuery();
+					
+					List<Entry> result = new ArrayList<Entry>();
+					
+					while (resultSet1.next()) {
+						Entry Entry = new Entry();
+						loadEntry(Entry, resultSet1, 1);
+
+						result.add(Entry);
+					}
+					
+					double totalHours = 0;
+					
+					for (Entry Entry: result) {
+						totalHours += Entry.getHours();
+					}
+					
+					stmt3 = conn.prepareStatement(
+						"SELECT tutors.* " + 
+						"FROM tutors " +
+						"WHERE tutors.tutor_id = ? " 
+					);
+						
+					stmt3.setInt(1, voucher.getTutorID());
+					
+					resultSet2 = stmt3.executeQuery();
+					
+					Tutor resultTutor = null;
+					
+					if (resultSet2.next()) {
+						Tutor Tutor = new Tutor();
+						loadTutor(Tutor, resultSet2, 1);
+						
+						resultTutor = Tutor;
+					}
+					
+					double totalPay = totalHours * resultTutor.getPayRate();
+					
+					stmt4 = conn.prepareStatement(
+						"UPDATE pay_vouchers " + 
+						"SET pay_vouchers.total_hours = ?, pay_vouchers.total_pay = ? "
+					);
+					
+					stmt4.setDouble(1, totalHours);
+					stmt4.setDouble(2, totalPay);
+					
+					stmt4.executeUpdate();
+	
 					return true;
 					
 				} finally {
-					DBUtil.closeQuietly(stmt);
+					DBUtil.closeQuietly(resultSet1);
+					DBUtil.closeQuietly(resultSet2);
+					DBUtil.closeQuietly(stmt1);
+					DBUtil.closeQuietly(stmt2);
+					DBUtil.closeQuietly(stmt3);
+					DBUtil.closeQuietly(stmt4);
 				}
 			}
 		});
