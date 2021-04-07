@@ -802,50 +802,242 @@ public class DerbyDatabase implements IDatabase {
 
 	@Override
 	public List<UserAccount> getUserAccounts() {
-		// TODO Auto-generated method stub
-		return null;
+		return executeTransaction(new Transaction<List<UserAccount>>() {
+			@Override
+			public List<UserAccount> execute(Connection conn) throws SQLException {
+				PreparedStatement stmt = null;
+				ResultSet resultSet = null;
+
+				try {
+					stmt = conn.prepareStatement(
+						"select user_accounts.* " + 
+						"from user_accounts " 
+					);
+					
+					List<UserAccount> result = new ArrayList<UserAccount>();
+
+					resultSet = stmt.executeQuery();
+
+					while (resultSet.next()) {
+						UserAccount UserAccount = new UserAccount();
+						loadUserAccount(UserAccount, resultSet, 1);
+
+						result.add(UserAccount);
+					}
+
+					return result;
+				} finally {
+					DBUtil.closeQuietly(resultSet);
+					DBUtil.closeQuietly(stmt);
+				}
+			}
+		});
 	}
 
 	@Override
 	public List<Tutor> getTutors() {
-		// TODO Auto-generated method stub
-		return null;
+		return executeTransaction(new Transaction<List<Tutor>>() {
+			@Override
+			public List<Tutor> execute(Connection conn) throws SQLException {
+				PreparedStatement stmt = null;
+				ResultSet resultSet = null;
+
+				try {
+					stmt = conn.prepareStatement(
+						"select tutors.* " + 
+						"from tutors " 
+					);
+					
+					List<Tutor> result = new ArrayList<Tutor>();
+
+					resultSet = stmt.executeQuery();
+
+					while (resultSet.next()) {
+						Tutor Tutor = new Tutor();
+						loadTutor(Tutor, resultSet, 1);
+
+						result.add(Tutor);
+					}
+
+					return result;
+				} finally {
+					DBUtil.closeQuietly(resultSet);
+					DBUtil.closeQuietly(stmt);
+				}
+			}
+		});
 	}
 
 	@Override
 	public List<PayVoucher> getPayVouchers() {
-		// TODO Auto-generated method stub
-		return null;
+		return executeTransaction(new Transaction<List<PayVoucher>>() {
+			@Override
+			public List<PayVoucher> execute(Connection conn) throws SQLException {
+				PreparedStatement stmt = null;
+				ResultSet resultSet = null;
+
+				try {
+					stmt = conn.prepareStatement(
+						"select pay_vouchers.* " + 
+						"from pay_vouchers " 
+					);
+					
+					List<PayVoucher> result = new ArrayList<PayVoucher>();
+
+					resultSet = stmt.executeQuery();
+
+					while (resultSet.next()) {
+						PayVoucher PayVoucher = new PayVoucher();
+						loadPayVoucher(PayVoucher, resultSet, 1);
+
+						result.add(PayVoucher);
+					}
+
+					return result;
+				} finally {
+					DBUtil.closeQuietly(resultSet);
+					DBUtil.closeQuietly(stmt);
+				}
+			}
+		});
 	}
 
 	@Override
 	public List<Entry> getEntries() {
-		// TODO Auto-generated method stub
-		return null;
+		return executeTransaction(new Transaction<List<Entry>>() {
+			@Override
+			public List<Entry> execute(Connection conn) throws SQLException {
+				PreparedStatement stmt = null;
+				ResultSet resultSet = null;
+
+				try {
+					stmt = conn.prepareStatement(
+						"select entries.* " + 
+						"from entries " 
+					);
+					
+					List<Entry> result = new ArrayList<Entry>();
+
+					resultSet = stmt.executeQuery();
+
+					while (resultSet.next()) {
+						Entry Entry = new Entry();
+						loadEntry(Entry, resultSet, 1);
+
+						result.add(Entry);
+					}
+
+					return result;
+				} finally {
+					DBUtil.closeQuietly(resultSet);
+					DBUtil.closeQuietly(stmt);
+				}
+			}
+		});
 	}
 
 	@Override
 	public void deleteUserAccount(UserAccount userAccounts) {
-		// TODO Auto-generated method stub
-		
+		executeTransaction(new Transaction<Boolean>() {
+			
+			@Override
+			public Boolean execute(Connection conn) throws SQLException {
+				PreparedStatement stmt = null;
+				
+				try {
+					stmt = conn.prepareStatement(
+						"DELETE FROM user_accounts " + 
+						"WHERE user_accounts.user_account_id = ? "
+					);
+					stmt.setInt(1, userAccounts.getAccountID());
+					
+					stmt.executeUpdate();
+			
+					return true;
+					
+				} finally {
+					DBUtil.closeQuietly(stmt);
+				}
+			}
+		});
 	}
 
 	@Override
 	public void deleteTutor(Tutor tutors) {
-		// TODO Auto-generated method stub
-		
+		executeTransaction(new Transaction<Boolean>() {
+			
+			@Override
+			public Boolean execute(Connection conn) throws SQLException {
+				PreparedStatement stmt = null;
+				
+				try {
+					stmt = conn.prepareStatement(
+						"DELETE FROM tutors " + 
+						"WHERE tutors.tutor_id = ? "
+					);
+					stmt.setInt(1, tutors.getTutorID());
+					
+					stmt.executeUpdate();
+			
+					return true;
+					
+				} finally {
+					DBUtil.closeQuietly(stmt);
+				}
+			}
+		});
 	}
 
 	@Override
 	public void deletePayVoucher(PayVoucher payVouchers) {
-		// TODO Auto-generated method stub
-		
+		executeTransaction(new Transaction<Boolean>() {
+			
+			@Override
+			public Boolean execute(Connection conn) throws SQLException {
+				PreparedStatement stmt = null;
+				
+				try {
+					stmt = conn.prepareStatement(
+						"DELETE FROM pay_vouchers " + 
+						"WHERE pay_vouchers.pay_voucher_id = ? "
+					);
+					stmt.setInt(1, payVouchers.getPayVoucherID());
+					
+					stmt.executeUpdate();
+			
+					return true;
+					
+				} finally {
+					DBUtil.closeQuietly(stmt);
+				}
+			}
+		});
 	}
 
 	@Override
 	public void deleteEntry(Entry entries) {
-		// TODO Auto-generated method stub
-		
+		executeTransaction(new Transaction<Boolean>() {
+			
+			@Override
+			public Boolean execute(Connection conn) throws SQLException {
+				PreparedStatement stmt = null;
+				
+				try {
+					stmt = conn.prepareStatement(
+						"DELETE FROM entries " + 
+						"WHERE entries.entry_id = ? "
+					);
+					stmt.setInt(1, entries.getEntryID());
+					
+					stmt.executeUpdate();
+			
+					return true;
+					
+				} finally {
+					DBUtil.closeQuietly(stmt);
+				}
+			}
+		});
 	}
 
 	@Override
