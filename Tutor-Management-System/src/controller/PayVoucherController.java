@@ -55,4 +55,8 @@ public class PayVoucherController {
 	public PayVoucher submitPayVoucher(int voucherID) {
 		return db.submitPayVoucher(voucherID);
 	}
+	
+	public PayVoucher signPayVoucher(int voucherID) {
+		return db.signPayVoucher(voucherID);
+	}
 }

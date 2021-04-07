@@ -57,7 +57,16 @@
 		</div>
 		
 		<input type="submit" class="submit" id="update" name="updateVoucher" value="Update Pay Voucher">
-		<input type="submit" class="submit" id="submit" name="submitVoucher" value="Submit Pay Voucher">
+		
+		<c:choose>
+			<c:when test="${user.isAdmin}">
+				<input type="submit" class="sign" id="sign" name="signVoucher" value="Sign Pay Voucher">
+			</c:when>
+			<c:otherwise>
+				<input type="submit" class="submit" id="submit" name="submitVoucher" value="Submit Pay Voucher">
+			</c:otherwise>
+		</c:choose>
+		
     </form>
 	<form action="${pageContext.servletContext.contextPath}/payVoucher" method="get">
    	     <input type="submit" id="back" name="back" value="Back">

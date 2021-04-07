@@ -318,4 +318,15 @@ public class FakeDatabase implements IDatabase {
 		}
 	}
 
+	@Override
+	public PayVoucher signPayVoucher(int voucherID) {
+		for (PayVoucher voucher: payVoucherList) {
+			if (voucher.getPayVoucherID() == voucherID) {
+				voucher.setIsSigned(true);
+				return voucher;
+			}
+		}
+		return null;
+	}
+
 }

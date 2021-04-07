@@ -811,4 +811,10 @@ public class DerbyDatabase implements IDatabase {
 		
 	}
 
+	@Override
+	public PayVoucher signPayVoucher(int voucherID) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
 }
