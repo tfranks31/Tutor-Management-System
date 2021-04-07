@@ -121,10 +121,14 @@ public class FakeDatabase implements IDatabase {
 	public List<Tuple<Tutor, PayVoucher, Entry>> findEntryByVoucher(int voucherID) {
 		List<Tuple<Tutor, PayVoucher, Entry>> result = new ArrayList<Tuple<Tutor, PayVoucher, Entry>>();
 		
+		//iterates over every pay voucher and tutor, check if they have the same tutor ID
 		for (PayVoucher voucher: payVoucherList) {
 			for (Tutor tutor : tutorList) {
 				if (voucher.getTutorID() == tutor.getTutorID()) {
 					if (voucher.getPayVoucherID() == voucherID) {
+		
+						//iterates over entry list and checks to see if the entry corresponds to the voucher
+						//if so it add the entry to the result
 						for (Entry entry: entryList) {
 							if (entry.getPayVoucherID() == voucher.getPayVoucherID()) {
 								result.add(new Tuple<Tutor, PayVoucher, Entry>(tutor, voucher, entry));
@@ -154,6 +158,7 @@ public class FakeDatabase implements IDatabase {
 
 	@Override
 	public UserAccount accountByLogin(String username, String password) {
+		//finds corresponding account from log in credentials
 		for (UserAccount account: accountList) {
 			if (account.getUsername().equals(username) && account.getPassword().equals(password)) {
 				UserAccount result = account;
@@ -213,6 +218,7 @@ public class FakeDatabase implements IDatabase {
 			}
 		}
 			
+		//returns all vouchers of the search parameter is blank
 		if (search.equals("")) {
 			for (PayVoucher voucher : payVoucherList) {
 				for (Tutor tutor : tutorList) {
@@ -240,6 +246,7 @@ public class FakeDatabase implements IDatabase {
 
 	@Override
 	public List<Pair<Tutor, PayVoucher>> findAllPayVouchers() {
+		//returns every voucher with correspond tutor
 		List<Pair<Tutor, PayVoucher>>  result = new ArrayList<Pair<Tutor, PayVoucher>>();
 		for (Tutor tutor : tutorList) {
 			for (PayVoucher voucher: payVoucherList) {
@@ -253,6 +260,8 @@ public class FakeDatabase implements IDatabase {
 
 	@Override
 	public PayVoucher submitPayVoucher(int voucherID) {
+		//checks to see if a voucher in the list has a corresponding id
+		//updates the isSibmitted parameter to true if so
 		for (PayVoucher voucher: payVoucherList) {
 			if (voucher.getPayVoucherID() == voucherID) {
 				voucher.setIsSubmitted(true);
@@ -265,7 +274,7 @@ public class FakeDatabase implements IDatabase {
 	@Override
 	public void updateVoucher(List<Entry> entries, PayVoucher voucher) {
 		for (Entry entry : entries) {
-			
+			//removes blank entries from a submitted voucher
 			if (entry.getDate().equals("") && entry.getHours() == 0.0 && 
 				entry.getServicePerformed().equals("") && entry.getWherePerformed().equals("")) {
 				
@@ -307,9 +316,9 @@ public class FakeDatabase implements IDatabase {
 
 	@Override
 	public void assignVoucher(String startDate, String dueDate) {
-		
+		//creates and assigns a pay voucher to every tutor with a set
+		//start and end date
 		for (Tutor tutor : tutorList) {
-			
 			PayVoucher voucher = new PayVoucher();
 			voucher.setStartDate(startDate);
 			voucher.setDueDate(dueDate);
@@ -327,6 +336,8 @@ public class FakeDatabase implements IDatabase {
 
 	@Override
 	public PayVoucher signPayVoucher(int voucherID) {
+		//checks to see if a voucher in the list has a corresponding id
+		//updates the isSibmitted parameter to true if so
 		for (PayVoucher voucher: payVoucherList) {
 			if (voucher.getPayVoucherID() == voucherID) {
 				voucher.setIsSigned(true);
