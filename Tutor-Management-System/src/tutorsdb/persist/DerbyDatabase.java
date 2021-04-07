@@ -414,8 +414,69 @@ public class DerbyDatabase implements IDatabase {
 
 	@Override
 	public List<Pair<Tutor, PayVoucher>> findVoucherBySearch(String search) throws UnsupportedOperationException {
-		// TODO Auto-generated method stub
-		return null;
+		return executeTransaction(new Transaction<List<Pair<Tutor, PayVoucher>>>() {
+			@Override
+			public List<Pair<Tutor, PayVoucher>> execute(Connection conn) throws SQLException {
+				PreparedStatement stmt = null;
+				ResultSet resultSet = null;
+				
+				try {
+					// show submitted vouchers
+					if (search.equals("Submitted") || search.equals("submitted")) {
+						stmt = conn.prepareStatement(
+							"select tutors.*, pay_vouchers.* " + 
+							"from tutors, pay_vouchers " + 
+							"where pay_vouchers.is_submitted = true " 
+						);
+					// show signed vouchers
+					} else if (search.equals("Signed") || search.equals("signed")) {
+						stmt = conn.prepareStatement(
+							"select tutors.*, pay_vouchers.* " + 
+							"from tutors, pay_vouchers " + 
+							"where pay_vouchers.is_signed = true " 
+						);
+					// show all vouchers
+					} else if (search.equals("")) {
+						stmt = conn.prepareStatement(
+							"select tutors.*, pay_vouchers.* " + 
+							"from tutors, pay_vouchers "
+						);
+					} else {
+						// searches by name or start date or due date or subject
+						stmt = conn.prepareStatement(
+							"select tutors.*, pay_vouchers.* " + 
+							"from tutors, pay_vouchers " + 
+							"where tutors.name = ? " + 
+							"OR pay_vouchers.due_date = ? " +
+							"OR pay_vouchers.start_date = ? " + 
+							"OR tutors.subject = ? "
+						);
+						stmt.setString(1, search);
+						stmt.setString(2, search);
+						stmt.setString(3, search);
+						stmt.setString(4, search);
+					}
+
+					resultSet = stmt.executeQuery();
+					
+					List<Pair<Tutor, PayVoucher>> result = new ArrayList<Pair<Tutor, PayVoucher>>();
+
+					while (resultSet.next()) {
+						// Create and then load a new user Account
+						Tutor Tutor = new Tutor();
+						loadTutor(Tutor, resultSet, 1);
+						PayVoucher PayVoucher = new PayVoucher();
+						loadPayVoucher(PayVoucher, resultSet, 9);
+						result.add(new Pair<Tutor, PayVoucher>(Tutor, PayVoucher));
+					}
+
+					return result;
+				} finally {
+					DBUtil.closeQuietly(resultSet);
+					DBUtil.closeQuietly(stmt);
+				}
+			}
+		});
 	}
 
 	@Override
