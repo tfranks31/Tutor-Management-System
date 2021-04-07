@@ -51,4 +51,8 @@ public class PayVoucherController {
 	public double calculateTotalPay(Tutor tutor, PayVoucher voucher){
 		return tutor.getPayRate() * voucher.getTotalHours();
 	}
+	
+	public PayVoucher submitPayVoucher(int voucherID) {
+		return db.submitPayVoucher(voucherID);
+	}
 }

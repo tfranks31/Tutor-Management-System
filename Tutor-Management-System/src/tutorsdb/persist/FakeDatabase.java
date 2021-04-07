@@ -206,13 +206,22 @@ public class FakeDatabase implements IDatabase {
 		if (search.equals("signed") || search.equals("Signed")) {
 			for (PayVoucher voucher : payVoucherList) {
 				for (Tutor tutor : tutorList) {
+					if (voucher.getTutorID() == tutor.getTutorID() && voucher.getIsSigned() == true) {
+						result.add(new Pair<Tutor, PayVoucher>(tutor, voucher));
+					}
+				}
+			}
+		}
+			
+		if (search.equals("")) {
+			for (PayVoucher voucher : payVoucherList) {
+				for (Tutor tutor : tutorList) {
 					if (voucher.getTutorID() == tutor.getTutorID()) {
 						result.add(new Pair<Tutor, PayVoucher>(tutor, voucher));
 					}
 				}
 			}
 		}
-
 		return result;
 	}
 
