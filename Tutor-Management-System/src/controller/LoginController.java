@@ -15,6 +15,7 @@ public class LoginController {
 	
 	public UserAccount getUserFromLogin(String username, String password) {
 		
+		// Get the UserAccount with the login credentials
 		UserAccount user = db.accountByLogin(username, password);
 		
 		return user;

@@ -20,6 +20,7 @@ public class SearchController {
 	
 	public ArrayList<Pair<Tutor, PayVoucher>> getAllVouchers() {
 		
+		// Get all vouchers from the database
 		List<Pair<Tutor, PayVoucher>> allVouchersList = db.findAllPayVouchers();
 		
 		ArrayList<Pair<Tutor, PayVoucher>> allVouchers = new ArrayList<Pair<Tutor, PayVoucher>>();
@@ -33,6 +34,7 @@ public class SearchController {
 	
 	public ArrayList<Pair<Tutor, PayVoucher>> getVoucherFromSearch(String search){
 		
+		// Get all vouchers with the search parameter
 		List<Pair<Tutor, PayVoucher>> resultList = db.findVoucherBySearch(search);
 		
 		ArrayList<Pair<Tutor, PayVoucher>> result = new ArrayList<Pair<Tutor, PayVoucher>>();
@@ -46,6 +48,7 @@ public class SearchController {
 	
 	public void assignPayVoucher(String startDate, String dueDate) {
 		
+		// Assign the pay voucher in the database
 		db.assignVoucher(startDate, dueDate);
 	}
 }

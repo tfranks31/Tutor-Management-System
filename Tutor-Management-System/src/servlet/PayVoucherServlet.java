@@ -33,12 +33,14 @@ public class PayVoucherServlet extends HttpServlet{
 		System.out.println("PayVoucher Servlet: doGet");	
 		
 		UserAccount account = (UserAccount) req.getSession().getAttribute("user");
+		// If user not logged in, redirect to login
 		if (account == null) {
 			
 			resp.sendRedirect("login");
 			return;
 		}
 		
+		// If user manually tries to access payvoucher view redirect to search
 		if (req.getParameter("ID") == null) {
 			
 			resp.sendRedirect("search");
@@ -50,10 +52,12 @@ public class PayVoucherServlet extends HttpServlet{
 			
 			resp.sendRedirect("search");
 		}
-		// Load addTutor
+		// Load and generate rows
 		else {
 			
 			controller = new PayVoucherController();
+			
+			// Load payVoucher with the specified id
 			if (req.getParameter("ID") != null) {
 				
 				payVoucherID = Integer.parseInt(req.getParameter("ID"));
@@ -63,19 +67,23 @@ public class PayVoucherServlet extends HttpServlet{
 			PayVoucher voucher = tutorVoucherEntryList.get(0).getMiddle(); //all voucher instances are identical
 			Tutor tutor = tutorVoucherEntryList.get(0).getLeft(); //add tutor instances are identical
 			
+			// Load entries
 			for (Tuple<Tutor, PayVoucher, Entry> tutorVoucherEntry : tutorVoucherEntryList) {
 				if (tutorVoucherEntry.getRight().getEntryID() != -1) {
 					entries.add(tutorVoucherEntry.getRight());
 				}
 			}
 
+			// Extra table spaces will be the hard limit of 10 - how many pre-existing entries
 			if (entries.size() < 10) {
 				tableSize = 10 - entries.size();
 			}
+			// More entries than 10, so generate no empty extra spaces
 			else {
 				tableSize = 0;
 			}
 			
+			// Set attributes
 			req.setAttribute("tableSize", tableSize);
 			req.setAttribute("entries", entries);
 			req.setAttribute("tutorName", tutor.getName());
@@ -86,7 +94,7 @@ public class PayVoucherServlet extends HttpServlet{
 			req.setAttribute("payRate", tutor.getPayRate());
 			req.setAttribute("totalPay", voucher.getTotalPay());
 			
-			// Call JSP to generate empty form
+			// Call JSP to generate updated form
 			req.getRequestDispatcher("/_view/payVoucher.jsp").forward(req, resp);
 		}
 		
@@ -99,26 +107,35 @@ public class PayVoucherServlet extends HttpServlet{
 		
 		UserAccount account = (UserAccount) req.getSession().getAttribute("user");
 		
+		// User just selected a payVoucher
 		if (req.getParameter("ID") != null) {
 			
 			controller = new PayVoucherController();
+			
+			// Get the payVoucher ID
 			payVoucherID = Integer.parseInt(req.getParameter("ID"));
+			
+			// Get tutor, voucher, and entries
 			ArrayList<Tuple<Tutor, PayVoucher, Entry>> tutorVoucherEntryList = controller.getPayVoucherEntries(payVoucherID);
 			ArrayList<Entry> entries = new ArrayList<Entry>();
 			PayVoucher voucher = tutorVoucherEntryList.get(0).getMiddle(); //all voucher instances are identical
 			Tutor tutor = tutorVoucherEntryList.get(0).getLeft(); //add tutor instances are identical
 			
+			// Populate entries
 			for (Tuple<Tutor, PayVoucher, Entry> tutorVoucherEntry : tutorVoucherEntryList) {
 				entries.add(tutorVoucherEntry.getRight());
 			}
 
+			// Extra table spaces will be the hard limit of 10 - how many pre-existing entries
 			if (entries.size() < 10) {
 				tableSize = 10 - entries.size();
 			}
+			// More entries than 10, so generate no empty extra spaces
 			else {
 				tableSize = 0;
 			}
 			
+			// Set attributes
 			req.setAttribute("tableSize", tableSize);
 			req.setAttribute("entries", entries);
 			req.setAttribute("tutorName", tutor.getName());
@@ -129,34 +146,44 @@ public class PayVoucherServlet extends HttpServlet{
 			req.setAttribute("payRate", tutor.getPayRate());
 			req.setAttribute("totalPay", voucher.getTotalPay());
 			
-			// Call JSP to generate empty form
+			// Call JSP to generate updated form
 			req.getRequestDispatcher("/_view/payVoucher.jsp").forward(req, resp);
 		}
 
-		// Go back to search
+		// User wants to add a row
 		else if (req.getParameter("addRow") != null) {	
 			
 			controller = new PayVoucherController();
 			ArrayList<Tuple<Tutor, PayVoucher, Entry>> tutorVoucherEntryList = controller.getPayVoucherEntries(payVoucherID);
 			
+			// Get tutor, voucher, and entries
 			ArrayList<Entry> entries = new ArrayList<Entry>();
 			PayVoucher voucher = tutorVoucherEntryList.get(0).getMiddle(); //all voucher instances are identical
 			Tutor tutor = tutorVoucherEntryList.get(0).getLeft(); //all tutor instances are identical
 						
+			// Get all input cells from the pay voucher table
 			String[] cells = req.getParameterValues("cell");
 			
+			// Populate entries
 			for (Tuple<Tutor, PayVoucher, Entry> tutorVoucherEntry : tutorVoucherEntryList) {
 				entries.add(tutorVoucherEntry.getRight());
 			}
 			
+			// Runs through all the cells refreshing old entries and creating new entries need be
 			for (int i = 0; i < cells.length; i += 4) {	
+				
+				// Cell is not empty
 				if (!cells[i].equals("") && !cells[i + 1].equals("") &&
 					!cells[i + 2].equals("") && !cells[i + 3].equals("")) {
 					
 					Entry entry;
+					
+					// cells[i:i+3] contain a previous entry
 					if (i < entries.size() * 4) {
 						
 						entry = entries.get(i / 4);
+						
+						// Empty vouchers will have an initial null entry, create a new entry
 						if (entry == null) {
 							
 							entry = new Entry();
@@ -166,6 +193,8 @@ public class PayVoucherServlet extends HttpServlet{
 						entry.setServicePerformed(cells[i + 2]);
 						entry.setWherePerformed(cells[i + 3]);
 					}
+					
+					// Cells[i:i+3] are new entries
 					else {
 						entry = new Entry();
 						entry.setDate(cells[i]);
@@ -177,13 +206,15 @@ public class PayVoucherServlet extends HttpServlet{
 				}
 			}
 			
-			
+			// Set the remaining empty rows to be one more than the previous total row length
 			tableSize = cells.length / 4 - entries.size() + 1;
 
+			// Limit on how many rows can be generated
 			if(tableSize + entries.size() > 15) {
 				tableSize = cells.length / 4 - entries.size();
 			}
 			
+			// Set attributes
 			req.setAttribute("tableSize", tableSize);	
 			
 			req.setAttribute("entries", entries);
@@ -195,36 +226,47 @@ public class PayVoucherServlet extends HttpServlet{
 			req.setAttribute("payRate", tutor.getPayRate());
 			req.setAttribute("totalPay", voucher.getTotalPay());
 			
+			// Refresh payVoucher
 			req.getRequestDispatcher("/_view/payVoucher.jsp").forward(req, resp);
 		
 		}
+		
+		// User wants to update the voucher
 		else if (req.getParameter("updateVoucher") != null) {
 			
 			controller = new PayVoucherController();
 			ArrayList<Tuple<Tutor, PayVoucher, Entry>> tutorVoucherEntryList = controller.getPayVoucherEntries(payVoucherID);
 			
+			// Get tutor, voucher, and entries
 			ArrayList<Entry> entries = new ArrayList<Entry>();
 			PayVoucher voucher = tutorVoucherEntryList.get(0).getMiddle(); //all voucher instances are identical
 			Tutor tutor = tutorVoucherEntryList.get(0).getLeft(); //all tutor instances are identical
-						
+			
+			// Get all input cells from the pay voucher table
 			String[] cells = req.getParameterValues("cell");
 			
+			// Populate entries
 			for (Tuple<Tutor, PayVoucher, Entry> tutorVoucherEntry : tutorVoucherEntryList) {
 				
+				// Do not add any null entries, this is important for updating the database
 				if (tutorVoucherEntry.getRight() != null) {
 					
 					entries.add(tutorVoucherEntry.getRight());
 				}
 			}
 			
+			// Runs through all the cells refreshing old entries and creating new entries need be
 			for (int i = 0; i < cells.length; i += 4) {
 				
 				Entry entry;
 				
+				// cells[i:i+3] contain a previous entry
 				if (i < entries.size() * 4) {
 					
 					entry = entries.get(i / 4);
 					entry.setDate(cells[i]);
+					
+					// Set hours to 0 if blank, cannot set hours to a string or null
 					if (cells[i + 1].equals("")) {
 						entry.setHours(0);
 					}
@@ -235,7 +277,11 @@ public class PayVoucherServlet extends HttpServlet{
 					entry.setServicePerformed(cells[i + 2]);
 					entry.setWherePerformed(cells[i + 3]);
 				}
+				
+				// Cells[i:i+3] are new entries
 				else {
+					
+					// Skip blank entries
 					if (!cells[i].equals("") && !cells[i + 1].equals("") &&
 						!cells[i + 2].equals("") && !cells[i + 3].equals("")) {
 							
@@ -252,13 +298,17 @@ public class PayVoucherServlet extends HttpServlet{
 				
 			}
 			
+			// Update hours and total pay
 			voucher.setTotalHours(controller.calculateTotalHours(entries));
 			voucher.setTotalPay(controller.calculateTotalPay(tutor, voucher));
 			
 			controller.updateVoucherWithEntries(entries, voucher);
 			
+			// Get the refreshed entry list to account for removed entries
 			tutorVoucherEntryList = controller.getPayVoucherEntries(payVoucherID);
 			entries = new ArrayList<Entry>();
+			
+			// Populate entries
 			for (Tuple<Tutor, PayVoucher, Entry> tutorVoucherEntry : tutorVoucherEntryList) {
 				
 				if (tutorVoucherEntry.getRight() != null) {
@@ -267,9 +317,10 @@ public class PayVoucherServlet extends HttpServlet{
 				}
 			}
 			
-			
+			// Calculate remaining empty rows and set the empty row size
 			tableSize = cells.length / 4 - entries.size();
 			
+			// Set attributes
 			req.setAttribute("tableSize", tableSize);	
 			
 			req.setAttribute("entries", entries);
@@ -281,33 +332,45 @@ public class PayVoucherServlet extends HttpServlet{
 			req.setAttribute("payRate", tutor.getPayRate());
 			req.setAttribute("totalPay", voucher.getTotalPay());
 			
+			// Refresh payVoucher
 			req.getRequestDispatcher("/_view/payVoucher.jsp").forward(req, resp);
 			
-		}else if (req.getParameter("submitVoucher") != null) {
+		}
+		
+		// User wants to submit the voucher
+		else if (req.getParameter("submitVoucher") != null) {
 			
 			controller = new PayVoucherController();
 			ArrayList<Tuple<Tutor, PayVoucher, Entry>> tutorVoucherEntryList = controller.getPayVoucherEntries(payVoucherID);
 			
+			// Get tutor, voucher, and entries
 			ArrayList<Entry> entries = new ArrayList<Entry>();
 			PayVoucher voucher = tutorVoucherEntryList.get(0).getMiddle(); //all voucher instances are identical
 			Tutor tutor = tutorVoucherEntryList.get(0).getLeft(); //all tutor instances are identical
 						
+			// Get all input cells from the pay voucher table
 			String[] cells = req.getParameterValues("cell");
 			
+			// Populate entries
 			for (Tuple<Tutor, PayVoucher, Entry> tutorVoucherEntry : tutorVoucherEntryList) {
 				
+				// Do not add any null entries, this is important for updating the database
 				if (tutorVoucherEntry.getRight() != null) {
 					
 					entries.add(tutorVoucherEntry.getRight());
 				}
 			}
 			
+			// Runs through all the cells refreshing old entries and creating new entries need be
 			for (int i = entries.size() * 4; i < cells.length; i += 4) {
 				
+				// Cell is not empty
 				if (!cells[i].equals("") && !cells[i + 1].equals("") &&
 					!cells[i + 2].equals("") && !cells[i + 3].equals("")) {
 					
 					Entry entry;
+					
+					// cells[i:i+3] contain a previous entry
 					if (i < entries.size() * 4) {
 						
 						entry = entries.get(i / 4);
@@ -316,6 +379,7 @@ public class PayVoucherServlet extends HttpServlet{
 						entry.setServicePerformed(cells[i + 2]);
 						entry.setWherePerformed(cells[i + 3]);
 					}
+					// Cells[i:i+3] are new entries
 					else {
 						entry = new Entry();
 						entry.setDate(cells[i]);
@@ -327,15 +391,19 @@ public class PayVoucherServlet extends HttpServlet{
 				}
 			}
 			
+			// Update hours and total pay
 			voucher.setTotalHours(controller.calculateTotalHours(entries));
 			voucher.setTotalPay(controller.calculateTotalPay(tutor, voucher));
 			
 			controller.updateVoucherWithEntries(entries, voucher);
 			
+			// Submit and get the updated voucher
 			voucher = controller.submitPayVoucher(voucher.getPayVoucherID());
 			
+			// Calculate remaining empty rows and set the empty row size
 			tableSize = cells.length / 4 - entries.size();
 			
+			// Set attributes
 			req.setAttribute("tableSize", tableSize);	
 			
 			req.setAttribute("entries", entries);
@@ -347,33 +415,45 @@ public class PayVoucherServlet extends HttpServlet{
 			req.setAttribute("payRate", tutor.getPayRate());
 			req.setAttribute("totalPay", voucher.getTotalPay());
 			
+			// Refresh payVoucher
 			req.getRequestDispatcher("/_view/payVoucher.jsp").forward(req, resp);
 			
-		}else if (req.getParameter("signVoucher") != null) {
+		}
+		
+		// User wants to sign off the voucher
+		else if (req.getParameter("signVoucher") != null) {
 			
 			controller = new PayVoucherController();
 			ArrayList<Tuple<Tutor, PayVoucher, Entry>> tutorVoucherEntryList = controller.getPayVoucherEntries(payVoucherID);
 			
+			// Get tutor, voucher, and entries
 			ArrayList<Entry> entries = new ArrayList<Entry>();
 			PayVoucher voucher = tutorVoucherEntryList.get(0).getMiddle(); //all voucher instances are identical
 			Tutor tutor = tutorVoucherEntryList.get(0).getLeft(); //all tutor instances are identical
 						
+			// Get all input cells from the pay voucher table
 			String[] cells = req.getParameterValues("cell");
 			
+			// Populate entries
 			for (Tuple<Tutor, PayVoucher, Entry> tutorVoucherEntry : tutorVoucherEntryList) {
 				
+				// Do not add any null entries, this is important for updating the database
 				if (tutorVoucherEntry.getRight() != null) {
 					
 					entries.add(tutorVoucherEntry.getRight());
 				}
 			}
 			
+			// Runs through all the cells refreshing old entries and creating new entries need be
 			for (int i = entries.size() * 4; i < cells.length; i += 4) {
 				
+				// Cell is not empty
 				if (!cells[i].equals("") && !cells[i + 1].equals("") &&
 					!cells[i + 2].equals("") && !cells[i + 3].equals("")) {
 					
 					Entry entry;
+					
+					// cells[i:i+3] contain a previous entry
 					if (i < entries.size() * 4) {
 						
 						entry = entries.get(i / 4);
@@ -382,6 +462,8 @@ public class PayVoucherServlet extends HttpServlet{
 						entry.setServicePerformed(cells[i + 2]);
 						entry.setWherePerformed(cells[i + 3]);
 					}
+					
+					// Cells[i:i+3] are new entries
 					else {
 						entry = new Entry();
 						entry.setDate(cells[i]);
@@ -393,15 +475,19 @@ public class PayVoucherServlet extends HttpServlet{
 				}
 			}
 			
+			// Update hours and total pay
 			voucher.setTotalHours(controller.calculateTotalHours(entries));
 			voucher.setTotalPay(controller.calculateTotalPay(tutor, voucher));
 			
 			controller.updateVoucherWithEntries(entries, voucher);
 			
+			// Sign and get the updated voucher
 			voucher = controller.signPayVoucher(voucher.getPayVoucherID());
 			
+			// Calculate remaining empty rows and set the empty row size
 			tableSize = cells.length / 4 - entries.size();
 			
+			// Set attributes
 			req.setAttribute("tableSize", tableSize);	
 			
 			req.setAttribute("entries", entries);
@@ -413,6 +499,7 @@ public class PayVoucherServlet extends HttpServlet{
 			req.setAttribute("payRate", tutor.getPayRate());
 			req.setAttribute("totalPay", voucher.getTotalPay());
 			
+			// Refresh payVoucher
 			req.getRequestDispatcher("/_view/payVoucher.jsp").forward(req, resp);
 		}
 		

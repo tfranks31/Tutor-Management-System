@@ -22,6 +22,7 @@ public class LoginServlet extends HttpServlet{
 
 		System.out.println("Login Servlet: doGet");	
 		
+		// Formally log out of the session
 		req.getSession().setAttribute("user", null);
 		
 		req.getRequestDispatcher("/_view/login.jsp").forward(req, resp);
@@ -37,7 +38,7 @@ public class LoginServlet extends HttpServlet{
 		if (loginValidate(req)) {
 			resp.sendRedirect("search");
 		}
-		// Load addTutor
+		// Reload login
 		else {
 			// Call JSP to generate empty form
 			req.getRequestDispatcher("/_view/login.jsp").forward(req, resp);
@@ -46,6 +47,8 @@ public class LoginServlet extends HttpServlet{
 	}
     
     private boolean loginValidate(HttpServletRequest req) {
+    	
+    	// Validate login information and retrieve the account
         username = req.getParameter("username");
         password = req.getParameter("password");
         

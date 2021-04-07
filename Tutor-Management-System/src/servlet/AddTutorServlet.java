@@ -22,11 +22,13 @@ public class AddTutorServlet extends HttpServlet {
 		System.out.println("AddTutor Servlet: doGet");	
 		
 		UserAccount account = (UserAccount) req.getSession().getAttribute("user");
+		// If user not logged in, redirect to login
 		if (account == null) {
 			
 			resp.sendRedirect("login");
 			return;
 		}
+		// Verify that only admins can get to this page
 		else if (!account.getIsAdmin()) {
 			
 			resp.sendRedirect("search");
