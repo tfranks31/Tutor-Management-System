@@ -124,7 +124,7 @@ public class PayVoucherServlet extends HttpServlet{
 			req.setAttribute("tutorName", tutor.getName());
 			req.setAttribute("studentID", tutor.getStudentID());
 			req.setAttribute("dueDate", voucher.getDueDate());
-			req.setAttribute("accountNumber", tutor.getAccountID());
+			req.setAttribute("accountNumber", tutor.getAccountNumber());
 			req.setAttribute("totalHours",voucher.getTotalHours());
 			req.setAttribute("payRate", tutor.getPayRate());
 			req.setAttribute("totalPay", voucher.getTotalPay());

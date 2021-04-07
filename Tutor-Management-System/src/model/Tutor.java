@@ -5,7 +5,7 @@ package model;
  * payrate and tutorID
  */
 
-public class Tutor extends UserAccount {
+public class Tutor{
 	private String name;
 	private String email;
 	private String subject;

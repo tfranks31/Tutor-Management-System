@@ -67,6 +67,10 @@ public class PayVoucherControllerTest {
 		db.insertPayVoucher(payVoucher);
 		
 		Entry entry = new Entry();
+		entry.setDate("10/24/2021");
+		entry.setHours(5);
+		entry.setServicePerformed("Tutoring");
+		entry.setWherePerformed("zoom");
 		ArrayList<Entry> entries = new ArrayList<Entry>();
 		entries.add(entry);
 		
