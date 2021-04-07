@@ -265,6 +265,13 @@ public class FakeDatabase implements IDatabase {
 	@Override
 	public void updateVoucher(List<Entry> entries, PayVoucher voucher) {
 		for (Entry entry : entries) {
+			
+			if (entry.getDate().equals("") && entry.getHours() == 0.0 && 
+				entry.getServicePerformed().equals("") && entry.getWherePerformed().equals("")) {
+				
+				entryList.remove(entry);
+				continue;
+			}
 			//checks if the entry is new, if new, it is assigned a corresponding ID
 			//and gets added to entry list
 			if (entry.getEntryID() == -1) {
