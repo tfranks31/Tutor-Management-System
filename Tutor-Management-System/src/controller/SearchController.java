@@ -7,17 +7,26 @@ import model.PayVoucher;
 import model.Tutor;
 import model.Pair;
 import tutorsdb.persist.DatabaseProvider;
-import tutorsdb.persist.FakeDatabase;
 import tutorsdb.persist.IDatabase;
 
+/**
+ * SearchController class manages all user interactions with the Search page.
+ */
 public class SearchController {
 	private IDatabase db = null;
 	
+	/**
+	 * Refresh database instance when constructed.
+	 */
 	public SearchController() {
 		
 		db = DatabaseProvider.getInstance();
 	}
 	
+	/**
+	 * Get all PayVouchers from the database with their tutor information.
+	 * @return ArrayList containing pairs of Tutors and their PayVouchers.
+	 */
 	public ArrayList<Pair<Tutor, PayVoucher>> getAllVouchers() {
 		
 		// Get all vouchers from the database
@@ -32,6 +41,11 @@ public class SearchController {
 		return allVouchers;
 	}
 	
+	/**
+	 * Get all PayVouchers from a specified search parameter.
+	 * @param search Parameter to search by.
+	 * @return ArrayList containing pairs of Tutors and their PayVouchers.
+	 */
 	public ArrayList<Pair<Tutor, PayVoucher>> getVoucherFromSearch(String search){
 		
 		// Get all vouchers with the search parameter
@@ -46,6 +60,11 @@ public class SearchController {
 		return result;
 	}
 	
+	/**
+	 * Assign a PayVoucher with the specified start date and dueDate.
+	 * @param startDate Date the PayVoucher will start on.
+	 * @param dueDate Date the PayVoucher will be due on.
+	 */
 	public void assignPayVoucher(String startDate, String dueDate) {
 		
 		// Assign the pay voucher in the database

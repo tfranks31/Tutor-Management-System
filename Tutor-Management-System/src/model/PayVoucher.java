@@ -1,17 +1,12 @@
 package model;
 
-import java.util.ArrayList;
-
 /**
  * PayVoucher class.
  * Contains dueDate, totalHours, totalPay.
  * Can tell if the voucher has been submitted, Signed, edited by an admin or
  * if the voucher is new.
  */
-
 public class PayVoucher {
-    
-//    private final int defaultVoucherSize = 10; //10 entries per blank voucher
 
     private String dueDate;
     private String startDate;
@@ -23,8 +18,10 @@ public class PayVoucher {
     private boolean isAdminEdited;
     private int payVoucherID;
     private int tutorID;
-//    private ArrayList<Entry> entries = new ArrayList<Entry>();
 
+    /**
+     * Empty PayVoucher constructor.
+     */
     public PayVoucher(){
         dueDate = null;
         startDate = null;
@@ -36,93 +33,149 @@ public class PayVoucher {
         isAdminEdited = false;
         payVoucherID = -1;
         tutorID = -1;
-
-        //initializes default number of entries per voucher, currently 10
-//        for (int i = 0; i < defaultVoucherSize; i++){
-//            addEntry();
-//        }
+    }
+    
+    /**
+     * Initialize PayVoucher constructor.
+     * @param dueDate This PayVoucher's due date.
+     * @param startDate This PayVoucher's start date.
+     * @param totalHours This PayVoucher's total hours.
+     * @param totalPay This PayVoucher's total pay.
+     * @param isSubmitted Is this PayVoucher submitted?
+     * @param isSigned Is this PayVoucher signed?
+     * @param isNew Is this PayVoucher new?
+     * @param isAdminEdited Is this PayVoucher admin edited.
+     * @param payVoucherID This PayVoucher's pay voucher ID.
+     * @param tutorID This PayVoucher's tutor ID.
+     */
+    public PayVoucher(String dueDate, String startDate, double totalHours,
+    				  double totalPay, boolean isSubmitted, boolean isSigned,
+    				  boolean isNew, boolean isAdminEdited, int payVoucherID,
+    				  int tutorID){
+    	
+        this.dueDate = dueDate;
+        this.startDate = startDate;
+        this.totalHours = totalHours;
+        this.totalPay = totalPay;
+        this.isSubmitted = isSubmitted;
+        this.isSigned = isSigned;
+        this.isNew = isNew;
+        this.isAdminEdited = isAdminEdited;
+        this.payVoucherID = payVoucherID;
+        this.tutorID = tutorID;
     }
 
+    /**
+     * Set if this PayVoucher is submitted.
+     * @param isSubmitted Whether or not this PayVoucher is now submitted.
+     */
     public void setIsSubmitted(boolean isSubmitted){
         this.isSubmitted = isSubmitted;
     }
 
+    /**
+     * Get if this PayVoucher is submitted.
+     * @return Whether or not this PayVoucher is submitted.
+     */
     public boolean getIsSubmitted(){
         return isSubmitted;
     }
 
+    /**
+     * Set if this PayVoucher is signed.
+     * @param isSigned Whether or not this PayVoucher is now signed.
+     */
     public void setIsSigned(boolean isSigned){
         this.isSigned = isSigned;
     }
 
+    /**
+     * Get if this PayVoucher is signed.
+     * @return Whether or not this PayVoucher is signed.
+     */
     public boolean getIsSigned(){
         return isSigned;
     }
 
+    /**
+     * Set if this PayVoucher is new.
+     * @param isNew Whether or not this PayVoucher is now new.
+     */
     public void setIsNew(boolean isNew){
         this.isNew = isNew;
     }
 
+    /**
+     * Get if this PayVoucher is new.
+     * @return Whether or not this PayVoucher is new.
+     */
     public boolean getIsNew(){
         return isNew;
     }
 
+    /**
+     * Set if this PayVoucher is admin edited.
+     * @param isAdminEdited Whether or not this PayVoucher is now admin edited.
+     */
     public void setIsAdminEdited(boolean isAdminEdited){
         this.isAdminEdited = isAdminEdited;
     }
 
+    /**
+     * Get if this PayVoucher is admin edited.
+     * @return Whether or not this PayVoucher is admin edited.
+     */
     public boolean getIsAdminEdited(){
         return isAdminEdited;
     }
 
+    /**
+     * Set this PayVoucher's due date.
+     * @param dueDate This PayVoucher's new due date.
+     */
     public void setDueDate(String dueDate){
         this.dueDate = dueDate;
     }
 
+    /**
+     * Get this PayVoucher's due date.
+     * @return This PayVoucher's due date.
+     */
     public String getDueDate(){
         return dueDate;
     }
 
-//    public void calculatePay(double hours, double payRate){
-//        totalPay = hours * payRate;
-//    }
-
+    /**
+     * Get this PayVoucher's total pay.
+     * @return This PayVoucher's total pay.
+     */
     public double getTotalPay(){
         return totalPay;
     }
     
+    /**
+     * Get this PayVoucher's total pay.
+     * @param totalPay This PayVoucher's new total pay.
+     */
     public void setTotalPay(double totalPay) {
     	this.totalPay = totalPay;
     }
 
+    /**
+     * Set this PayVoucher's total hours.
+     * @param totalHours This PayVoucher's new total hours.
+     */
     public void setTotalHours(double totalHours){
         this.totalHours = totalHours; 
     }
 
+    /**
+     * Get this PayVoucher's total hours.
+     * @return This PayVoucher's total hours.
+     */
     public double getTotalHours(){
         return totalHours;
     }
-    
-//    //iterates over every entry in the voucher, sums the hours
-//    public void CalculateTotalHours(){
-//    	for (Entry entry: entries){
-//            totalHours += entry.getHours();
-//        }   
-//    }
-//
-//    // generates a blank entry object and adds it to the array list
-//    public void addEntry(){
-//        Entry entry = new Entry();
-//        entries.add(entry); 
-//    }
-//
-//    public Entry getEntry(int entryNum){
-//        return entries.get(entryNum);
-//    } 
-//    
-//    public void setEntry(int entryNum, Entry entry){
-//       entries.set(entryNum, entry);
-//    }
     
     /**
      * Get this PayVoucher's starting date.
