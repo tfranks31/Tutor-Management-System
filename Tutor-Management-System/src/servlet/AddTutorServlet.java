@@ -26,17 +26,15 @@ public class AddTutorServlet extends HttpServlet {
 		if (account == null) {
 			
 			resp.sendRedirect("login");
-			return;
 		}
 		// Verify that only admins can get to this page
 		else if (!account.getIsAdmin()) {
 			
 			resp.sendRedirect("search");
-			return;
 		}
 		
 		// Go back to search
-		if (req.getParameter("back") != null) {
+		else if (req.getParameter("back") != null) {
 			
 			resp.sendRedirect("search");
 		}
@@ -56,6 +54,8 @@ public class AddTutorServlet extends HttpServlet {
 		
 		System.out.println("AddTutor Servlet: doPost");
 		
+		controller = new AddTutorController();
+		
 		String firstName = req.getParameter("firstName");
 		String lastName = req.getParameter("lastName");
 		String username = req.getParameter("username");
@@ -68,8 +68,6 @@ public class AddTutorServlet extends HttpServlet {
 		
 		// If the tutor information is valid, continue to the search page
 		if (tutorValidate(req)) {
-			
-			controller = new AddTutorController();
 			
 			UserAccount newAccount = new UserAccount();
 			newAccount.setUsername(username);

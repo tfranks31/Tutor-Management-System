@@ -25,16 +25,17 @@ public class SearchServlet extends HttpServlet{
 
 		System.out.println("Search Servlet: doGet");
 		
+		controller = new SearchController();
+		
 		UserAccount account = (UserAccount) req.getSession().getAttribute("user");
 		// If user not logged in, redirect to login
 		if (account == null) {
 			
 			resp.sendRedirect("login");
-			return;
 		}
 		
 		// User wants to add a tutor
-		if (req.getParameter("addTutor") != null) {
+		else if (req.getParameter("addTutor") != null) {
 			
 			resp.sendRedirect("addTutor");
 		}
@@ -46,7 +47,7 @@ public class SearchServlet extends HttpServlet{
 		
 		// Load search
 		else {
-			controller = new SearchController();
+
 			ArrayList<Pair<Tutor, PayVoucher>> tutorVoucherList = new ArrayList<Pair<Tutor, PayVoucher>>();
 			
 			// Get all Tutors and their vouchers

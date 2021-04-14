@@ -13,8 +13,6 @@ import model.UserAccount;
 public class LoginServlet extends HttpServlet{
 	private static final long serialVersionUID = 1L;
 	private LoginController controller = null;
-	private String username;
-	private String password;
 	
 	@Override
 	protected void doGet(HttpServletRequest req, HttpServletResponse resp)
@@ -32,7 +30,9 @@ public class LoginServlet extends HttpServlet{
 	protected void doPost(HttpServletRequest req, HttpServletResponse resp)
 			throws ServletException, IOException {
 
-		System.out.println("Login Servlet: doPost");	
+		System.out.println("Login Servlet: doPost");
+		
+        controller = new LoginController();
 		
 		// Go to search if the user has logged in
 		if (loginValidate(req)) {
@@ -49,10 +49,9 @@ public class LoginServlet extends HttpServlet{
     private boolean loginValidate(HttpServletRequest req) {
     	
     	// Validate login information and retrieve the account
-        username = req.getParameter("username");
-        password = req.getParameter("password");
+        String username = req.getParameter("username");
+        String password = req.getParameter("password");
         
-        controller = new LoginController();
         UserAccount user = controller.getUserFromLogin(username, password);
         
         if (user == null) {

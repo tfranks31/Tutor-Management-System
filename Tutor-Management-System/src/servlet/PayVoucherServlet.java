@@ -2,8 +2,6 @@ package servlet;
 
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.List;
-
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
@@ -20,11 +18,6 @@ public class PayVoucherServlet extends HttpServlet{
 	private static final long serialVersionUID = 1L;
 	private int tableSize, payVoucherID = 1;
 	private PayVoucherController controller = null;
-
-	
-	public PayVoucherServlet(){
-		controller = new PayVoucherController();
-	}
 	
 	@Override
 	protected void doGet(HttpServletRequest req, HttpServletResponse resp)
@@ -32,30 +25,28 @@ public class PayVoucherServlet extends HttpServlet{
 
 		System.out.println("PayVoucher Servlet: doGet");	
 		
+		controller = new PayVoucherController();
+		
 		UserAccount account = (UserAccount) req.getSession().getAttribute("user");
 		// If user not logged in, redirect to login
 		if (account == null) {
 			
 			resp.sendRedirect("login");
-			return;
 		}
 		
 		// If user manually tries to access payvoucher view redirect to search
-		if (req.getParameter("ID") == null) {
+		else if (req.getParameter("ID") == null) {
 			
 			resp.sendRedirect("search");
-			return;
 		}
 
 		// Go back to search
-		if (req.getParameter("back") != null) {
+		else if (req.getParameter("back") != null) {
 			
 			resp.sendRedirect("search");
 		}
 		// Load and generate rows
 		else {
-			
-			controller = new PayVoucherController();
 			
 			// Load payVoucher with the specified id
 			if (req.getParameter("ID") != null) {
@@ -103,14 +94,12 @@ public class PayVoucherServlet extends HttpServlet{
 	protected void doPost(HttpServletRequest req, HttpServletResponse resp)
 			throws ServletException, IOException {
 
-		System.out.println("PayVoucher Servlet: doPost");	
+		System.out.println("PayVoucher Servlet: doPost");
 		
-		UserAccount account = (UserAccount) req.getSession().getAttribute("user");
+		controller = new PayVoucherController();
 		
 		// User just selected a payVoucher
 		if (req.getParameter("ID") != null) {
-			
-			controller = new PayVoucherController();
 			
 			// Get the payVoucher ID
 			payVoucherID = Integer.parseInt(req.getParameter("ID"));
@@ -153,7 +142,6 @@ public class PayVoucherServlet extends HttpServlet{
 		// User wants to add a row
 		else if (req.getParameter("addRow") != null) {	
 			
-			controller = new PayVoucherController();
 			ArrayList<Tuple<Tutor, PayVoucher, Entry>> tutorVoucherEntryList = controller.getPayVoucherEntries(payVoucherID);
 			
 			// Get tutor, voucher, and entries
@@ -234,7 +222,6 @@ public class PayVoucherServlet extends HttpServlet{
 		// User wants to update the voucher
 		else if (req.getParameter("updateVoucher") != null) {
 			
-			controller = new PayVoucherController();
 			ArrayList<Tuple<Tutor, PayVoucher, Entry>> tutorVoucherEntryList = controller.getPayVoucherEntries(payVoucherID);
 			
 			// Get tutor, voucher, and entries
@@ -340,7 +327,6 @@ public class PayVoucherServlet extends HttpServlet{
 		// User wants to submit the voucher
 		else if (req.getParameter("submitVoucher") != null) {
 			
-			controller = new PayVoucherController();
 			ArrayList<Tuple<Tutor, PayVoucher, Entry>> tutorVoucherEntryList = controller.getPayVoucherEntries(payVoucherID);
 			
 			// Get tutor, voucher, and entries
@@ -423,7 +409,6 @@ public class PayVoucherServlet extends HttpServlet{
 		// User wants to sign off the voucher
 		else if (req.getParameter("signVoucher") != null) {
 			
-			controller = new PayVoucherController();
 			ArrayList<Tuple<Tutor, PayVoucher, Entry>> tutorVoucherEntryList = controller.getPayVoucherEntries(payVoucherID);
 			
 			// Get tutor, voucher, and entries
