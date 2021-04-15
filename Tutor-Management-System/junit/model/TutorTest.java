@@ -65,6 +65,4 @@ public class TutorTest {
 		model.setAccountID(1);
 		assertEquals(1, model.getAccountID());
 	}
-	// test submit payvoucher test
-	// get payvoucher test
 }

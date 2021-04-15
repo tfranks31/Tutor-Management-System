@@ -142,7 +142,7 @@ public class PayVoucherControllerTest {
 		
 		payVoucher.setIsSigned(true);
 		
-		controller.submitPayVoucher(payVoucher.getPayVoucherID());
+		controller.signPayVoucher(payVoucher.getPayVoucherID());
 		List<PayVoucher> dbPayVouchers = db.getPayVouchers();
 		
 		assertEquals(payVoucher, dbPayVouchers.get(dbPayVouchers.size() - 1));
