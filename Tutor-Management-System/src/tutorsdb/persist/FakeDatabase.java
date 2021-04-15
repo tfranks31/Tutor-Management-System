@@ -279,11 +279,10 @@ public class FakeDatabase implements IDatabase {
 				entry.getServicePerformed().equals("") && entry.getWherePerformed().equals("")) {
 				
 				entryList.remove(entry);
-				continue;
 			}
 			//checks if the entry is new, if new, it is assigned a corresponding ID
 			//and gets added to entry list
-			if (entry.getEntryID() == -1) {
+			else if (entry.getEntryID() == -1) {
 				
 				entry.setEntryID(entryList.size() + 1);
 				entry.setPayVoucherID(voucher.getPayVoucherID());

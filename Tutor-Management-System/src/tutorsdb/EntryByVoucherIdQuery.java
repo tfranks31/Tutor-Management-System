@@ -1,17 +1,18 @@
 package tutorsdb;
 
 import java.util.ArrayList;
-import java.util.List;
 import java.util.Scanner;
 
 import model.Entry;
-import model.Pair;
 import model.PayVoucher;
 import model.Tuple;
 import model.Tutor;
 import tutorsdb.persist.DatabaseProvider;
 import tutorsdb.persist.IDatabase;
 
+/**
+ * Execute findEntryByVoucher query manually from the command line.
+ */
 public class EntryByVoucherIdQuery {
 	public static void main(String[] args) throws Exception {
 		Scanner keyBoard = new Scanner(System.in);
@@ -35,8 +36,8 @@ public class EntryByVoucherIdQuery {
 				PayVoucher voucher = tutorvoucherEntry.getMiddle();
 				Entry entry = tutorvoucherEntry.getRight();
 				
-				System.out.println(tutor.getName() + "," + tutor.getAccountID() + "," + tutor.getStudentID() + "," + entry.getDate() + "," 
-									+ entry.getHours() + "," + entry.getServicePerformed() + "," + entry.getWherePerformed());
+				System.out.println(tutor.getName() + "," + tutor.getAccountID() + "," + tutor.getStudentID() + "," + voucher.getDueDate() + ","
+									+ entry.getDate() + "," + entry.getHours() + "," + entry.getServicePerformed() + "," + entry.getWherePerformed());
 			}
 		}
 	}

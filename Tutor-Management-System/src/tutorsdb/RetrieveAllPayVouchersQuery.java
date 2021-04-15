@@ -9,6 +9,9 @@ import model.Tutor;
 import tutorsdb.persist.DatabaseProvider;
 import tutorsdb.persist.IDatabase;
 
+/**
+ * Execute findAllPayVouchers query manually from the command line.
+ */
 public class RetrieveAllPayVouchersQuery {
 	public static void main(String[] args) throws Exception {
 		Scanner keyBoard = new Scanner(System.in);

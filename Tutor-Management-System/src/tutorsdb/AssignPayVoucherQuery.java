@@ -5,6 +5,9 @@ import java.util.Scanner;
 import tutorsdb.persist.DatabaseProvider;
 import tutorsdb.persist.IDatabase;
 
+/**
+ * Execute assignVoucher query manually from the command line.
+ */
 public class AssignPayVoucherQuery {
 	public static void main(String[] args) throws Exception {
 		Scanner keyBoard = new Scanner(System.in);

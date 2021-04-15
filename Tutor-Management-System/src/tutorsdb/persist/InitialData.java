@@ -10,6 +10,7 @@ import model.PayVoucher;
 import model.Tutor;
 import model.UserAccount;
 
+// Modeled off of Library Example
 public class InitialData {
 
 	// reads initial user_account data from CSV file and returns a List of UserAccounts
