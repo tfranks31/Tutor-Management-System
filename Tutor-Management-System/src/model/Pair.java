@@ -1,5 +1,7 @@
 package model;
 
+//This Class was copied from the Pair class in LAB6
+
 /**
  * The Pair class holds two objects, a left and a right. Both sides can be 
  * stored and accessed.

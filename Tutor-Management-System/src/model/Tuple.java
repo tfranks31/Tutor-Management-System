@@ -1,5 +1,7 @@
 package model;
 
+//This Class was modeled off of the Pair class from LAB6
+
 /**
  * The Tuple class holds three objects, a left, a middle, and a right. All can
  * be stored and accessed.
