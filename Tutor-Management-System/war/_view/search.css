@@ -1,19 +1,37 @@
-html {
-    margin-top: 15px;
-    margin-left: 20%;
-    margin-right: 20%;
-    margin-bottom: 15px;
-    background-image: url("searchBackground.jpg");
-	background-size: 1920px 1325px;
-	background-position: center;
+html, body {
+	height: 100%;
+	margin: 0px;
+	padding: 0px;
+	position: relative;
 }
 
-body {
+.super-class {
+	top: 0;
+	width: 100%;
+	height: 100%;
+	position: relative;
+}
+
+.background-image {
+	position: relative;
+	z-index: 0;
+	width: 100%;
+	height: 100%;
+	background-image: url("searchBackground.jpg");
+	filter: blur(5px);
+}
+
+.content {
+	position: absolute;
+	z-index: 1;
+ 	left: 50%;
+ 	height: 770px;
+ 	margin-left: -460px;
 	width: 920px;
-	margin: auto;
 	border: 2px solid #e1eae2;
 	border-radius: 20px;
 	background-color: #e1eae2;
+	margin-top: 30px;
 }
 
 .Header{
@@ -111,26 +129,31 @@ th, td{
 
 #assignVoucher {
 	float: left;
-	margin-left: 34px;
-	width: 150px;
+	width: 517px;
 	text-align: center;
 }
 
 #assignVoucherText {
 	margin: auto;
-	margin-left: 15px;
+	margin-left: 1px;
 	text-align: center;
 	border: none;
 	background: none;
 	border-bottom: 1px solid black;
 }
 
+.date1, .date2 {
+	display: inline-block;
+	margin-left: -20px;
+}
+	
 #assignVoucherDate {
-	margin-left: 25px;
+	margin-left: 10px;
 }
 
 #assignVoucherBtn {
 	float: left;
+	margin-left: 34px;
 	background-color: black;
 	color: white;
 	font-size: 15px;
