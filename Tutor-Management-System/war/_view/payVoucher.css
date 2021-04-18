@@ -101,7 +101,8 @@ th, td{
 }
 
 #update {
-	margin-left: 235px;
+	position: relative;
+	left: 13%;
    	background-color: black;
 	color: white;
 	font-size: 15px;
