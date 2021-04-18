@@ -28,7 +28,7 @@ public class RetrieveAllPayVouchersQuery {
 			for (Pair<Tutor, PayVoucher> tutorVoucher : VoucherList) {
 				Tutor tutor = tutorVoucher.getLeft();
 				PayVoucher voucher = tutorVoucher.getRight();
-				System.out.println(tutor.getName() + "," + tutor.getSubject() + ',' + voucher.getIsSubmitted() + "," + voucher.getDueDate());
+				System.out.println(voucher.getPayVoucherID() + "," + tutor.getName() + "," + tutor.getSubject() + ',' + voucher.getIsSubmitted() + "," + voucher.getDueDate());
 			}
 		}
 	}

@@ -28,6 +28,6 @@ public class AccountFromLoginInfoQuery {
 			System.out.println("No accounts found with Username: " + username + " Password: " + password);
 		}else {
 			System.out.println(account.getAccountID() + "," + account.getIsAdmin());		
-		}
+		}	
 	}
 }
