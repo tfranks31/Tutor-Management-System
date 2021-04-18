@@ -30,4 +30,8 @@ public class AddTutorController {
 		
 		db.addTutor(account, tutor);
 	}
+	
+	public void editTutor(UserAccount account, Tutor tutor) {
+		db.editTutor(account, tutor);
+	}
 }

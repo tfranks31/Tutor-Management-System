@@ -160,4 +160,11 @@ public interface IDatabase {
 	 * @param entry The Entry to insert.
 	 */
 	public void insertEntry(Entry entry);
+	
+	/**
+	 * Edit a tutor's account
+	 * @param account updated Tutor's UserAccount.
+	 * @param tutor updated Tutor.
+	 */
+	public void editTutor (UserAccount account, Tutor tutor);
 }

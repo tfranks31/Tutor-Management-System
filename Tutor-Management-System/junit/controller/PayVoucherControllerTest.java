@@ -50,9 +50,9 @@ public class PayVoucherControllerTest {
 		ArrayList<Tuple<Tutor, PayVoucher, Entry>> tupleList = controller.getPayVoucherEntries(-1);
 		Tuple<Tutor, PayVoucher, Entry> tuple = tupleList.get(0);
 		
-		assertEquals(newTutor, tuple.getLeft());
-		assertEquals(newPayVoucher, tuple.getMiddle());
-		assertEquals(newEntry, tuple.getRight());
+		assertEquals(newTutor.getTutorID(), tuple.getLeft().getTutorID());
+		assertEquals(newPayVoucher.getPayVoucherID(), tuple.getMiddle().getPayVoucherID());
+		assertEquals(newEntry.getEntryID(), tuple.getRight().getEntryID());
 		
 		db.deleteTutor(newTutor);
 		db.deletePayVoucher(newPayVoucher);
