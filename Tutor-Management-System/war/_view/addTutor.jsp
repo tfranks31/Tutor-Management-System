@@ -6,6 +6,9 @@
         <link rel="stylesheet" href="./_view/addTutor.css">
     </head>
     <body>
+    	<div class="super-class background-image"></div>
+    
+   	 	<div class="super-class content">
         <div id="title">
             Add a Tutor
         </div>
@@ -78,6 +81,7 @@
         </form>
         
         </br>
+        </div>
         
     </body>
 </html>
