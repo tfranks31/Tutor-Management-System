@@ -66,16 +66,32 @@
 		        	<input type="text" class="date1" id="assignVoucherText" name="startDate" placeholder="MM/DD/YYYY" value="${startDate}"></input>
 		        	<label for="startDate" class="date2" id="assignVoucherDate">Due Date:</label>
 		        	<input type="text" class="date2" id="assignVoucherText" name="dueDate" placeholder="MM/DD/YYYY" value="${dueDate}"></input>
+		        	</br>
 		    	</form>
 			</div>
 		</c:if>
-	
+		
+		<c:if test="${user.isAdmin}">
+			<form action="${pageContext.servletContext.contextPath}/search" method="get">
+				<div id="radio">
+  					<input type="radio" id="assign-all" name="assign" value="all-tutors">
+					<label for="assign-all" id="radio-label">All Tutors</label>
+					<input type="radio" id="assign-one" name="assign" value="one-tutor">
+					<label for="assign-one" id="radio-label">Specific Tutor</label>
+					<input type="text" id="edit-tutor-name" name="tutorName" value="${dueDate}"></input>
+				</div>
+			</form>
+		</c:if>
+			
 		<c:if test="${user.isAdmin}">
     		<form action="${pageContext.servletContext.contextPath}/search" method="get">
         		<input type="submit" id="addTutor" name="addTutor" value="Add Tutor" class="addTutor"></input>
   				</br></br>
+  				<input type="submit" id="editTutor" name="editTutor" value="Edit Tutor" class="addTutor"></input>
     		</form>
 		</c:if>
+		
+		
 	</div>
 
 </body>

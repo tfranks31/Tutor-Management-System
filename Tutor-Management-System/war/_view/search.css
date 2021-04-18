@@ -25,7 +25,6 @@ html, body {
 	position: absolute;
 	z-index: 1;
  	left: 50%;
- 	height: 770px;
  	margin-left: -460px;
 	width: 920px;
 	border: 2px solid #e1eae2;
@@ -99,6 +98,20 @@ html, body {
 	border: 0px;
 }
 
+#editTutor {
+	float: right;
+	margin-right: -100px;
+	margin-top: 25px;
+	background-color: black;
+	color: white;
+	font-size: 15px;
+	text-align: center;
+	height: 42px;
+	width: 125px;
+	border-radius: 35px;
+	border: 0px;
+}
+
 table{
 	margin: auto;
     width: 100%;
@@ -162,4 +175,10 @@ th, td{
 	width: 185px;
 	border-radius: 35px;
 	border: 0px;
+}
+
+#radio {
+	margin-top: 150px;
+	margin-left: -10px;
+	height: 17px;
 }
