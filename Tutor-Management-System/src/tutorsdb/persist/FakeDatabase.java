@@ -393,4 +393,25 @@ public class FakeDatabase implements IDatabase {
 			}
 		}
 	}
+
+	@Override
+	public void assignVoucherSpecific(String startDate, String dueDate, String name) {
+		for (Tutor tutor : tutorList) {
+			if (tutor.getName().equals(name)) {
+				PayVoucher voucher = new PayVoucher();
+				voucher.setStartDate(startDate);
+				voucher.setDueDate(dueDate);
+				voucher.setTutorID(tutor.getTutorID());
+				voucher.setIsAdminEdited(false);
+				voucher.setIsNew(true);
+				voucher.setPayVoucherID(payVoucherList.size() + 1);
+				voucher.setIsSigned(false);
+				voucher.setIsSubmitted(false);
+				voucher.setTotalHours(0);
+				voucher.setTotalPay(0);
+				payVoucherList.add(voucher);
+			}
+		}
+		
+	}
 }

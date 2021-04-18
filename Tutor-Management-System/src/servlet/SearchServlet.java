@@ -14,6 +14,8 @@ import model.PayVoucher;
 import model.Tutor;
 import model.UserAccount;
 
+
+
 public class SearchServlet extends HttpServlet{
 	private static final long serialVersionUID = 1L;
 	private SearchController controller = null;
@@ -82,7 +84,6 @@ public class SearchServlet extends HttpServlet{
 		controller = new SearchController();
 		
 		UserAccount account = (UserAccount) req.getSession().getAttribute("user");
-		
 		// User selected to view a pay voucher
 		if (req.getParameter("ID") != null) {
 			
@@ -90,10 +91,26 @@ public class SearchServlet extends HttpServlet{
 		}
 		
 		// User wants to assign a pay voucher
-		else if (req.getParameter("assignVoucher") != null) {
+		else if (req.getParameter("assignVoucher") != null && req.getParameter("assign") != null) {
 			
-			// Assign the voucher to all tutors
-			controller.assignPayVoucher(req.getParameter("startDate"), req.getParameter("dueDate"));
+			System.out.println(req.getParameter("tutorName"));
+			/*if (req.getParameter("tutorName") != null) {
+				//assigns the voucher to one tutor
+				controller.assignPayVoucherSpecific(req.getParameter("startDate"), req.getParameter("dueDate"), req.getParameter("tutorName"));
+			}else {
+				// Assign the voucher to all tutors
+				controller.assignPayVoucherAll(req.getParameter("startDate"), req.getParameter("dueDate"));
+			}*/
+			String assignmentType = req.getParameter("assign");
+			
+			if (assignmentType.equals("allTutors")) {
+				// Assign the voucher to all tutors
+				controller.assignPayVoucherAll(req.getParameter("startDate"), req.getParameter("dueDate"));
+			}
+			if (assignmentType.equals("oneTutor")) {
+				//assigns the voucher to one tutor
+				controller.assignPayVoucherSpecific(req.getParameter("startDate"), req.getParameter("dueDate"), req.getParameter("tutorName"));
+			}
 			
 			ArrayList<Pair<Tutor, PayVoucher>> tutorVoucherList = new ArrayList<Pair<Tutor, PayVoucher>>();
 			

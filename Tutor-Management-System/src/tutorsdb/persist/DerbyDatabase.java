@@ -1077,4 +1077,10 @@ public class DerbyDatabase implements IDatabase {
 		
 	}
 
+	@Override
+	public void assignVoucherSpecific(String startDate, String dueDate, String name) {
+		// TODO Auto-generated method stub
+		
+	}
+
 }

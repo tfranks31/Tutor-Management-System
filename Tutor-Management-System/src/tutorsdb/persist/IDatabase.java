@@ -75,6 +75,16 @@ public interface IDatabase {
 	public void assignVoucher(String startDate, String dueDate);
 	
 	/**
+	 * Assign a new PayVoucher to a specific Tutor with the specified start date and
+	 * end date.
+	 * @param startDate The date the PayVoucher is open at.
+	 * @param dueDate The date the PayVoucher is due at.
+	 * @param name The name of the specific tutor to assign a voucher to.
+	 */
+	public void assignVoucherSpecific(String startDate, String dueDate, String name);
+	
+	
+	/**
 	 * A utility method to get all UserAccounts, meant to be used for testing.
 	 * @return A List of all UserAccounts in the database.
 	 */

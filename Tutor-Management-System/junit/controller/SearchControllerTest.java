@@ -57,7 +57,7 @@ public class SearchControllerTest {
 	
 	@Test
 	public void testAssignPayVoucher() {
-		controller.assignPayVoucher("April", "May");
+		controller.assignPayVoucherAll("April", "May");
 		List<PayVoucher> vouchers = db.getPayVouchers();
 		
 		String startDate = vouchers.get(vouchers.size() - 1).getStartDate();
