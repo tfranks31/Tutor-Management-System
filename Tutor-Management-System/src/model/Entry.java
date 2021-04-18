@@ -36,7 +36,7 @@ public class Entry {
 				 double hours, int entryID, int payVoucherID) {
 		
 		this.date = date;
-		this.servicePerformed = null;
+		this.servicePerformed = servicePerformed;
 		this.wherePerformed = wherePerformed;
 		this.hours = hours;
 		this.entryID = entryID;

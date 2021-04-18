@@ -7,6 +7,7 @@ import org.eclipse.jetty.server.Server;
 import org.eclipse.jetty.webapp.Configuration;
 import org.eclipse.jetty.webapp.WebAppContext;
 
+// Refactored from Lab02
 public class Launcher {
 	/**
 	 * Create a {@link Server}, but do not start it.

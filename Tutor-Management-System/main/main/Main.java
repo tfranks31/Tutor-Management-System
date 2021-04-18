@@ -7,6 +7,7 @@ import org.eclipse.jetty.server.Server;
 import tutorsdb.persist.DatabaseProvider;
 import tutorsdb.persist.FakeDatabase;
 
+// Refactored from Lab02
 public class Main {
 	public static void main(String[] args) throws Exception {
 		String webappCodeBase = "./war";

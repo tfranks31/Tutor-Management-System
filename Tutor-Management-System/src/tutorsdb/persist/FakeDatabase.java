@@ -122,15 +122,26 @@ public class FakeDatabase implements IDatabase {
 		List<Tuple<Tutor, PayVoucher, Entry>> result = new ArrayList<Tuple<Tutor, PayVoucher, Entry>>();
 		
 		//iterates over every pay voucher and tutor, check if they have the same tutor ID
-		for (PayVoucher voucher: payVoucherList) {
-			for (Tutor tutor : tutorList) {
-				if (voucher.getTutorID() == tutor.getTutorID()) {
-					if (voucher.getPayVoucherID() == voucherID) {
+		for (PayVoucher dbVoucher: payVoucherList) {
+			for (Tutor dbTutor : tutorList) {
+				if (dbVoucher.getTutorID() == dbTutor.getTutorID()) {
+					if (dbVoucher.getPayVoucherID() == voucherID) {
 		
 						//iterates over entry list and checks to see if the entry corresponds to the voucher
 						//if so it add the entry to the result
-						for (Entry entry: entryList) {
-							if (entry.getPayVoucherID() == voucher.getPayVoucherID()) {
+						for (Entry dbEntry: entryList) {
+							if (dbEntry.getPayVoucherID() == dbVoucher.getPayVoucherID()) {
+								
+								Tutor tutor = new Tutor(dbTutor.getName(), dbTutor.getEmail(), dbTutor.getSubject(), dbTutor.getPayRate(),
+										dbTutor.getTutorID(), dbTutor.getAccountID(), dbTutor.getAccountNumber(), dbTutor.getStudentID());
+								
+								PayVoucher voucher = new PayVoucher(dbVoucher.getDueDate(), dbVoucher.getStartDate(), dbVoucher.getTotalHours(), 
+										dbVoucher.getTotalPay(), dbVoucher.getIsSubmitted(), dbVoucher.getIsSigned(), dbVoucher.getIsNew(),
+										dbVoucher.getIsAdminEdited(), dbVoucher.getPayVoucherID(), dbVoucher.getTutorID());
+								
+								Entry entry = new Entry(dbEntry.getDate(), dbEntry.getServicePerformed(), dbEntry.getWherePerformed(), 
+										dbEntry.getHours(), dbEntry.getEntryID(), dbEntry.getPayVoucherID());
+								
 								result.add(new Tuple<Tutor, PayVoucher, Entry>(tutor, voucher, entry));
 							}
 						}
@@ -141,10 +152,18 @@ public class FakeDatabase implements IDatabase {
 		
 		//if voucher is empty returns tutor and voucher info with blank entry
 		if (result.isEmpty()) {
-			for (PayVoucher voucher: payVoucherList) {
-				for (Tutor tutor : tutorList) {
-					if (voucher.getTutorID() == tutor.getTutorID()) {
-						if (voucher.getPayVoucherID() == voucherID) {
+			for (PayVoucher dbvoucher: payVoucherList) {
+				for (Tutor dbtutor : tutorList) {
+					if (dbvoucher.getTutorID() == dbtutor.getTutorID()) {
+						if (dbvoucher.getPayVoucherID() == voucherID) {
+							
+							Tutor tutor = new Tutor(dbtutor.getName(), dbtutor.getEmail(), dbtutor.getSubject(), dbtutor.getPayRate(),
+									dbtutor.getTutorID(), dbtutor.getAccountID(), dbtutor.getAccountNumber(), dbtutor.getStudentID());
+							
+							PayVoucher voucher = new PayVoucher(dbvoucher.getDueDate(), dbvoucher.getStartDate(), dbvoucher.getTotalHours(), 
+									dbvoucher.getTotalPay(), dbvoucher.getIsSubmitted(), dbvoucher.getIsSigned(), dbvoucher.getIsNew(),
+									dbvoucher.getIsAdminEdited(), dbvoucher.getPayVoucherID(), dbvoucher.getTutorID());
+							
 							Entry entry = null;
 							result.add(new Tuple<Tutor, PayVoucher, Entry>(tutor, voucher, entry));
 						}
@@ -278,7 +297,14 @@ public class FakeDatabase implements IDatabase {
 			if (entry.getDate().equals("") && entry.getHours() == 0.0 && 
 				entry.getServicePerformed().equals("") && entry.getWherePerformed().equals("")) {
 				
-				entryList.remove(entry);
+				for (int i = 0; i < entryList.size(); i++) {
+					
+					if (entryList.get(i).getEntryID() == entry.getEntryID()) {
+						
+						entryList.remove(entryList.get(i));
+						i--;
+					}
+				}
 			}
 			//checks if the entry is new, if new, it is assigned a corresponding ID
 			//and gets added to entry list
