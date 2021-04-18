@@ -785,9 +785,10 @@ public class DerbyDatabase implements IDatabase {
 						stmt2.setBoolean(6, false);
 						stmt2.setBoolean(7, false);
 						stmt2.setBoolean(8, true);
-						stmt2.setBoolean(9, false);
-						
+						stmt2.setBoolean(9, false);	
 					}
+					
+					stmt2.executeUpdate();
 					
 					return true;
 					
