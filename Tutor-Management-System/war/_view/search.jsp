@@ -48,7 +48,14 @@
 					</td>
                 	<td> ${voucher.left.name} </td>
                 	<td> ${voucher.left.subject} </td>
-                	<td> ${voucher.right.isSubmitted} </td>
+                	<c:choose>
+                		<c:when test="${voucher.right.isSubmitted}">
+                			<td> &#10003 </td>
+                		</c:when>
+                		<c:otherwise>
+							<td></td>
+						</c:otherwise>
+					</c:choose>
                 	<td> ${voucher.right.dueDate}</td>
            	 	</tr>
        		 </c:forEach>
@@ -71,8 +78,8 @@
 						<input type="radio" id="assign-all" name="assign" value="allTutors">
 						<label for="assign-all" id="radio-label">All Tutors</label>
 						<input type="radio" id="assign-one" name="assign" value="oneTutor">
-						<label for="assign-one" id="radio-label">Specific Tutor</label>
-						<input type="text" id="edit-tutor-name" name="tutorName" value="${tutorName}"></input>
+						<label for="assign-one" id="radio-label">Specific Tutor:</label>
+						<input type="text" id="edit-tutor-name" name="tutorName" placeholder="Tutor Name" value="${tutorName}"></input>
 					</div>
 
 		    	</form>
@@ -84,9 +91,13 @@
         		<input type="submit" id="addTutor" name="addTutor" value="Add Tutor" class="addTutor"></input>
   				</br></br>
   				<input type="submit" id="editTutor" name="editTutor" value="Edit Tutor" class="addTutor"></input>
+  				<input type="text" id="editing-tutor" name="tutorName" placeholder="Tutor Name" value="${tutorName}"></input>
     		</form>
 		</c:if>
 		
+		<c:if test="${user.isAdmin}">
+			</br></br></br></br></br></br></br></br>
+		</c:if>
 		
 	</div>
 

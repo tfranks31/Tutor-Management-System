@@ -25,12 +25,14 @@ html, body {
 	position: absolute;
 	z-index: 1;
  	left: 50%;
- 	margin-left: -460px;
-	width: 920px;
+ 	margin-left: -465px;
+	width: 930px;
+	height: 795px;
 	border: 2px solid #e1eae2;
 	border-radius: 20px;
 	background-color: #e1eae2;
 	margin-top: 30px;
+	overflow: auto;
 }
 
 .Header{
@@ -100,8 +102,8 @@ html, body {
 
 #editTutor {
 	float: right;
-	margin-right: -100px;
-	margin-top: 25px;
+	margin-right: -125px;
+	margin-top: 35px;
 	background-color: black;
 	color: white;
 	font-size: 15px;
@@ -178,7 +180,26 @@ th, td{
 }
 
 #radio {
-	margin-top: 150px;
-	margin-left: -10px;
+	margin-top: 30px;
+	margin-left: -86px;
 	height: 17px;
+}
+
+#edit-tutor-name {
+	border: none;
+	background: none;
+	border-bottom: 1px solid black;
+	text-align: center;
+}
+
+#editing-tutor {
+	float: right;
+	width: 125px;
+	margin-top: 102px;
+	margin-right: -129px;
+	border: none;
+	background: none;
+	border-bottom: 1px solid black;
+	text-align: center;
+	
 }
