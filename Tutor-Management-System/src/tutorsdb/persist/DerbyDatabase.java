@@ -1071,4 +1071,10 @@ public class DerbyDatabase implements IDatabase {
 		return null;
 	}
 
+	@Override
+	public void editTutor(UserAccount account, Tutor tutor) {
+		// TODO Auto-generated method stub
+		
+	}
+
 }

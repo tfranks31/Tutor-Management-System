@@ -372,4 +372,25 @@ public class FakeDatabase implements IDatabase {
 		return null;
 	}
 
+	@Override
+	public void editTutor(UserAccount account, Tutor tutor) {
+		// Set IDs
+		for (Tutor dbTutor: tutorList) {
+			if (dbTutor.getTutorID() == tutor.getTutorID()) {
+				dbTutor.setAccountNumber(tutor.getAccountNumber());
+				dbTutor.setEmail(tutor.getEmail());
+				dbTutor.setName(tutor.getName());
+				dbTutor.setPayRate(tutor.getPayRate());
+				dbTutor.setStudentID(tutor.getStudentID());
+				dbTutor.setSubject(tutor.getSubject());
+			}
+		}
+
+		for (UserAccount user : accountList) {
+			if (user.getAccountID() == account.getAccountID()) {
+				user.setPassword(account.getPassword());
+				user.setUsername(account.getUsername());
+			}
+		}
+	}
 }
