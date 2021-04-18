@@ -138,3 +138,8 @@ th, td{
 	border-radius: 35px;
 	border: 0px;
 }
+
+.error {
+	color: red;
+	text-align: center;
+}

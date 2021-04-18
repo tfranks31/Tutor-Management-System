@@ -172,11 +172,13 @@ public class PayVoucherServlet extends HttpServlet{
 					else if (!cells[i].equals("") && !cells[i + 1].equals("") &&
 							 !cells[i + 2].equals("") && !cells[i + 3].equals("")) {
 						
-						entry = entries.get(i / 4);
-						entry.setDate(cells[i]);
-						entry.setHours(Double.parseDouble(cells[i + 1]));
-						entry.setServicePerformed(cells[i + 2]);
-						entry.setWherePerformed(cells[i + 3]);
+						if (validate(req, cells[i], cells[i+1], cells[i+2], cells[i+3])){
+							entry = entries.get(i / 4);
+							entry.setDate(cells[i]);
+							entry.setHours(Double.parseDouble(cells[i + 1]));
+							entry.setServicePerformed(cells[i + 2]);
+							entry.setWherePerformed(cells[i + 3]);
+						}
 					}					
 				}
 				
@@ -186,13 +188,15 @@ public class PayVoucherServlet extends HttpServlet{
 					// Skip blank entries
 					if (!cells[i].equals("") && !cells[i + 1].equals("") &&
 						!cells[i + 2].equals("") && !cells[i + 3].equals("")) {
-							
+						
+						if (validate(req, cells[i], cells[i+1], cells[i+2], cells[i+3])) {	
 						entry = new Entry();
 						entry.setDate(cells[i]);
 						entry.setHours(Double.parseDouble(cells[i + 1]));
 						entry.setServicePerformed(cells[i + 2]);
 						entry.setWherePerformed(cells[i + 3]);
-						entries.add(entry);						
+						entries.add(entry);
+						}
 					}
 				}
 			}
@@ -263,4 +267,58 @@ public class PayVoucherServlet extends HttpServlet{
 		// Refresh payVoucher
 		req.getRequestDispatcher("/_view/payVoucher.jsp").forward(req, resp);
 	}
+	
+	private boolean validate(HttpServletRequest req, String date, String hours, 
+							String servicePerformed, String wherePerformed) {
+		//checks size for date, max = 12 characters
+
+		if (!(date.length() <= 12)) {
+			req.setAttribute("errorMessage", "Date format must be MM/DD/YYYY");
+			return false;
+		}
+		
+		//checks proper format, mm/dd/yyyy or m/d/yyyy
+		String[] splitDate = date.split("[/]");
+		if (splitDate[0].length() > 2) {
+			req.setAttribute("errorMessage", "MM error Date format must be MM/DD/YYYY");
+			return false;
+		}else if (splitDate[1].length() > 2) {
+			req.setAttribute("errorMessage", "DD error Date format must be MM/DD/YYYY");
+			return false;
+		}else if (splitDate[2].length() != 4 && splitDate[2].length() != 2) {
+			req.setAttribute("errorMessage", "YYY error Date format must be MM/DD/YYYY");
+			return false;
+		}
+		
+		//checks to for hours to be decimal
+		try {
+			
+			Double.valueOf(hours);
+		}
+		catch (NumberFormatException e) {
+			req.setAttribute("errorMessage", "Hours can only contain decimal numbers");
+			return false;
+		}
+		
+		//checks for hours to be postitive
+		if (Double.valueOf(hours) <= 0) {
+			req.setAttribute("errorMessage", "Hours must be positive");
+			return false;
+		}
+			
+		//Checks size for wherePerformed, Max = 120 char
+		if (!(wherePerformed.length() <= 120)) {
+			req.setAttribute("errorMessage", "Where performed must be less than 120 characters");
+			return false;
+		}
+		
+		//checks size for servicePerformed, Max = 250 char
+		if (!(servicePerformed.length() <= 250)) {
+			req.setAttribute("errorMessage", "Service performed must be less than 250 characters");
+			return false;
+		}
+		
+		return true;
+	}
+	
 }
