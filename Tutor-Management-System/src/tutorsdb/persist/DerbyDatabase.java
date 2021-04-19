@@ -812,11 +812,13 @@ public class DerbyDatabase implements IDatabase {
 					//update total hours and total pay
 					stmt4 = conn.prepareStatement(
 						"UPDATE pay_vouchers " + 
-						"SET pay_vouchers.total_hours = ?, pay_vouchers.total_pay = ? "
+						"SET pay_vouchers.total_hours = ?, pay_vouchers.total_pay = ? " +
+						"WHERE pay_vouchers.pay_voucher_id = ? "
 					);
 					
 					stmt4.setDouble(1, totalHours);
 					stmt4.setDouble(2, totalPay);
+					stmt4.setInt(3, voucher.getPayVoucherID());
 					
 					stmt4.executeUpdate();
 				
