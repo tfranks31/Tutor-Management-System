@@ -65,7 +65,6 @@ public class SearchServlet extends HttpServlet{
 			}
 			
 			if(tutorVoucherList.isEmpty()) {
-				
 				System.out.println("Search Servlet: no Voucher Found");
 			}
 			
@@ -145,9 +144,17 @@ public class SearchServlet extends HttpServlet{
 			if (searchParameter == null) {
 				//call all pay vouchers
 				allTutorVoucherList = controller.getAllVouchers();
+				if (allTutorVoucherList.isEmpty()) {
+					req.setAttribute("errorMessage", "There were no pay vouchers found");
+					System.out.println("Search Servlet: no Voucher Found");
+				}
 			}else {
 				//call pay voucher per search
 				allTutorVoucherList = controller.getVoucherFromSearch(searchParameter);
+				if (allTutorVoucherList.isEmpty()) {
+					req.setAttribute("errorMessage", "There were no pay vouchers found");
+					System.out.println("Search Servlet: no Voucher Found");
+				}
 			}
 			
 			// Filter out tutors and vouchers based on account info
@@ -158,11 +165,7 @@ public class SearchServlet extends HttpServlet{
 					tutorVoucherList.add(tutorVoucher);
 				}
 			}
-			
-			if(tutorVoucherList.isEmpty()) {
-				System.out.println("Search Servlet: no Voucher Found");
-			}
-				
+
 			// Update search with the vouchers
 			req.setAttribute("payVouchers", tutorVoucherList);
 			req.getRequestDispatcher("/_view/search.jsp").forward(req, resp);

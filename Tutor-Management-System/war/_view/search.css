@@ -136,6 +136,14 @@ th, td{
     text-align: center;
 }
 
+.error {
+	margin: auto;
+	text-align: center;
+	font-size: 20px;
+	height: 25px;
+	color: #ff0000;
+}
+
 .pageNum {
  	margin-top: -18px;
     padding: 10px;

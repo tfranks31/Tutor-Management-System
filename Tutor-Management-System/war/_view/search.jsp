@@ -60,6 +60,10 @@
            	 	</tr>
        		 </c:forEach>
     	</table>
+    	
+    	<c:if test="${! empty errorMessage}">
+        	<div class="error">${errorMessage}</div>
+        </c:if>
 
     	<div Class = "pageNum">
         	<p> <<< &#160; Page # &#160; >>></p>
