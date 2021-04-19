@@ -55,8 +55,9 @@ public class LoginServlet extends HttpServlet{
         UserAccount user = controller.getUserFromLogin(username, password);
         
         if (user == null) {
+        	req.setAttribute("errorMessage", "Invalid username or password");
         	return false;
-        }else {
+        } else {
         	req.getSession().setAttribute("user", user);
         	return true;
         }

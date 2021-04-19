@@ -41,3 +41,8 @@ body {
 .label {
     font-size: 20px;
 }
+
+.error {
+	margin-top: 15px;
+	color: #ff0000;
+}
