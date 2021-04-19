@@ -154,7 +154,7 @@ public class PayVoucherServlet extends HttpServlet{
 						if (req.getParameter("addRow") != null) {
 							
 							entries.remove(i / 4);
-							i-=4;
+							i -= 4;
 						}
 						
 						// Set entry to be removed from the database if not adding row
@@ -190,12 +190,12 @@ public class PayVoucherServlet extends HttpServlet{
 						!cells[i + 2].equals("") && !cells[i + 3].equals("")) {
 						
 						if (validate(req, cells[i], cells[i+1], cells[i+2], cells[i+3])) {	
-						entry = new Entry();
-						entry.setDate(cells[i]);
-						entry.setHours(Double.parseDouble(cells[i + 1]));
-						entry.setServicePerformed(cells[i + 2]);
-						entry.setWherePerformed(cells[i + 3]);
-						entries.add(entry);
+							entry = new Entry();
+							entry.setDate(cells[i]);
+							entry.setHours(Double.parseDouble(cells[i + 1]));
+							entry.setServicePerformed(cells[i + 2]);
+							entry.setWherePerformed(cells[i + 3]);
+							entries.add(entry);
 						}
 					}
 				}
@@ -270,23 +270,10 @@ public class PayVoucherServlet extends HttpServlet{
 	
 	private boolean validate(HttpServletRequest req, String date, String hours, 
 							String servicePerformed, String wherePerformed) {
-		//checks size for date, max = 12 characters
-
-		if (!(date.length() <= 12)) {
-			req.setAttribute("errorMessage", "Date format must be MM/DD/YYYY");
-			return false;
-		}
 		
-		//checks proper format, mm/dd/yyyy or m/d/yyyy
-		String[] splitDate = date.split("[/]");
-		if (splitDate[0].length() > 2) {
-			req.setAttribute("errorMessage", "MM error Date format must be MM/DD/YYYY");
-			return false;
-		}else if (splitDate[1].length() > 2) {
-			req.setAttribute("errorMessage", "DD error Date format must be MM/DD/YYYY");
-			return false;
-		}else if (splitDate[2].length() != 4 && splitDate[2].length() != 2) {
-			req.setAttribute("errorMessage", "YYY error Date format must be MM/DD/YYYY");
+		if (!date.matches("^(1[0-2]|0[1-9])/(3[01]|[12][0-9]|0[1-9])/[0-9]{4}$")) {
+			
+			req.setAttribute("errorMessage", "Date format must be MM/DD/YYYY");
 			return false;
 		}
 		
