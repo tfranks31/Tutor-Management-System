@@ -2,6 +2,7 @@ package controller;
 
 import model.UserAccount;
 import tutorsdb.persist.DatabaseProvider;
+import tutorsdb.persist.DerbyDatabase;
 import tutorsdb.persist.IDatabase;
 
 /**
@@ -14,7 +15,7 @@ public class LoginController {
 	 * Refresh the database instance when constructed.
 	 */
 	public LoginController() {
-		
+		DatabaseProvider.setInstance(new DerbyDatabase());
 		db = DatabaseProvider.getInstance();
 	}
 	

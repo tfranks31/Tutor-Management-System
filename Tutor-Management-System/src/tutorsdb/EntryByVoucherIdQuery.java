@@ -29,15 +29,20 @@ public class EntryByVoucherIdQuery {
 		ArrayList<Tuple<Tutor, PayVoucher, Entry>> tutorVoucherEntryList = (ArrayList<Tuple<Tutor, PayVoucher, Entry>>) db.findEntryByVoucher(voucherID);
 		
 		if (tutorVoucherEntryList.isEmpty()) {
-			System.out.println("No entrys found with Voucher ID: " + voucherID);
+			System.out.println("No Pay Voucher found with Voucher ID: " + voucherID);
 		}else {
 			for (Tuple<Tutor, PayVoucher, Entry> tutorvoucherEntry : tutorVoucherEntryList) {
 				Tutor tutor = tutorvoucherEntry.getLeft();
 				PayVoucher voucher = tutorvoucherEntry.getMiddle();
 				Entry entry = tutorvoucherEntry.getRight();
-				
+				if (entry == null) {
+					System.out.println("No Entries found");
+					System.out.println(tutor.getName() + "," + tutor.getAccountID() + "," + tutor.getStudentID() + "," + voucher.getDueDate() + ",");
+				} else {
+					
 				System.out.println(tutor.getName() + "," + tutor.getAccountID() + "," + tutor.getStudentID() + "," + voucher.getDueDate() + ","
 									+ entry.getDate() + "," + entry.getHours() + "," + entry.getServicePerformed() + "," + entry.getWherePerformed());
+				}
 			}
 		}
 	}

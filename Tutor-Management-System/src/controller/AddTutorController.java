@@ -3,6 +3,7 @@ package controller;
 import model.Tutor;
 import model.UserAccount;
 import tutorsdb.persist.DatabaseProvider;
+import tutorsdb.persist.DerbyDatabase;
 import tutorsdb.persist.IDatabase;
 
 /**
@@ -12,12 +13,12 @@ import tutorsdb.persist.IDatabase;
 public class AddTutorController {
 	
 	private IDatabase db = null;
-	
+
 	/**
 	 * Refresh the database instance when constructed.
 	 */
 	public AddTutorController() {
-		
+		DatabaseProvider.setInstance(new DerbyDatabase());
 		db = DatabaseProvider.getInstance();
 	}
 	

@@ -75,7 +75,7 @@
 		        	<input type="text" class="date2" id="assignVoucherText" name="dueDate" placeholder="MM/DD/YYYY" value="${dueDate}"></input>
 		        	</br>
 					<div id="radio">
-						<input type="radio" id="assign-all" name="assign" value="allTutors">
+						<input type="radio" id="assign-all" name="assign" value="allTutors" checked>
 						<label for="assign-all" id="radio-label">All Tutors</label>
 						<input type="radio" id="assign-one" name="assign" value="oneTutor">
 						<label for="assign-one" id="radio-label">Specific Tutor:</label>

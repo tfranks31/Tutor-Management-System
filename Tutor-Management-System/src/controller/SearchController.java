@@ -7,6 +7,7 @@ import model.PayVoucher;
 import model.Tutor;
 import model.Pair;
 import tutorsdb.persist.DatabaseProvider;
+import tutorsdb.persist.DerbyDatabase;
 import tutorsdb.persist.IDatabase;
 
 /**
@@ -19,7 +20,7 @@ public class SearchController {
 	 * Refresh database instance when constructed.
 	 */
 	public SearchController() {
-		
+		DatabaseProvider.setInstance(new DerbyDatabase());
 		db = DatabaseProvider.getInstance();
 	}
 	

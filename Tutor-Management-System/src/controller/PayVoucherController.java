@@ -8,6 +8,7 @@ import model.PayVoucher;
 import model.Tuple;
 import model.Tutor;
 import tutorsdb.persist.DatabaseProvider;
+import tutorsdb.persist.DerbyDatabase;
 import tutorsdb.persist.IDatabase;
 
 /**
@@ -22,7 +23,7 @@ public class PayVoucherController {
 	 * Refresh the database instance when constructed.
 	 */
 	public PayVoucherController() {
-		
+		DatabaseProvider.setInstance(new DerbyDatabase());
 		db = DatabaseProvider.getInstance();
 	}
 	
