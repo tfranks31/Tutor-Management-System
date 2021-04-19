@@ -19,6 +19,7 @@ html, body {
 	height: 100%;
 	background-image: url("tutorBackground.jpg");
 	filter: blur(7px);
+	background-size: cover;
 }
 
 .content {
