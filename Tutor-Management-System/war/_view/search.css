@@ -210,8 +210,9 @@ th, td{
 }
 
 .editTutorText {
-	margin-top: 95px;
-	margin-left: 251px;
+	position: absolute;
+	top: 767px;
+	left: 769px;
 }
 
 #editing-tutor {
