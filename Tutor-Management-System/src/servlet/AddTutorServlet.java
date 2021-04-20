@@ -50,13 +50,9 @@ public class AddTutorServlet extends HttpServlet {
 			
 			controller = new AddTutorController();
 			
-			String editName = (String) req.getSession().getAttribute("editName");
-			System.out.println(editName);
-			Pair <UserAccount, Tutor> userTutorPair = controller.getTutorInfo(editName);
-			
-			UserAccount user = userTutorPair.getLeft();
-			Tutor tutor = userTutorPair.getRight();
-			String[] name = editName.split(" ");
+			UserAccount user = (UserAccount) req.getSession().getAttribute("editUser");
+			Tutor tutor = (Tutor) req.getSession().getAttribute("editTutor");
+			String[] name = tutor.getName().split(" ");
 			
 			req.setAttribute("firstName", name[0]);
 			req.setAttribute("lastName", name[1]);
@@ -121,14 +117,12 @@ public class AddTutorServlet extends HttpServlet {
 				req.getRequestDispatcher("/search").forward(req, resp);
 			}else if (req.getParameter("editTutorInfo") != null) {
 				System.out.println("Edit");
-			
-				Pair <UserAccount, Tutor> userTutorPair = controller.getTutorInfo((String) req.getSession().getAttribute("editName"));
-							
+									
 				UserAccount updatedAccount = new UserAccount();
 				updatedAccount.setUsername(username);
 				updatedAccount.setPassword(password);
 				updatedAccount.setIsAdmin(false);
-				updatedAccount.setAccountID(userTutorPair.getLeft().getAccountID());
+				updatedAccount.setAccountID(((UserAccount) req.getSession().getAttribute("editUser")).getAccountID());
 				
 				Tutor updatedTutor = new Tutor();
 				updatedTutor.setName(firstName + " " + lastName);
@@ -137,7 +131,7 @@ public class AddTutorServlet extends HttpServlet {
 				updatedTutor.setAccountNumber(accountNumber);
 				updatedTutor.setSubject(subject);
 				updatedTutor.setPayRate(Double.parseDouble(payRate));
-				updatedTutor.setTutorID(userTutorPair.getRight().getTutorID());
+				updatedTutor.setTutorID(((Tutor) req.getSession().getAttribute("editTutor")).getTutorID());
 				
 				controller.editTutor(updatedAccount, updatedTutor);
 				req.setAttribute("tutorName", firstName + " " + lastName);

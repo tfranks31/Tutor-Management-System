@@ -95,11 +95,16 @@
 			<c:if test="${user.isAdmin}">
 				<input type="submit" id="addTutor" name="addTutor" value="Add Tutor" class="addTutor"></input>
 				</br></br>
-				<input type="submit" id="editTutor" name="editTutor" value="Edit Tutor" class="addTutor"></input>
-				<input type="text" class="editTutorText" id="edit-tutor-name" name="editTutorName" placeholder="Tutor Name" value="${editTutorName}"></input>
 			</c:if>
 		</form>
 		
+		<form action="${pageContext.servletContext.contextPath}/search" method="post">
+			<c:if test="${user.isAdmin}">
+				<input type="submit" id="editTutor" name="editTutor" value="Edit Tutor" class="addTutor"></input>
+				<input type="text" class="editTutorText" id="edit-tutor-name" name="editTutorName" placeholder="Tutor Name" value="${editTutorName}"></input>
+			</c:if>
+		</form>	
+
 		<c:if test="${user.isAdmin}">
 			</br></br></br></br></br></br></br></br>
 		</c:if>

@@ -52,20 +52,6 @@ public class SearchServlet extends HttpServlet{
 			resp.sendRedirect("login");
 		}
 		
-		//Redirects to edit tutor page
-		else if(req.getParameter("editTutor") != null && req.getParameter("editTutorName") != null) {
-			//sets session variables
-			boolean editTutor = true;
-			String editName = (String) req.getParameter("editTutorName");
-			System.out.println(editName);
-			req.getSession().setAttribute("edit", editTutor);
-			req.getSession().setAttribute("editName", editName);
-			
-			//redirects to page
-			resp.sendRedirect("addTutor");
-			
-		}
-		
 		// Load search
 		else {
 			ArrayList<Pair<Tutor, PayVoucher>> tutorVoucherList = new ArrayList<Pair<Tutor, PayVoucher>>();
@@ -181,26 +167,57 @@ public class SearchServlet extends HttpServlet{
 			req.getRequestDispatcher("/_view/search.jsp").forward(req, resp);
 		} 
 		
-		// Default generate pay vouchers
-		else {
+		//Redirects to edit tutor page
+		else if(req.getParameter("editTutor") != null && !req.getParameter("editTutorName").equals("")) {
+			//sets session variables
+			boolean editTutor = true;
+			String editName = (String) req.getParameter("editTutorName");
 			
-			ArrayList<Pair<Tutor, PayVoucher>> tutorVoucherList = new ArrayList<Pair<Tutor, PayVoucher>>();
-			
-			// Get all pay vouchers
-			ArrayList<Pair<Tutor, PayVoucher>> allTutorVoucherList = controller.getAllVouchers();
-			
-			// Filter out tutors and vouchers based on account info
-			for (Pair<Tutor, PayVoucher> tutorVoucher : allTutorVoucherList) {
+			Pair <UserAccount, Tutor> userTutorPair = controller.getTutorInfo(editName);
+		
+			if (userTutorPair != null) {
+				req.getSession().setAttribute("edit", editTutor);
+				req.getSession().setAttribute("editUser", userTutorPair.getLeft());
+				req.getSession().setAttribute("editTutor", userTutorPair.getRight());
+				//req.getSession().setAttribute("editName", editName);
 				
-				if (tutorVoucher.getLeft().getAccountID() == account.getAccountID() || account.getIsAdmin()) {
-					
-					tutorVoucherList.add(tutorVoucher);
-				}
+				//redirects to page
+				resp.sendRedirect("addTutor");
+				
 			}
 			
-			// Update search with the vouchers
-			req.setAttribute("payVouchers", tutorVoucherList);
-			req.getRequestDispatcher("/_view/search.jsp").forward(req, resp);
+			//loads the default search page
+			else {
+				loadDefaultSearch(req, resp, account);
+			}
 		}
+		
+		// Default generate pay vouchers
+		else {
+			loadDefaultSearch(req, resp, account);
+;		}
 	}
+	
+	// Default generate pay vouchers
+	private void loadDefaultSearch(HttpServletRequest req, HttpServletResponse resp, UserAccount account)
+			throws ServletException, IOException {
+		ArrayList<Pair<Tutor, PayVoucher>> tutorVoucherList = new ArrayList<Pair<Tutor, PayVoucher>>();
+		
+		// Get all pay vouchers
+		ArrayList<Pair<Tutor, PayVoucher>> allTutorVoucherList = controller.getAllVouchers();
+		
+		// Filter out tutors and vouchers based on account info
+		for (Pair<Tutor, PayVoucher> tutorVoucher : allTutorVoucherList) {
+			
+			if (tutorVoucher.getLeft().getAccountID() == account.getAccountID() || account.getIsAdmin()) {
+				
+				tutorVoucherList.add(tutorVoucher);
+			}
+		}
+		
+		// Update search with the vouchers
+		req.setAttribute("payVouchers", tutorVoucherList);
+		req.getRequestDispatcher("/_view/search.jsp").forward(req, resp);
+	}
+	
 }
