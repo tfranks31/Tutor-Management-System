@@ -20,7 +20,7 @@ public class SearchServlet extends HttpServlet{
 	private static final long serialVersionUID = 1L;
 	private SearchController controller = null;
 	String searchParameter = null;
-	
+	boolean editTutor = false;
 	@Override
 	protected void doGet(HttpServletRequest req, HttpServletResponse resp)
 			throws ServletException, IOException {
@@ -30,6 +30,8 @@ public class SearchServlet extends HttpServlet{
 		controller = new SearchController();
 		
 		UserAccount account = (UserAccount) req.getSession().getAttribute("user");
+		
+		
 		// If user not logged in, redirect to login
 		if (account == null) {
 			
@@ -39,6 +41,9 @@ public class SearchServlet extends HttpServlet{
 		// User wants to add a tutor
 		else if (req.getParameter("addTutor") != null) {
 			
+			//defaults to false
+			req.getSession().setAttribute("edit", editTutor);
+			
 			resp.sendRedirect("addTutor");
 		}
 		
@@ -47,9 +52,22 @@ public class SearchServlet extends HttpServlet{
 			resp.sendRedirect("login");
 		}
 		
+		//Redirects to edit tutor page
+		else if(req.getParameter("editTutor") != null && req.getParameter("editTutorName") != null) {
+			//sets session variables
+			boolean editTutor = true;
+			String editName = (String) req.getParameter("editTutorName");
+			System.out.println(editName);
+			req.getSession().setAttribute("edit", editTutor);
+			req.getSession().setAttribute("editName", editName);
+			
+			//redirects to page
+			resp.sendRedirect("addTutor");
+			
+		}
+		
 		// Load search
 		else {
-
 			ArrayList<Pair<Tutor, PayVoucher>> tutorVoucherList = new ArrayList<Pair<Tutor, PayVoucher>>();
 			
 			// Get all Tutors and their vouchers
@@ -92,14 +110,6 @@ public class SearchServlet extends HttpServlet{
 		// User wants to assign a pay voucher
 		else if (req.getParameter("assignVoucher") != null && req.getParameter("assign") != null) {
 			
-			System.out.println(req.getParameter("tutorName"));
-			/*if (req.getParameter("tutorName") != null) {
-				//assigns the voucher to one tutor
-				controller.assignPayVoucherSpecific(req.getParameter("startDate"), req.getParameter("dueDate"), req.getParameter("tutorName"));
-			}else {
-				// Assign the voucher to all tutors
-				controller.assignPayVoucherAll(req.getParameter("startDate"), req.getParameter("dueDate"));
-			}*/
 			String assignmentType = req.getParameter("assign");
 			
 			if (assignmentType.equals("allTutors")) {
@@ -108,7 +118,7 @@ public class SearchServlet extends HttpServlet{
 			}
 			if (assignmentType.equals("oneTutor")) {
 				//assigns the voucher to one tutor
-				controller.assignPayVoucherSpecific(req.getParameter("startDate"), req.getParameter("dueDate"), req.getParameter("tutorName"));
+				controller.assignPayVoucherSpecific(req.getParameter("startDate"), req.getParameter("dueDate"), req.getParameter("assignName"));
 			}
 			
 			ArrayList<Pair<Tutor, PayVoucher>> tutorVoucherList = new ArrayList<Pair<Tutor, PayVoucher>>();
@@ -169,7 +179,7 @@ public class SearchServlet extends HttpServlet{
 			// Update search with the vouchers
 			req.setAttribute("payVouchers", tutorVoucherList);
 			req.getRequestDispatcher("/_view/search.jsp").forward(req, resp);
-		}
+		} 
 		
 		// Default generate pay vouchers
 		else {

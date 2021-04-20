@@ -83,21 +83,20 @@
 						<label for="assign-all" id="radio-label">All Tutors</label>
 						<input type="radio" id="assign-one" name="assign" value="oneTutor">
 						<label for="assign-one" id="radio-label">Specific Tutor:</label>
-						<input type="text" id="edit-tutor-name" name="tutorName" placeholder="Tutor Name" value="${tutorName}"></input>
+						<input type="text" id="edit-tutor-name" name="assignName" placeholder="Tutor Name" value="${assignName}"></input>
 					</div>
-
 		    	</form>
 			</div>
 		</c:if>
 		
-		<c:if test="${user.isAdmin}">
-    		<form action="${pageContext.servletContext.contextPath}/search" method="get">
-        		<input type="submit" id="addTutor" name="addTutor" value="Add Tutor" class="addTutor"></input>
-  				</br></br>
-  				<input type="submit" id="editTutor" name="editTutor" value="Edit Tutor" class="addTutor"></input>
-  				<input type="text" id="editing-tutor" name="tutorName" placeholder="Tutor Name" value="${tutorName}"></input>
-    		</form>
-		</c:if>
+		<form action="${pageContext.servletContext.contextPath}/search" method="get">
+			<c:if test="${user.isAdmin}">
+				<input type="submit" id="addTutor" name="addTutor" value="Add Tutor" class="addTutor"></input>
+				</br></br>
+				<input type="submit" id="editTutor" name="editTutor" value="Edit Tutor" class="addTutor"></input>
+				<input type="text" id="edit-tutor-name" name="editTutorName" placeholder="Tutor Name" value="${editTutorName}"></input>
+			</c:if>
+		</form>
 		
 		<c:if test="${user.isAdmin}">
 			</br></br></br></br></br></br></br></br>

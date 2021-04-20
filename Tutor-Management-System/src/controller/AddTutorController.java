@@ -2,6 +2,7 @@ package controller;
 
 import model.Tutor;
 import model.UserAccount;
+import model.Pair;
 import tutorsdb.persist.DatabaseProvider;
 import tutorsdb.persist.DerbyDatabase;
 import tutorsdb.persist.IDatabase;
@@ -13,7 +14,7 @@ import tutorsdb.persist.IDatabase;
 public class AddTutorController {
 	
 	private IDatabase db = null;
-
+	
 	/**
 	 * Refresh the database instance when constructed.
 	 */
@@ -32,6 +33,22 @@ public class AddTutorController {
 		db.addTutor(account, tutor);
 	}
 	
+	/**
+	 * Returns an instance of a tutor and account with respective name 
+	 * @param name name of tutor who info is requested
+	 * @return A pair consiting of a tutor and it's respective UserAccount
+	 */
+	public Pair<UserAccount, Tutor> getTutorInfo(String name) {
+		Pair<UserAccount, Tutor> userTutor;
+		userTutor = db.getTutorInfo(name);
+		return userTutor;
+	}
+	
+	/**
+	 * Updates the Tutor's account and user information in the database
+	 * @param account Useraccount of the Tutor
+	 * @param tutor Tutor object of the repective tutor
+	 */
 	public void editTutor(UserAccount account, Tutor tutor) {
 		db.editTutor(account, tutor);
 	}

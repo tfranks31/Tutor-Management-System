@@ -74,6 +74,9 @@ public class PayVoucherServlet extends HttpServlet{
 				tableSize = 0;
 			}
 			
+			//updates total pay in case tutor account was edited since voucher was last loaded
+			voucher.setTotalPay(controller.calculateTotalPay(tutor, voucher));
+			
 			// Set attributes
 			req.setAttribute("tableSize", tableSize);
 			req.setAttribute("entries", entries);
@@ -254,6 +257,9 @@ public class PayVoucherServlet extends HttpServlet{
 				
 		// Set attributes
 		req.setAttribute("tableSize", tableSize);	
+		
+		//updates total pay in case tutor account was edited since voucher was last loaded
+		voucher.setTotalPay(controller.calculateTotalPay(tutor, voucher));
 		
 		req.setAttribute("entries", entries);
 		req.setAttribute("tutorName", tutor.getName());
