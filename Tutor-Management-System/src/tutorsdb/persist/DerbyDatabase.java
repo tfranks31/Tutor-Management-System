@@ -1272,4 +1272,10 @@ public class DerbyDatabase implements IDatabase {
 		
 	}
 
+	@Override
+	public Pair<UserAccount, Tutor> getTutorInfo(String name) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
 }

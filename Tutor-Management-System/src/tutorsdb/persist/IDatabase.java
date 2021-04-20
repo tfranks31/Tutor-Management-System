@@ -172,9 +172,17 @@ public interface IDatabase {
 	public void insertEntry(Entry entry);
 	
 	/**
-	 * Edit a tutor's account
+	 * A utility method to change a Tutor's account and User Information
 	 * @param account updated Tutor's UserAccount.
 	 * @param tutor updated Tutor.
 	 */
 	public void editTutor (UserAccount account, Tutor tutor);
+	
+	
+	/**
+	 * A utility method to get a Tutor's Account and User information
+	 * @param name THe name of the tutor
+	 * @return A pair consisting of the Tutor and it's respective account
+	 */
+	public Pair<UserAccount, Tutor>getTutorInfo(String name);
 }

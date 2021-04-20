@@ -414,4 +414,20 @@ public class FakeDatabase implements IDatabase {
 		}
 		
 	}
+
+	@Override
+	public Pair<UserAccount, Tutor> getTutorInfo(String name) {
+		Pair<UserAccount, Tutor> userTutorPair = null;
+		for (Tutor tutor : tutorList) {
+			if (tutor.getName().equals(name)) {
+				for (UserAccount account : accountList) {
+					if (account.getAccountID() == tutor.getAccountID()) {
+						userTutorPair = new Pair<UserAccount, Tutor>(account, tutor);
+					}
+				}
+			}
+		}
+		
+		return userTutorPair;
+	}
 }
