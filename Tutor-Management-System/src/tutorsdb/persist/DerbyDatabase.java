@@ -1209,8 +1209,101 @@ public class DerbyDatabase implements IDatabase {
 
 	@Override
 	public void editTutor(UserAccount account, Tutor tutor) {
-		// TODO Auto-generated method stub
-		
+		executeTransaction(new Transaction<Boolean>() {
+			
+			@Override
+			public Boolean execute(Connection conn) throws SQLException {
+				PreparedStatement stmt1 = null;
+				PreparedStatement stmt2 = null;
+				PreparedStatement stmt3 = null;
+				PreparedStatement stmt4 = null;
+				ResultSet resultSet = null;
+				ResultSet accountList = null;
+				
+				try {
+					//get a list of all the tutors
+					stmt1 = conn.prepareStatement(
+						"SELECT tutors.* " + 
+						"FROM tutors "
+					);
+					
+					resultSet = stmt1.executeQuery();
+					
+					List<Tutor> result = new ArrayList<Tutor>();
+					
+					while (resultSet.next()) {
+						Tutor Tutor = new Tutor();
+						loadTutor(Tutor, resultSet, 1);
+
+						result.add(Tutor);
+					}
+					
+					for (Tutor tutorList : result) {
+						if (tutorList.getTutorID() == (tutor.getTutorID())) {
+							
+							stmt2 = conn.prepareStatement(
+								"UPDATE tutors " + 
+								"SET tutors.name = ?, tutors.email = ?, tutors.student_id = ?, " +
+								"tutors.account_number = ?, tutors.subject = ?, tutors.pay_rate = ? " +
+								"WHERE tutors.tutor_id = ? "
+							);
+							
+							//for some reason the tutor that is passed in has an account id of 0
+							//stmt2.setInt(1, tutor.getAccountID());
+							
+							stmt2.setString(1, tutor.getName());
+							stmt2.setString(2, tutor.getEmail());
+							stmt2.setString(3, tutor.getStudentID());
+							stmt2.setString(4, tutor.getAccountNumber());
+							stmt2.setString(5, tutor.getSubject());
+							stmt2.setDouble(6, tutor.getPayRate());
+							stmt2.setInt(7, tutor.getTutorID());
+							stmt2.executeUpdate();
+						}
+					}
+					
+					stmt3 = conn.prepareStatement(
+							"SELECT user_accounts.* " + 
+							"FROM user_accounts "
+						);
+						
+						accountList = stmt3.executeQuery();
+						
+						List<UserAccount> accounts = new ArrayList<UserAccount>();
+						
+						while (accountList.next()) {
+							UserAccount user = new UserAccount();
+							loadUserAccount(user, accountList, 1);
+
+							accounts.add(user);
+						}
+						
+						for (UserAccount user : accounts) {
+							if (user.getAccountID() == (account.getAccountID())) {
+								stmt4 = conn.prepareStatement(
+									"UPDATE user_accounts " + 
+									"SET user_accounts.username = ?, user_accounts.password = ? " +
+									"WHERE user_accounts.user_account_id = ? "
+								);
+								
+								stmt4.setString(1,account.getUsername());
+								stmt4.setString(2, account.getPassword());
+								stmt4.setInt(3, account.getAccountID());
+								stmt4.executeUpdate();
+							}
+						}
+						
+					return true;
+					
+				} finally {
+					DBUtil.closeQuietly(resultSet);
+					DBUtil.closeQuietly(stmt1);
+					DBUtil.closeQuietly(stmt2);
+					DBUtil.closeQuietly(stmt3);
+					DBUtil.closeQuietly(stmt4);
+				}
+			}
+		});
 	}
 
 	@Override
@@ -1274,8 +1367,59 @@ public class DerbyDatabase implements IDatabase {
 
 	@Override
 	public Pair<UserAccount, Tutor> getTutorInfo(String name) {
-		// TODO Auto-generated method stub
-		return null;
+		return executeTransaction(new Transaction<Pair<UserAccount, Tutor>>() {
+			@Override
+			public Pair<UserAccount, Tutor> execute(Connection conn) throws SQLException {
+				PreparedStatement stmt1 = null;
+				PreparedStatement stmt2 = null;
+				ResultSet tutorList = null;
+				ResultSet accountList = null;
+
+				try {
+					stmt1 = conn.prepareStatement(
+						"select tutors.* " + 
+						"from tutors " + 
+						"where tutors.name = ? "
+					);
+					
+					stmt1.setString(1, name);
+					tutorList = stmt1.executeQuery();
+					
+					Pair<UserAccount, Tutor> result = new Pair<UserAccount, Tutor>(null, null);
+					
+					Tutor Tutor = new Tutor();
+					
+					if (tutorList.next()) {
+						loadTutor(Tutor, tutorList, 1);
+					
+						stmt2 = conn.prepareStatement(
+							"select user_accounts.* " + 
+							"from user_accounts " + 
+							"where user_accounts.user_account_id = ? "
+						);
+							
+						stmt2.setInt(1, Tutor.getAccountID());
+						accountList = stmt2.executeQuery();
+						
+						UserAccount UserAccount = new UserAccount();
+						
+						if (accountList.next()) {
+							loadUserAccount(UserAccount, accountList, 1);
+						}
+						
+						result = (new Pair<UserAccount, Tutor>(UserAccount, Tutor));
+					}
+					
+					return result;
+				
+				} finally {
+					DBUtil.closeQuietly(tutorList);
+					DBUtil.closeQuietly(accountList);
+					DBUtil.closeQuietly(stmt1);
+					DBUtil.closeQuietly(stmt2);
+				}
+			}
+		});
 	}
 
 }
