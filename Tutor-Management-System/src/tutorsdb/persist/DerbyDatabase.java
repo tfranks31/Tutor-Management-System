@@ -1385,7 +1385,7 @@ public class DerbyDatabase implements IDatabase {
 					stmt1.setString(1, name);
 					tutorList = stmt1.executeQuery();
 					
-					Pair<UserAccount, Tutor> result = new Pair<UserAccount, Tutor>(null, null);
+					Pair<UserAccount, Tutor> result = null;
 					
 					Tutor Tutor = new Tutor();
 					
