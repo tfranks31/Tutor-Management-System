@@ -114,7 +114,7 @@ public class SearchServlet extends HttpServlet{
 				if (searchValidate(req)) {
 					
 					//assigns the voucher to one tutor
-					controller.assignPayVoucherSpecific(req.getParameter("startDate"), req.getParameter("dueDate"), req.getParameter("tutorName"));
+					controller.assignPayVoucherSpecific(req.getParameter("startDate"), req.getParameter("dueDate"), req.getParameter("assignName"));
 				}				
 			}
 			
