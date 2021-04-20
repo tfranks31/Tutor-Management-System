@@ -25,8 +25,8 @@ public class SearchControllerTest {
 		
 		// Set and get the tutordb instance and initialize AddTutorController
 		DatabaseProvider.setInstance(new FakeDatabase());
-		db = DatabaseProvider.getInstance();
 		controller = new SearchController();
+		db = DatabaseProvider.getInstance();
     }
 	
 	@Test
@@ -35,13 +35,13 @@ public class SearchControllerTest {
 		List<Pair<Tutor, PayVoucher>> test = controller.getAllVouchers();
 		
 		assertEquals(test.size(), vouchers.size());
-		assertEquals(test.get(0).getRight(), vouchers.get(0));
-		assertEquals(test.get(1).getRight(), vouchers.get(1));
-		assertEquals(test.get(2).getRight(), vouchers.get(2));
-		assertEquals(test.get(3).getRight(), vouchers.get(3));
-		assertEquals(test.get(4).getRight(), vouchers.get(4));
-		assertEquals(test.get(5).getRight(), vouchers.get(5));
-		assertEquals(test.get(6).getRight(), vouchers.get(6));	
+		assertEquals(test.get(0).getRight().getPayVoucherID(), vouchers.get(0).getPayVoucherID());
+		assertEquals(test.get(1).getRight().getPayVoucherID(), vouchers.get(1).getPayVoucherID());
+		assertEquals(test.get(2).getRight().getPayVoucherID(), vouchers.get(2).getPayVoucherID());
+		assertEquals(test.get(3).getRight().getPayVoucherID(), vouchers.get(3).getPayVoucherID());
+		assertEquals(test.get(4).getRight().getPayVoucherID(), vouchers.get(4).getPayVoucherID());
+		assertEquals(test.get(5).getRight().getPayVoucherID(), vouchers.get(5).getPayVoucherID());
+		assertEquals(test.get(6).getRight().getPayVoucherID(), vouchers.get(6).getPayVoucherID());	
 	}
 	
 	@Test

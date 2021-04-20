@@ -23,16 +23,16 @@ public class AddTutorControllerTest {
 		
 		// Set and get the tutordb instance and initialize AddTutorController
 		DatabaseProvider.setInstance(new FakeDatabase());
-		db = DatabaseProvider.getInstance();
 		controller = new AddTutorController();
+		db = DatabaseProvider.getInstance();		
     }
 	
 	@Test
 	public void testAddTutor() {
 		
 		// Create and add objects to tutorsdb
-		UserAccount newAccount = new UserAccount();
-		Tutor newTutor = new Tutor();
+		UserAccount newAccount = new UserAccount("user", "pass", -1, false);
+		Tutor newTutor = new Tutor("user pass", "user@user.use", "use", 1, -1, -1, "321", "123");
 		controller.addTutor(newAccount, newTutor);
 		
 		List<UserAccount> accountList = db.getUserAccounts();
@@ -43,11 +43,11 @@ public class AddTutorControllerTest {
 		Tutor dbTutor = tutorList.get(tutorList.size() - 1);
 		
 		// Check that the objects were successfully entered
-		assertEquals(dbAccount, newAccount);
-		assertEquals(dbTutor, newTutor);
+		assertEquals(dbAccount.getUsername(), newAccount.getUsername());
+		assertEquals(dbTutor.getName(), newTutor.getName());
 		
-		// Remove test objects from tutorsdb
-		db.deleteUserAccount(dbAccount);
+		// Remove test objects from tutorsdb		
 		db.deleteTutor(dbTutor);
+		db.deleteUserAccount(dbAccount);
 	}
 }
