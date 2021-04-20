@@ -31,6 +31,7 @@
     		<div class="successAdd">${tutorName} was added as a tutor</div>
 		</c:if>
 
+    	<div class="table">
     	<table id = "searchResults">
     		<th>Pay Vouchers</th>
         	<th>Tutor Name</th>
@@ -60,6 +61,7 @@
            	 	</tr>
        		 </c:forEach>
     	</table>
+    	</div>
     	
     	<c:if test="${! empty errorMessage}">
         	<div class="error">${errorMessage}</div>
@@ -94,7 +96,7 @@
 				<input type="submit" id="addTutor" name="addTutor" value="Add Tutor" class="addTutor"></input>
 				</br></br>
 				<input type="submit" id="editTutor" name="editTutor" value="Edit Tutor" class="addTutor"></input>
-				<input type="text" id="edit-tutor-name" name="editTutorName" placeholder="Tutor Name" value="${editTutorName}"></input>
+				<input type="text" class="editTutorText" id="edit-tutor-name" name="editTutorName" placeholder="Tutor Name" value="${editTutorName}"></input>
 			</c:if>
 		</form>
 		
