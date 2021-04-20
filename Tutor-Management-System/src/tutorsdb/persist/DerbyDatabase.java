@@ -1137,26 +1137,126 @@ public class DerbyDatabase implements IDatabase {
 
 	@Override
 	public void insertUserAccount(UserAccount userAccount) {
-		// TODO Auto-generated method stub
-		
+		executeTransaction(new Transaction<Boolean>() {
+			
+			@Override
+			public Boolean execute(Connection conn) throws SQLException {
+				PreparedStatement insertUserAccount = null;
+				
+				try {
+					insertUserAccount = conn.prepareStatement(
+						"insert into user_accounts (username, password, is_admin) " +
+						"values (?, ?, ?)"
+					);
+					
+					insertUserAccount.setString(1, userAccount.getUsername());
+					insertUserAccount.setString(2, userAccount.getPassword());
+					insertUserAccount.setBoolean(3, userAccount.getIsAdmin());
+					
+					insertUserAccount.executeUpdate();
+					
+					return true;
+				} finally {
+					DBUtil.closeQuietly(insertUserAccount);
+				}
+			}
+		});
 	}
 
 	@Override
 	public void insertTutor(Tutor tutor) {
-		// TODO Auto-generated method stub
+		executeTransaction(new Transaction<Boolean>() {
+			
+			@Override
+			public Boolean execute(Connection conn) throws SQLException {
+				PreparedStatement insertTutor = null;
+				
+				try {
+					insertTutor = conn.prepareStatement(
+						"insert into tutors (user_account_id, name, email, student_id, account_number, subject, pay_rate) " +
+						"values (?, ?, ?, ?, ?, ?, ?)"
+					);
 		
+					insertTutor.setInt(1, tutor.getAccountID());
+					insertTutor.setString(2, tutor.getName());
+					insertTutor.setString(3, tutor.getEmail());
+					insertTutor.setString(4, tutor.getStudentID());
+					insertTutor.setString(5, tutor.getAccountNumber());
+					insertTutor.setString(6, tutor.getSubject());
+					insertTutor.setDouble(7, tutor.getPayRate());
+					
+					insertTutor.executeUpdate();
+					
+					return true;
+				} finally {
+					DBUtil.closeQuietly(insertTutor);
+				}
+			}
+		});
 	}
 
 	@Override
 	public void insertPayVoucher(PayVoucher payVoucher) {
-		// TODO Auto-generated method stub
+		executeTransaction(new Transaction<Boolean>() {
+			
+			@Override
+			public Boolean execute(Connection conn) throws SQLException {
+				PreparedStatement insertPayVoucher = null;
+				
+				try {
+					insertPayVoucher = conn.prepareStatement(
+						"insert into pay_vouchers (tutor_id, start_date, due_date, total_hours, total_pay, is_submitted, is_signed, is_new, is_admin_edited) " +
+						"values (?, ?, ?, ?, ?, ?, ?, ?, ?)"
+					);
 		
+					insertPayVoucher.setInt(1, payVoucher.getTutorID());
+					insertPayVoucher.setString(2, payVoucher.getStartDate());
+					insertPayVoucher.setString(3, payVoucher.getDueDate());
+					insertPayVoucher.setDouble(4, payVoucher.getTotalHours());
+					insertPayVoucher.setDouble(5, payVoucher.getTotalPay());
+					insertPayVoucher.setBoolean(6, payVoucher.getIsSubmitted());
+					insertPayVoucher.setBoolean(7, payVoucher.getIsSigned());
+					insertPayVoucher.setBoolean(8, payVoucher.getIsNew());
+					insertPayVoucher.setBoolean(9, payVoucher.getIsAdminEdited());
+					
+					insertPayVoucher.executeUpdate();
+					
+					return true;
+				} finally {
+					DBUtil.closeQuietly(insertPayVoucher);
+				}
+			}
+		});
 	}
 
 	@Override
 	public void insertEntry(Entry entry) {
-		// TODO Auto-generated method stub
-		
+		executeTransaction(new Transaction<Boolean>() {
+			
+			@Override
+			public Boolean execute(Connection conn) throws SQLException {
+				PreparedStatement insertEntry = null;
+				
+				try {
+					insertEntry = conn.prepareStatement(
+						"insert into entries (pay_voucher_id, date, service_performed, where_performed, hours) " + 
+						"values (?, ?, ?, ?, ?)"
+					);
+					
+					insertEntry.setInt(1, entry.getPayVoucherID());
+					insertEntry.setString(2, entry.getDate());
+					insertEntry.setString(3, entry.getServicePerformed());
+					insertEntry.setString(4, entry.getWherePerformed());
+					insertEntry.setDouble(5, entry.getHours());
+					
+					insertEntry.executeUpdate();
+					
+					return true;
+				} finally {
+					DBUtil.closeQuietly(insertEntry);
+				}
+			}
+		});
 	}
 
 	@Override
@@ -1350,6 +1450,7 @@ public class DerbyDatabase implements IDatabase {
 							stmt2.setBoolean(7, false);
 							stmt2.setBoolean(8, true);
 							stmt2.setBoolean(9, false);
+							
 							stmt2.executeUpdate();
 						}
 					}
