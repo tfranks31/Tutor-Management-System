@@ -1,7 +1,10 @@
 package servlet;
 
 import java.io.IOException;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
@@ -99,12 +102,20 @@ public class SearchServlet extends HttpServlet{
 			String assignmentType = req.getParameter("assign");
 			
 			if (assignmentType.equals("allTutors")) {
-				// Assign the voucher to all tutors
-				controller.assignPayVoucherAll(req.getParameter("startDate"), req.getParameter("dueDate"));
+				
+				if (searchValidate(req)) {
+					
+					// Assign the voucher to all tutors
+					controller.assignPayVoucherAll(req.getParameter("startDate"), req.getParameter("dueDate"));
+				}			
 			}
 			if (assignmentType.equals("oneTutor")) {
-				//assigns the voucher to one tutor
-				controller.assignPayVoucherSpecific(req.getParameter("startDate"), req.getParameter("dueDate"), req.getParameter("assignName"));
+				
+				if (searchValidate(req)) {
+					
+					//assigns the voucher to one tutor
+					controller.assignPayVoucherSpecific(req.getParameter("startDate"), req.getParameter("dueDate"), req.getParameter("tutorName"));
+				}				
 			}
 			
 			ArrayList<Pair<Tutor, PayVoucher>> tutorVoucherList = new ArrayList<Pair<Tutor, PayVoucher>>();
@@ -220,4 +231,35 @@ public class SearchServlet extends HttpServlet{
 		req.getRequestDispatcher("/_view/search.jsp").forward(req, resp);
 	}
 	
+	private boolean searchValidate(HttpServletRequest req) {
+		
+		String startDate = req.getParameter("startDate");
+		String dueDate = req.getParameter("dueDate");
+		
+		// Check for valid date format
+		if (!startDate.matches("^(1[0-2]|0[1-9])/(3[01]|[12][0-9]|0[1-9])/[0-9]{4}$")
+			|| !dueDate.matches("^(1[0-2]|0[1-9])/(3[01]|[12][0-9]|0[1-9])/[0-9]{4}$")) {
+			
+			req.setAttribute("assignErrorMessage", "Please enter a valid date");
+			return false;
+		}
+		
+		try {
+			
+			Date start = new SimpleDateFormat("MM/dd/yyyy").parse(startDate);
+			Date due = new SimpleDateFormat("MM/dd/yyyy").parse(dueDate);
+			
+			if (start.after(due)) {
+				
+				req.setAttribute("assignErrorMessage", "The due date must start after the start date");
+				return false;
+			}
+		} 
+		catch (ParseException e) {
+
+			return false;
+		}
+				
+		return true;
+	}
 }

@@ -27,7 +27,7 @@ html, body {
  	left: 50%;
  	margin-left: -465px;
 	width: 930px;
-	height: 795px;
+	height: 830px;
 	border: 2px solid #e1eae2;
 	border-radius: 20px;
 	background-color: #e1eae2;
@@ -211,8 +211,8 @@ th, td{
 
 .editTutorText {
 	position: absolute;
-	top: 767px;
-	left: 769px;
+	top: 800px;
+	left: 760px;
 }
 
 #editing-tutor {

@@ -80,6 +80,9 @@
 		        	<label for="startDate" class="date2" id="assignVoucherDate">Due Date:</label>
 		        	<input type="text" class="date2" id="assignVoucherText" name="dueDate" placeholder="MM/DD/YYYY" value="${dueDate}"></input>
 		        	</br>
+		        	<c:if test="${! empty assignErrorMessage}">
+        				<div class="error">${assignErrorMessage}</div>
+        			</c:if>
 					<div id="radio">
 						<input type="radio" id="assign-all" name="assign" value="allTutors" checked>
 						<label for="assign-all" id="radio-label">All Tutors</label>
