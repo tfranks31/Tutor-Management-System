@@ -55,50 +55,76 @@ public class DerbyDatabaseTests {
 	public void testGetUserAccounts() {
 		
 		UserAccount newAccount = new UserAccount("user", "pass", -1, false);
-		Tutor newTutor = new Tutor("user pass", "user@user.use", "use", 1, -1, -1, "321", "123");
 		
-		db.addTutor(newAccount, newTutor);
+		db.insertUserAccount(newAccount);
 		
 		List<UserAccount> accountList = db.getUserAccounts();
-		List<Tutor> tutorList = db.getTutors();
 		
 		// Newly added objects should be the last object in the list
 		UserAccount dbAccount = accountList.get(accountList.size() - 1);
-		Tutor dbTutor = tutorList.get(tutorList.size() - 1);
 		
 		// Check that the objects were successfully entered
 		assertEquals(dbAccount.getUsername(), newAccount.getUsername());
-		assertEquals(dbTutor.getName(), newTutor.getName());
 		
 		// Remove test objects from tutorsdb
-		db.deleteTutor(dbTutor);
 		db.deleteUserAccount(dbAccount);
-		
 	}
 	
 	@Test
 	public void testGetTutor() {
 		
-		UserAccount newAccount = new UserAccount("user", "pass", -1, false);
-		Tutor newTutor = new Tutor("user pass", "user@user.use", "use", 1, -1, -1, "321", "123");
+		Tutor newTutor = new Tutor("user pass", "user@user.use", "use", 1, -1, 1, "321", "123");
 		
-		db.addTutor(newAccount, newTutor);
+		db.insertTutor(newTutor);
 		
-		List<UserAccount> accountList = db.getUserAccounts();
 		List<Tutor> tutorList = db.getTutors();
 		
 		// Newly added objects should be the last object in the list
-		UserAccount dbAccount = accountList.get(accountList.size() - 1);
 		Tutor dbTutor = tutorList.get(tutorList.size() - 1);
 		
 		// Check that the objects were successfully entered
-		assertEquals(dbAccount.getUsername(), newAccount.getUsername());
 		assertEquals(dbTutor.getName(), newTutor.getName());
 		
 		// Remove test objects from tutorsdb
 		db.deleteTutor(dbTutor);
-		db.deleteUserAccount(dbAccount);
+	}
+	
+	@Test
+	public void testInsertUserAccount() {
 		
+		UserAccount newAccount = new UserAccount("user", "pass", -1, false);
+		
+		db.insertUserAccount(newAccount);
+		
+		List<UserAccount> accountList = db.getUserAccounts();
+		
+		// Newly added objects should be the last object in the list
+		UserAccount dbAccount = accountList.get(accountList.size() - 1);
+		
+		// Check that the objects were successfully entered
+		assertEquals(dbAccount.getUsername(), newAccount.getUsername());
+		
+		// Remove test objects from tutorsdb
+		db.deleteUserAccount(dbAccount);
+	}
+	
+	@Test
+	public void testInsertTutor() {
+		
+		Tutor newTutor = new Tutor("user pass", "user@user.use", "use", 1, -1, 1, "321", "123");
+		
+		db.insertTutor(newTutor);
+		
+		List<Tutor> tutorList = db.getTutors();
+		
+		// Newly added objects should be the last object in the list
+		Tutor dbTutor = tutorList.get(tutorList.size() - 1);
+		
+		// Check that the objects were successfully entered
+		assertEquals(dbTutor.getName(), newTutor.getName());
+		
+		// Remove test objects from tutorsdb
+		db.deleteTutor(dbTutor);
 	}
 	
 	@Test
