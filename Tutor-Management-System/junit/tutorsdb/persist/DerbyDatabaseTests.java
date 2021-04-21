@@ -2,6 +2,7 @@ package tutorsdb.persist;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertNotEquals;
 import static org.junit.Assert.assertTrue;
 
 import org.junit.Before;
@@ -61,7 +62,7 @@ public class DerbyDatabaseTests {
 		assertEquals(dbTutor.getStudentID(), newTutor.getStudentID());
 		assertEquals(dbTutor.getSubject(), newTutor.getSubject());
 		
-		// Remove test objects from tutorsdb
+		// Remove test objects
 		db.deleteTutor(dbTutor);
 		db.deleteUserAccount(dbAccount);
 	}
@@ -83,7 +84,7 @@ public class DerbyDatabaseTests {
 		assertEquals(dbAccount.getPassword(), newAccount.getPassword());
 		assertEquals(dbAccount.getIsAdmin(), newAccount.getIsAdmin());
 	
-		// Remove test objects from tutorsdb
+		// Remove test objects
 		db.deleteUserAccount(dbAccount);
 	}
 	
@@ -107,7 +108,7 @@ public class DerbyDatabaseTests {
 		assertEquals(dbTutor.getStudentID(), newTutor.getStudentID());
 		assertEquals(dbTutor.getSubject(), newTutor.getSubject());
 		
-		// Remove test objects from tutorsdb
+		// Remove test objects
 		db.deleteTutor(dbTutor);
 	}
 	
@@ -128,7 +129,7 @@ public class DerbyDatabaseTests {
 		assertEquals(dbAccount.getPassword(), newAccount.getPassword());
 		assertEquals(dbAccount.getIsAdmin(), newAccount.getIsAdmin());
 		
-		// Remove test objects from tutorsdb
+		// Remove test objects
 		db.deleteUserAccount(dbAccount);
 	}
 	
@@ -152,7 +153,7 @@ public class DerbyDatabaseTests {
 		assertEquals(dbTutor.getStudentID(), newTutor.getStudentID());
 		assertEquals(dbTutor.getSubject(), newTutor.getSubject());
 
-		// Remove test objects from tutorsdb
+		// Remove test objects
 		db.deleteTutor(dbTutor);
 	}
 	
@@ -303,7 +304,7 @@ public class DerbyDatabaseTests {
 		assertTrue(dbVoucher.getTotalPay() == newVoucher.getTotalPay());
 		assertEquals(dbVoucher.getTutorID(), newVoucher.getTutorID());
 		
-		// Remove test objects from tutorsdb
+		// Remove test objects
 		db.deletePayVoucher(dbVoucher);
 	}
 	
@@ -363,7 +364,7 @@ public class DerbyDatabaseTests {
 		assertTrue(dbVoucher.getTotalPay() == newVoucher.getTotalPay());
 		assertEquals(dbVoucher.getTutorID(), newVoucher.getTutorID());
 		
-		// Remove test objects from tutorsdb
+		// Remove test objects
 		db.deletePayVoucher(dbVoucher);
 	}
 	
@@ -386,7 +387,7 @@ public class DerbyDatabaseTests {
 		assertEquals(dbEntry.getWherePerformed(), newEntry.getWherePerformed());
 		assertTrue(dbEntry.getHours() == newEntry.getHours());
 		
-		// Remove test objects from tutorsdb
+		// Remove test objects
 		db.deleteEntry(dbEntry);
 	}
 	
@@ -409,7 +410,7 @@ public class DerbyDatabaseTests {
 		assertEquals(dbEntry.getWherePerformed(), newEntry.getWherePerformed());
 		assertTrue(dbEntry.getHours() == newEntry.getHours());
 		
-		// Remove test objects from tutorsdb
+		// Remove test objects
 		db.deleteEntry(dbEntry);
 	}
 	
@@ -465,7 +466,7 @@ public class DerbyDatabaseTests {
 		assertEquals(dbAccount.getPassword(), newAccount.getPassword());
 		assertEquals(dbAccount.getIsAdmin(), newAccount.getIsAdmin());
 	
-		// Remove test objects from tutorsdb
+		// Remove test objects
 		db.deleteUserAccount(dbAccount);
 		
 		for (UserAccount Account : db.getUserAccounts()) {
@@ -478,5 +479,32 @@ public class DerbyDatabaseTests {
 		}
 		assertEquals(0, count);
 	}
-
+	
+	@Test
+	public void testDeleteEntry() {
+		
+		Entry newEntry = new Entry("04/27/2001", "nothingWasDoneHereNoOneWorked", "notALocationThatWillEverBeUsed",
+				 0.0, 1, 1);
+		
+		db.insertEntry(newEntry);
+		
+		List<Entry> EntriesList = db.getEntries();
+		
+		// Newly added objects should be the last object in the list
+		Entry dbEntry = EntriesList.get(EntriesList.size() - 1);
+		
+		// Check that the objects were successfully entered
+		assertEquals(dbEntry.getDate(), newEntry.getDate());
+		assertEquals(dbEntry.getServicePerformed(), newEntry.getServicePerformed());
+		assertEquals(dbEntry.getWherePerformed(), newEntry.getWherePerformed());
+		assertTrue(dbEntry.getHours() == newEntry.getHours());
+	
+		// Remove test objects
+		db.deleteEntry(dbEntry);
+		
+		for (Entry entry : db.getEntries()) {
+			assertNotEquals(entry.getServicePerformed(), newEntry.getServicePerformed());
+			assertNotEquals(entry.getWherePerformed(), newEntry.getWherePerformed());
+		}
+	}
 }
