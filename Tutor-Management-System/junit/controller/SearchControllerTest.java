@@ -92,8 +92,11 @@ public class SearchControllerTest {
 		
 		assertEquals(controller.getTutorInfo("Steven Seymour").getRight().getName(), testing.getRight().getName());
 		
-		db.deleteTutor(testing.getRight());
-		db.deleteUserAccount(account);
+		UserAccount deleteMe = db.getUserAccounts().get(db.getUserAccounts().size()-1);
+		Tutor deleteTutor = db.getTutors().get(db.getTutors().size()-1);
+		
+		db.deleteTutor(deleteTutor);
+		db.deleteUserAccount(deleteMe);
 	}
 	
 	@Test
