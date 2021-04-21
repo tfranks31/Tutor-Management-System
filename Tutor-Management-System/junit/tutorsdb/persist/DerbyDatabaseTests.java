@@ -378,4 +378,18 @@ public class DerbyDatabaseTests {
 		// Remove test objects from tutorsdb
 		db.deleteEntry(dbEntry);
 	}
+	
+	@Test
+	public void testSignPayVoucher() {
+		PayVoucher payVoucher = new PayVoucher("03/04/2021", "03/02/2021", 0, 0, false, false, false, false, -1, 1);
+		db.insertPayVoucher(payVoucher);
+		PayVoucher dbPayVoucher = db.getPayVouchers().get(db.getPayVouchers().size() - 1);
+		
+		db.signPayVoucher(dbPayVoucher.getPayVoucherID());
+		List<PayVoucher> dbPayVouchers = db.getPayVouchers();
+		
+		assertTrue(dbPayVouchers.get(dbPayVouchers.size() - 1).getIsSigned());
+		
+		db.deletePayVoucher(dbPayVoucher);
+	}
 }
