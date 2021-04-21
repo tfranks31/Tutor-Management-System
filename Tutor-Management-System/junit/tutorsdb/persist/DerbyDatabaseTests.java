@@ -8,14 +8,8 @@ import static org.junit.Assert.assertTrue;
 import org.junit.Before;
 import org.junit.Test;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
-
 import java.util.ArrayList;
 import java.util.List;
-
-import org.junit.Before;
-import org.junit.Test;
 
 import model.Entry;
 import model.Pair;
@@ -190,7 +184,7 @@ public class DerbyDatabaseTests {
 		Tutor tutor = new Tutor();
 		int count = 0;
 		
-		account.setUsername("username");
+		account.setUsername("delete");
 		account.setPassword("password");
 		tutor.setName("SuperRandomNameWeWillNeverUse");
 		tutor.setTutorID(123456789);
@@ -217,7 +211,7 @@ public class DerbyDatabaseTests {
 		UserAccount account = new UserAccount();
 		Tutor tutor = new Tutor();
 		
-		account.setUsername("username");
+		account.setUsername("gettutor");
 		account.setPassword("password");
 		tutor.setName("Steven Seymour");
 
@@ -228,8 +222,11 @@ public class DerbyDatabaseTests {
 		
 		assertEquals(db.getTutorInfo("Steven Seymour").getRight().getName(), testing.getRight().getName());
 		
-		db.deleteTutor(testing.getRight());
-		db.deleteUserAccount(testing.getLeft());
+		UserAccount deleteMe = db.getUserAccounts().get(db.getUserAccounts().size()-1);
+		Tutor deleteTutor = db.getTutors().get(db.getTutors().size()-1);
+		
+		db.deleteTutor(deleteTutor);
+		db.deleteUserAccount(deleteMe);
 	}
 	
 	public void testAccountByLogin() {
