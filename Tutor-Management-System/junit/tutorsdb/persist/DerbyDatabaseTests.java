@@ -1,6 +1,7 @@
 package tutorsdb.persist;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 
 import org.junit.Before;
@@ -339,27 +340,6 @@ public class DerbyDatabaseTests {
 	}
 	
 	@Test
-	public void testInsertPayVoucher1() {
-		db.assignVoucher("April", "May");
-		List<PayVoucher> vouchers = db.getPayVouchers();
-		
-		String startDate = vouchers.get(vouchers.size() - 1).getStartDate();
-		String dueDate = vouchers.get(vouchers.size() - 1).getDueDate();
-		
-		assertTrue(startDate.equals("April"));
-		assertTrue(dueDate.equals("May"));
-		
-		List<Tutor> tutors = db.getTutors();
-		
-		for (int i = 1; i <= tutors.size(); i++) {
-			
-			PayVoucher delete = vouchers.get(vouchers.size() - i);
-			db.deletePayVoucher(delete);
-		}
-
-	}
-	
-	@Test
 	public void testGetPayVoucher() {
 		
 		PayVoucher newVoucher = new PayVoucher("04/27/2021", "04/20/2021", 0.0,
@@ -467,4 +447,36 @@ public class DerbyDatabaseTests {
 		db.deletePayVoucher(delete);
 		db.deleteTutor(dbTutor);
 	}
+	
+	@Test
+	public void testDeleteUserAccount() {
+		
+		UserAccount newAccount = new UserAccount("user", "pass", -1, false);
+		int count = 0;
+		db.insertUserAccount(newAccount);
+		
+		List<UserAccount> accountList = db.getUserAccounts();
+		
+		// Newly added objects should be the last object in the list
+		UserAccount dbAccount = accountList.get(accountList.size() - 1);
+		
+		// Check that the objects were successfully entered
+		assertEquals(dbAccount.getUsername(), newAccount.getUsername());
+		assertEquals(dbAccount.getPassword(), newAccount.getPassword());
+		assertEquals(dbAccount.getIsAdmin(), newAccount.getIsAdmin());
+	
+		// Remove test objects from tutorsdb
+		db.deleteUserAccount(dbAccount);
+		
+		for (UserAccount Account : db.getUserAccounts()) {
+			assertFalse(Account.getUsername().equals(newAccount.getUsername()));
+			assertFalse(Account.getPassword().equals(newAccount.getPassword()));
+			if (Account.getUsername().equals(newAccount.getUsername()) && Account.getPassword().equals(newAccount.getPassword())) {
+				count++;
+				
+			}
+		}
+		assertEquals(0, count);
+	}
+
 }
