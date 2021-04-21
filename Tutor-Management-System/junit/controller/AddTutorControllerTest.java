@@ -50,4 +50,38 @@ public class AddTutorControllerTest {
 		db.deleteTutor(dbTutor);
 		db.deleteUserAccount(dbAccount);
 	}
+	
+	@Test
+	public void testEditTutor() {
+		
+		UserAccount newAccount = new UserAccount("user", "pass", -1, false);
+		Tutor newTutor = new Tutor("user pass", "user@user.use", "use", 1, -1, -1, "321", "123");
+		controller.addTutor(newAccount, newTutor);
+		
+		List<UserAccount> accountList = db.getUserAccounts();
+		List<Tutor> tutorList = db.getTutors();
+		
+		// Newly added objects should be the last object in the list
+		UserAccount dbAccount = accountList.get(accountList.size() - 1);
+		Tutor dbTutor = tutorList.get(tutorList.size() - 1);
+		
+		dbAccount.setUsername("someUsername");
+		dbTutor.setName("someName");
+		
+		controller.editTutor(dbAccount, dbTutor);
+		
+		accountList = db.getUserAccounts();
+		tutorList = db.getTutors();
+		
+		// Newly added objects should be the last object in the list
+		dbAccount = accountList.get(accountList.size() - 1);
+		dbTutor = tutorList.get(tutorList.size() - 1);
+		
+		assertEquals("someUsername", dbAccount.getUsername());
+		assertEquals("someName", dbTutor.getName());
+		
+		// Remove test objects from tutorsdb		
+		db.deleteTutor(dbTutor);
+		db.deleteUserAccount(dbAccount);
+	}
 }
