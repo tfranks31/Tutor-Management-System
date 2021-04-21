@@ -270,6 +270,22 @@ public class DerbyDatabaseTests {
 	}
 	
 	@Test
+	public void testSubmitPayVouchers() {
+		
+		PayVoucher payVoucher = new PayVoucher("03/04/2021", "03/02/2021", 0, 0, false, false, false, false, -1, 1);
+		db.insertPayVoucher(payVoucher);
+		PayVoucher dbPayVoucher = db.getPayVouchers().get(db.getPayVouchers().size() - 1);
+		
+		db.submitPayVoucher(dbPayVoucher.getPayVoucherID());
+		List<PayVoucher> dbPayVouchers = db.getPayVouchers();
+		
+		assertTrue(dbPayVouchers.get(dbPayVouchers.size() - 1).getIsSubmitted());
+		
+		db.deletePayVoucher(dbPayVoucher);
+		
+	}
+	
+	@Test
 	public void testInsertPayVoucher1() {
 		db.assignVoucher("April", "May");
 		List<PayVoucher> vouchers = db.getPayVouchers();
