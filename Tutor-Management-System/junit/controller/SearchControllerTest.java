@@ -11,6 +11,7 @@ import org.junit.Test;
 import model.Pair;
 import model.PayVoucher;
 import model.Tutor;
+import model.UserAccount;
 import tutorsdb.persist.DatabaseProvider;
 import tutorsdb.persist.FakeDatabase;
 import tutorsdb.persist.IDatabase;
@@ -73,5 +74,25 @@ public class SearchControllerTest {
 			PayVoucher delete = vouchers.get(vouchers.size() - i);
 			db.deletePayVoucher(delete);
 		}
+	}
+	
+	@Test
+	public void testGetTutorInfo() {
+		UserAccount account = new UserAccount();
+		Tutor tutor = new Tutor();
+		
+		account.setUsername("username");
+		account.setPassword("password");
+		tutor.setName("Steven Seymour");
+
+		
+		db.addTutor(account, tutor);
+		
+		Pair<UserAccount, Tutor> testing = new Pair<UserAccount, Tutor>(account, tutor);
+		
+		assertEquals(controller.getTutorInfo("Steven Seymour").getRight().getName(), testing.getRight().getName());
+		
+		db.deleteTutor(testing.getRight());
+		db.deleteUserAccount(account);
 	}
 }
