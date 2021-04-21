@@ -31,6 +31,10 @@
     		<div class="successAdd">${tutorName} was added as a tutor</div>
 		</c:if>
 
+		<c:if test="${! empty editTutorName}">
+			<div class="successAdd">${editTutorName} was sucessfully updated</div>
+		</c:if>
+
     	<div class="table">
     	<table id = "searchResults">
     		<th>Pay Vouchers</th>
