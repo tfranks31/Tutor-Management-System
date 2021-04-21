@@ -19,7 +19,7 @@ public class UserAccountTest {
     }
 	
 	@Test
-	public void testGetSetUsername() {
+	public void testSetUsername() {
 		
 		emptyAccount.setUsername("123abc");
 		assertEquals("123abc", emptyAccount.getUsername());
@@ -27,7 +27,7 @@ public class UserAccountTest {
 	}
 	
 	@Test
-	public void testGetSetPassword() {
+	public void testSetPassword() {
 		
 		emptyAccount.setPassword("123abc");
 		assertEquals("123abc", emptyAccount.getPassword());
@@ -35,7 +35,7 @@ public class UserAccountTest {
 	}
 	
 	@Test
-	public void testGetSetAccountId() {
+	public void testSetAccountId() {
 		
 		emptyAccount.setAccountID(1);
 		assertEquals(1, emptyAccount.getAccountID());
@@ -43,7 +43,39 @@ public class UserAccountTest {
 	}
 	
 	@Test
-	public void testGetSetIsAdmin() {
+	public void testSetIsAdmin() {
+		
+		emptyAccount.setIsAdmin(true);
+		assertTrue(emptyAccount.getIsAdmin());
+		assertFalse(initialAccount.getIsAdmin());
+	}
+	
+	@Test
+	public void testGetUsername() {
+		
+		emptyAccount.setUsername("123abc");
+		assertEquals("123abc", emptyAccount.getUsername());
+		assertEquals("123abc", initialAccount.getUsername());
+	}
+	
+	@Test
+	public void testGetPassword() {
+		
+		emptyAccount.setPassword("123abc");
+		assertEquals("123abc", emptyAccount.getPassword());
+		assertEquals("123abc", initialAccount.getPassword());
+	}
+	
+	@Test
+	public void testGetAccountId() {
+		
+		emptyAccount.setAccountID(1);
+		assertEquals(1, emptyAccount.getAccountID());
+		assertEquals(1, initialAccount.getAccountID());
+	}
+	
+	@Test
+	public void testGetIsAdmin() {
 		
 		emptyAccount.setIsAdmin(true);
 		assertTrue(emptyAccount.getIsAdmin());
