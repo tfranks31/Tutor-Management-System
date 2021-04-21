@@ -66,8 +66,12 @@ public class SearchControllerTest {
 		assertTrue(startDate.equals("April"));
 		assertTrue(dueDate.equals("May"));
 		
-		PayVoucher delete = vouchers.get(vouchers.size() - 1);
-		db.deletePayVoucher(delete);
+		List<Tutor> tutors = db.getTutors();
+		
+		for (int i = 1; i <= tutors.size(); i++) {
+			
+			PayVoucher delete = vouchers.get(vouchers.size() - i);
+			db.deletePayVoucher(delete);
+		}
 	}
 }
-

@@ -37,6 +37,6 @@ public class LoginControllerTest {
 		
 		assertEquals(newAccount.getUsername(), controller.getUserFromLogin(username, password).getUsername());
 		
-		db.deleteUserAccount(newAccount);
+		db.deleteUserAccount(controller.getUserFromLogin(username, password));
 	}
 }
