@@ -134,7 +134,7 @@ public class AddTutorServlet extends HttpServlet {
 				updatedTutor.setTutorID(((Tutor) req.getSession().getAttribute("editTutor")).getTutorID());
 				
 				controller.editTutor(updatedAccount, updatedTutor);
-				req.setAttribute("tutorName", firstName + " " + lastName);
+				req.setAttribute("editTutorName", firstName + " " + lastName);
 				req.getRequestDispatcher("/search").forward(req, resp);
 			}
 			
