@@ -170,4 +170,24 @@ public class DerbyDatabaseTests {
 		
 		db.deleteUserAccount(db.accountByLogin(username, password));
 	}
+	
+	@Test
+	public void testUpdateVoucher(){
+		PayVoucher payVoucher = new PayVoucher("03/04/2021", "03/02/2021", 0, 0, false, false, false, false, -1, 1);
+		db.insertPayVoucher(payVoucher);
+		PayVoucher dbPayVoucher = db.getPayVouchers().get(db.getPayVouchers().size() - 1);
+		
+		Entry entry = new Entry("03/03/2021", "Tutoring", "zoom", 1, -1, -1);
+		ArrayList<Entry> entries = new ArrayList<Entry>();
+		entries.add(entry);
+		
+		db.updateVoucher(entries, dbPayVoucher);
+		
+		List<Entry> dbEntries = db.getEntries();
+		
+		assertEquals(entry.getDate(), dbEntries.get(dbEntries.size() - 1).getDate());
+		
+		db.deleteEntry(dbEntries.get(dbEntries.size() - 1));
+		db.deletePayVoucher(dbPayVoucher);
+	}
 }
