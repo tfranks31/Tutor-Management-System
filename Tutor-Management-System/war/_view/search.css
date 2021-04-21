@@ -1,19 +1,37 @@
-html {
-    margin-top: 15px;
-    margin-left: 20%;
-    margin-right: 20%;
-    margin-bottom: 15px;
-    background-image: url("searchBackground.jpg");
-	background-size: 1920px 1325px;
-	background-position: center;
+html, body {
+	height: 100%;
+	margin: 0px;
+	padding: 0px;
+	position: relative;
 }
 
-body {
-	width: 920px;
-	margin: auto;
+.super-class {
+	top: 0;
+	width: 100%;
+	height: 90%;
+	position: relative;
+}
+
+.background-image {
+	position: absolute;
+	z-index: 0;
+	background-image: url("searchBackground.jpg");
+	min-width: 900px;
+	min-height: 1000px;
+	filter: blur(5px);
+}
+
+.content {
+	position: absolute;
+	z-index: 1;
+ 	left: 50%;
+ 	margin-left: -465px;
+	width: 930px;
+	height: 830px;
 	border: 2px solid #e1eae2;
 	border-radius: 20px;
 	background-color: #e1eae2;
+	margin-top: 30px;
 }
 
 .Header{
@@ -81,10 +99,34 @@ body {
 	border: 0px;
 }
 
+#editTutor {
+	float: right;
+	margin-right: -125px;
+	margin-top: 35px;
+	background-color: black;
+	color: white;
+	font-size: 15px;
+	text-align: center;
+	height: 42px;
+	width: 125px;
+	border-radius: 35px;
+	border: 0px;
+}
+
 table{
 	margin: auto;
     width: 100%;
     margin-top: 20px;
+}
+
+.table {
+	margin-top: 10px;
+	max-height: 440px;
+    overflow: auto;
+}
+
+#searchResults {
+	overflow: auto;
 }
 
 #view { 
@@ -103,6 +145,14 @@ th, td{
     text-align: center;
 }
 
+.error {
+	margin: auto;
+	text-align: center;
+	font-size: 20px;
+	height: 25px;
+	color: #ff0000;
+}
+
 .pageNum {
  	margin-top: -18px;
     padding: 10px;
@@ -111,26 +161,31 @@ th, td{
 
 #assignVoucher {
 	float: left;
-	margin-left: 34px;
-	width: 150px;
+	width: 517px;
 	text-align: center;
 }
 
 #assignVoucherText {
 	margin: auto;
-	margin-left: 15px;
+	margin-left: 1px;
 	text-align: center;
 	border: none;
 	background: none;
 	border-bottom: 1px solid black;
 }
 
+.date1, .date2 {
+	display: inline-block;
+	margin-left: -20px;
+}
+	
 #assignVoucherDate {
-	margin-left: 25px;
+	margin-left: 10px;
 }
 
 #assignVoucherBtn {
 	float: left;
+	margin-left: 34px;
 	background-color: black;
 	color: white;
 	font-size: 15px;
@@ -139,4 +194,34 @@ th, td{
 	width: 185px;
 	border-radius: 35px;
 	border: 0px;
+}
+
+#radio {
+	margin-top: 30px;
+	margin-left: -86px;
+	height: 17px;
+}
+
+#edit-tutor-name {
+	border: none;
+	background: none;
+	border-bottom: 1px solid black;
+	text-align: center;
+}
+
+.editTutorText {
+	position: absolute;
+	top: 800px;
+	left: 760px;
+}
+
+#editing-tutor {
+	float: right;
+	width: 125px;
+	margin-top: 97px;
+	margin-right: -129px;
+	border: none;
+	background: none;
+	border-bottom: 1px solid black;
+	text-align: center;
 }

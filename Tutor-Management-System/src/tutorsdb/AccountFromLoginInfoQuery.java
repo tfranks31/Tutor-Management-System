@@ -6,6 +6,9 @@ import model.UserAccount;
 import tutorsdb.persist.DatabaseProvider;
 import tutorsdb.persist.IDatabase;
 
+/**
+ * Execute accountByLogin query manually from the command line.
+ */
 public class AccountFromLoginInfoQuery {
 	public static void main(String[] args) throws Exception {
 		Scanner keyBoard = new Scanner(System.in);
@@ -25,6 +28,6 @@ public class AccountFromLoginInfoQuery {
 			System.out.println("No accounts found with Username: " + username + " Password: " + password);
 		}else {
 			System.out.println(account.getAccountID() + "," + account.getIsAdmin());		
-		}
+		}	
 	}
 }

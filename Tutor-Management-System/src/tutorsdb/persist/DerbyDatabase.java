@@ -331,40 +331,85 @@ public class DerbyDatabase implements IDatabase {
 		return executeTransaction(new Transaction<List<Tuple<Tutor, PayVoucher, Entry>>>() {
 			@Override
 			public List<Tuple<Tutor, PayVoucher, Entry>> execute(Connection conn) throws SQLException {
-				PreparedStatement stmt = null;
-				ResultSet resultSet = null;
-
+				PreparedStatement stmt1 = null;
+				PreparedStatement stmt2 = null;
+				ResultSet resultSet1 = null;
+				ResultSet resultSet2 = null;
+				List<Tuple<Tutor, PayVoucher, Entry>> result = new ArrayList<Tuple<Tutor, PayVoucher, Entry>>();
+				
 				try {
-					// Retrieve the entries with the given voucher id
-					stmt = conn.prepareStatement(
-						"select tutors.*, pay_vouchers.*, entries.*" + 
+					// Retrieve only the entries to see if any exist
+					stmt1 = conn.prepareStatement(
+						"select entries.*" + 
 						"from tutors, pay_vouchers, entries " + 
 						"where entries.pay_voucher_id = ? " +
 						"AND pay_vouchers.pay_voucher_id = entries.pay_voucher_id " +
 						"AND pay_vouchers.tutor_id = tutors.tutor_id "
 					);
 					
-					stmt.setLong(1, voucherID);
+					stmt1.setLong(1, voucherID);
 					
-					List<Tuple<Tutor, PayVoucher, Entry>> result = new ArrayList<Tuple<Tutor, PayVoucher, Entry>>();
-
-					resultSet = stmt.executeQuery();
-
-					while (resultSet.next()) {
-						// Create and then load a new entry object
-						Tutor Tutor = new Tutor();
-						loadTutor(Tutor, resultSet, 1);
-						PayVoucher PayVoucher = new PayVoucher();
-						loadPayVoucher(PayVoucher, resultSet, 9);
+					resultSet1 = stmt1.executeQuery();
+					
+					if (!resultSet1.next()) {
 						Entry Entry = new Entry();
-						loadEntry(Entry, resultSet, 19);
-						result.add(new Tuple<Tutor, PayVoucher, Entry>(Tutor, PayVoucher, Entry));
+						Entry = null;
+						
+						stmt2 = conn.prepareStatement(
+							"select tutors.*, pay_vouchers.* " + 
+							"from tutors, pay_vouchers " + 
+							"where pay_vouchers.pay_voucher_id = ? " +
+							"AND pay_vouchers.tutor_id = tutors.tutor_id "
+						);
+						
+						stmt2.setLong(1, voucherID);
+						
+						resultSet2 = stmt2.executeQuery();
+						
+						while (resultSet2.next()) {
+							Tutor Tutor = new Tutor();
+							loadTutor(Tutor, resultSet2, 1);
+							PayVoucher PayVoucher = new PayVoucher();
+							loadPayVoucher(PayVoucher, resultSet2, 9);
+							//loadEntry(Entry, resultSet2, 19);
+							result.add(new Tuple<Tutor, PayVoucher, Entry>(Tutor, PayVoucher, Entry));
+						}
+					} else {
+						stmt2 = conn.prepareStatement(
+								"select tutors.*, pay_vouchers.*, entries.* " + 
+								"from tutors, pay_vouchers, entries " + 
+								"where entries.pay_voucher_id = ? " +
+								"AND pay_vouchers.pay_voucher_id = entries.pay_voucher_id " +
+								"AND pay_vouchers.tutor_id = tutors.tutor_id "
+							);
+							
+							stmt2.setLong(1, voucherID);
+							
+							resultSet2 = stmt2.executeQuery();
+							
+							//if (!resultSet2.next()) {
+							//	return null;
+							//}
+							
+							while (resultSet2.next()) {
+								Tutor Tutor = new Tutor();
+								loadTutor(Tutor, resultSet2, 1);
+								PayVoucher PayVoucher = new PayVoucher();
+								loadPayVoucher(PayVoucher, resultSet2, 9);
+								Entry Entry = new Entry();
+								loadEntry(Entry, resultSet2, 19);
+								
+								result.add(new Tuple<Tutor, PayVoucher, Entry>(Tutor, PayVoucher, Entry));
+							} 
 					}
-
+					
 					return result;
+					
 				} finally {
-					DBUtil.closeQuietly(resultSet);
-					DBUtil.closeQuietly(stmt);
+					DBUtil.closeQuietly(resultSet1);
+					DBUtil.closeQuietly(resultSet2);
+					DBUtil.closeQuietly(stmt1);
+					DBUtil.closeQuietly(stmt2);
 				}
 			}
 		});
@@ -379,6 +424,7 @@ public class DerbyDatabase implements IDatabase {
 			public UserAccount execute(Connection conn) throws SQLException {
 				PreparedStatement stmt = null;
 				ResultSet resultSet = null;
+				
 
 				try {
 					// Retrieve the users account
@@ -401,6 +447,8 @@ public class DerbyDatabase implements IDatabase {
 						loadUserAccount(UserAccount, resultSet, 1);
 
 						result = UserAccount;
+					} else {
+						return null;
 					}
 
 					return result;
@@ -417,47 +465,56 @@ public class DerbyDatabase implements IDatabase {
 		return executeTransaction(new Transaction<List<Pair<Tutor, PayVoucher>>>() {
 			@Override
 			public List<Pair<Tutor, PayVoucher>> execute(Connection conn) throws SQLException {
-				PreparedStatement stmt = null;
+				PreparedStatement stmt1 = null;
+				PreparedStatement stmt2 = null;
+				PreparedStatement stmt3 = null;
+				PreparedStatement stmt4 = null;
 				ResultSet resultSet = null;
 				
 				try {
 					// show submitted vouchers
 					if (search.equals("Submitted") || search.equals("submitted")) {
-						stmt = conn.prepareStatement(
+						stmt1 = conn.prepareStatement(
 							"select tutors.*, pay_vouchers.* " + 
 							"from tutors, pay_vouchers " + 
-							"where pay_vouchers.is_submitted = true " 
+							"where pay_vouchers.is_submitted = true " +
+							"AND pay_vouchers.tutor_id = tutors.tutor_id "
 						);
+						resultSet = stmt1.executeQuery();
 					// show signed vouchers
 					} else if (search.equals("Signed") || search.equals("signed")) {
-						stmt = conn.prepareStatement(
+						stmt2 = conn.prepareStatement(
 							"select tutors.*, pay_vouchers.* " + 
 							"from tutors, pay_vouchers " + 
-							"where pay_vouchers.is_signed = true " 
+							"where pay_vouchers.is_signed = true " +
+							"AND pay_vouchers.tutor_id = tutors.tutor_id "
 						);
+						resultSet = stmt2.executeQuery();
 					// show all vouchers
 					} else if (search.equals("")) {
-						stmt = conn.prepareStatement(
-							"select tutors.*, pay_vouchers.* " + 
-							"from tutors, pay_vouchers "
-						);
-					} else {
-						// searches by name or start date or due date or subject
-						stmt = conn.prepareStatement(
+						stmt3 = conn.prepareStatement(
 							"select tutors.*, pay_vouchers.* " + 
 							"from tutors, pay_vouchers " + 
-							"where tutors.name = ? " + 
+							"where pay_vouchers.tutor_id = tutors.tutor_id "
+						);
+						resultSet = stmt3.executeQuery();
+					} else {
+						// searches by name or start date or due date or subject
+						stmt4 = conn.prepareStatement(
+							"select tutors.*, pay_vouchers.* " + 
+							"from tutors, pay_vouchers " + 
+							"where (tutors.name = ? " + 
 							"OR pay_vouchers.due_date = ? " +
 							"OR pay_vouchers.start_date = ? " + 
-							"OR tutors.subject = ? "
+							"OR tutors.subject = ?) " +
+							"AND pay_vouchers.tutor_id = tutors.tutor_id "
 						);
-						stmt.setString(1, search);
-						stmt.setString(2, search);
-						stmt.setString(3, search);
-						stmt.setString(4, search);
+						stmt4.setString(1, search);
+						stmt4.setString(2, search);
+						stmt4.setString(3, search);
+						stmt4.setString(4, search);
+						resultSet = stmt4.executeQuery();
 					}
-
-					resultSet = stmt.executeQuery();
 					
 					List<Pair<Tutor, PayVoucher>> result = new ArrayList<Pair<Tutor, PayVoucher>>();
 
@@ -473,7 +530,10 @@ public class DerbyDatabase implements IDatabase {
 					return result;
 				} finally {
 					DBUtil.closeQuietly(resultSet);
-					DBUtil.closeQuietly(stmt);
+					DBUtil.closeQuietly(stmt1);
+					DBUtil.closeQuietly(stmt2);
+					DBUtil.closeQuietly(stmt3);
+					DBUtil.closeQuietly(stmt4);
 				}
 			}
 		});
@@ -566,6 +626,8 @@ public class DerbyDatabase implements IDatabase {
 						"select pay_vouchers.*, tutors.* " + 
 						"from pay_vouchers, tutors " + 
 						"where pay_vouchers.tutor_id = tutors.tutor_id "
+//						+ 
+//						"ORDER BY tutors.name, pay_vouchers.pay_voucher_id "
 					);
 					
 					List<Pair<Tutor, PayVoucher>> result = new ArrayList<Pair<Tutor, PayVoucher>>();
@@ -651,26 +713,54 @@ public class DerbyDatabase implements IDatabase {
 				PreparedStatement stmt2 = null;
 				PreparedStatement stmt3 = null;
 				PreparedStatement stmt4 = null;
-				ResultSet resultSet1 = null;
+				PreparedStatement stmt5 = null;
+				PreparedStatement stmt6 = null;
+				ResultSet resultSet1 = null; 
 				ResultSet resultSet2 = null;
 				
 				try {
 					for (Entry entry : entries) {
-						stmt1 = conn.prepareStatement(
-							"UPDATE entries " + 
-							"SET entries.date = ?, entries.service_performed = ?, entries.where_performed = ?, entries.hours = ? " +
-							"WHERE entries.entry_id = ? " + 
-							"AND entries.pay_voucher_id = ? "
-						);
-						
-						stmt1.setString(1, entry.getDate());
-						stmt1.setString(2, entry.getServicePerformed());
-						stmt1.setString(3, entry.getWherePerformed());
-						stmt1.setDouble(4, entry.getHours());
-						stmt1.setInt(5, entry.getEntryID());
-						stmt1.setInt(6, voucher.getPayVoucherID());
-						
-						stmt1.executeUpdate();
+						if (entry.getEntryID() == -1) {
+							stmt5 = conn.prepareStatement(
+								"INSERT into entries (pay_voucher_id, date, service_performed, where_performed, hours) " + 
+								"VALUES (?, ?, ?, ?, ?)"
+							);
+							
+							stmt5.setInt(1, voucher.getPayVoucherID());
+							stmt5.setString(2, entry.getDate());
+							stmt5.setString(3, entry.getServicePerformed());
+							stmt5.setString(4, entry.getWherePerformed());
+							stmt5.setDouble(5, entry.getHours());
+							
+							stmt5.executeUpdate();
+						} else if(entry.getDate().equals("") && entry.getHours() == 0.0 && 
+								entry.getServicePerformed().equals("") && entry.getWherePerformed().equals("")) {
+							stmt5 = conn.prepareStatement(
+								"DELETE FROM entries " + 
+								"WHERE entries.entry_id = ? "
+							);
+							stmt5.setInt(1, entry.getEntryID());
+								
+							stmt5.executeUpdate();
+							
+						} else {
+							
+							stmt1 = conn.prepareStatement(
+								"UPDATE entries " + 
+								"SET entries.date = ?, entries.service_performed = ?, entries.where_performed = ?, entries.hours = ? " +
+								"WHERE entries.entry_id = ? " + 
+								"AND entries.pay_voucher_id = ? "
+							);
+							
+							stmt1.setString(1, entry.getDate());
+							stmt1.setString(2, entry.getServicePerformed());
+							stmt1.setString(3, entry.getWherePerformed());
+							stmt1.setDouble(4, entry.getHours());
+							stmt1.setInt(5, entry.getEntryID());
+							stmt1.setInt(6, voucher.getPayVoucherID());
+							
+							stmt1.executeUpdate();
+						}
 					}
 					
 					stmt2 = conn.prepareStatement(
@@ -698,6 +788,7 @@ public class DerbyDatabase implements IDatabase {
 						totalHours += Entry.getHours();
 					}
 					
+					//get the tutor attached to the pay voucher
 					stmt3 = conn.prepareStatement(
 						"SELECT tutors.* " + 
 						"FROM tutors " +
@@ -719,16 +810,19 @@ public class DerbyDatabase implements IDatabase {
 					
 					double totalPay = totalHours * resultTutor.getPayRate();
 					
+					//update total hours and total pay
 					stmt4 = conn.prepareStatement(
 						"UPDATE pay_vouchers " + 
-						"SET pay_vouchers.total_hours = ?, pay_vouchers.total_pay = ? "
+						"SET pay_vouchers.total_hours = ?, pay_vouchers.total_pay = ? " +
+						"WHERE pay_vouchers.pay_voucher_id = ? "
 					);
 					
 					stmt4.setDouble(1, totalHours);
 					stmt4.setDouble(2, totalPay);
+					stmt4.setInt(3, voucher.getPayVoucherID());
 					
 					stmt4.executeUpdate();
-	
+				
 					return true;
 					
 				} finally {
@@ -738,6 +832,8 @@ public class DerbyDatabase implements IDatabase {
 					DBUtil.closeQuietly(stmt2);
 					DBUtil.closeQuietly(stmt3);
 					DBUtil.closeQuietly(stmt4);
+					DBUtil.closeQuietly(stmt5);
+					DBUtil.closeQuietly(stmt6);
 				}
 			}
 		});
@@ -755,7 +851,7 @@ public class DerbyDatabase implements IDatabase {
 				ResultSet resultSet = null;
 				
 				try {
-					
+					//get a list of all the tutors
 					stmt1 = conn.prepareStatement(
 						"SELECT tutors.* " + 
 						"FROM tutors " 
@@ -771,7 +867,7 @@ public class DerbyDatabase implements IDatabase {
 
 						result.add(Tutor);
 					}
-				
+					//for all of the returned tutors add a new pay voucher
 					for (Tutor tutor : result) {
 						stmt2 = conn.prepareStatement(
 							"INSERT INTO pay_vouchers (tutor_id, start_date, due_date, total_hours, total_pay, is_submitted, is_signed, is_new, is_admin_edited) " +
@@ -786,7 +882,7 @@ public class DerbyDatabase implements IDatabase {
 						stmt2.setBoolean(7, false);
 						stmt2.setBoolean(8, true);
 						stmt2.setBoolean(9, false);
-						
+						stmt2.executeUpdate();
 					}
 					
 					return true;
@@ -1042,32 +1138,390 @@ public class DerbyDatabase implements IDatabase {
 
 	@Override
 	public void insertUserAccount(UserAccount userAccount) {
-		// TODO Auto-generated method stub
-		
+		executeTransaction(new Transaction<Boolean>() {
+			
+			@Override
+			public Boolean execute(Connection conn) throws SQLException {
+				PreparedStatement insertUserAccount = null;
+				
+				try {
+					insertUserAccount = conn.prepareStatement(
+						"insert into user_accounts (username, password, is_admin) " +
+						"values (?, ?, ?)"
+					);
+					
+					insertUserAccount.setString(1, userAccount.getUsername());
+					insertUserAccount.setString(2, userAccount.getPassword());
+					insertUserAccount.setBoolean(3, userAccount.getIsAdmin());
+					
+					insertUserAccount.executeUpdate();
+					
+					return true;
+				} finally {
+					DBUtil.closeQuietly(insertUserAccount);
+				}
+			}
+		});
 	}
 
 	@Override
 	public void insertTutor(Tutor tutor) {
-		// TODO Auto-generated method stub
+		executeTransaction(new Transaction<Boolean>() {
+			
+			@Override
+			public Boolean execute(Connection conn) throws SQLException {
+				PreparedStatement insertTutor = null;
+				
+				try {
+					insertTutor = conn.prepareStatement(
+						"insert into tutors (user_account_id, name, email, student_id, account_number, subject, pay_rate) " +
+						"values (?, ?, ?, ?, ?, ?, ?)"
+					);
 		
+					insertTutor.setInt(1, tutor.getAccountID());
+					insertTutor.setString(2, tutor.getName());
+					insertTutor.setString(3, tutor.getEmail());
+					insertTutor.setString(4, tutor.getStudentID());
+					insertTutor.setString(5, tutor.getAccountNumber());
+					insertTutor.setString(6, tutor.getSubject());
+					insertTutor.setDouble(7, tutor.getPayRate());
+					
+					insertTutor.executeUpdate();
+					
+					return true;
+				} finally {
+					DBUtil.closeQuietly(insertTutor);
+				}
+			}
+		});
 	}
 
 	@Override
 	public void insertPayVoucher(PayVoucher payVoucher) {
-		// TODO Auto-generated method stub
+		executeTransaction(new Transaction<Boolean>() {
+			
+			@Override
+			public Boolean execute(Connection conn) throws SQLException {
+				PreparedStatement insertPayVoucher = null;
+				
+				try {
+					insertPayVoucher = conn.prepareStatement(
+						"insert into pay_vouchers (tutor_id, start_date, due_date, total_hours, total_pay, is_submitted, is_signed, is_new, is_admin_edited) " +
+						"values (?, ?, ?, ?, ?, ?, ?, ?, ?)"
+					);
 		
+					insertPayVoucher.setInt(1, payVoucher.getTutorID());
+					insertPayVoucher.setString(2, payVoucher.getStartDate());
+					insertPayVoucher.setString(3, payVoucher.getDueDate());
+					insertPayVoucher.setDouble(4, payVoucher.getTotalHours());
+					insertPayVoucher.setDouble(5, payVoucher.getTotalPay());
+					insertPayVoucher.setBoolean(6, payVoucher.getIsSubmitted());
+					insertPayVoucher.setBoolean(7, payVoucher.getIsSigned());
+					insertPayVoucher.setBoolean(8, payVoucher.getIsNew());
+					insertPayVoucher.setBoolean(9, payVoucher.getIsAdminEdited());
+					
+					insertPayVoucher.executeUpdate();
+					
+					return true;
+				} finally {
+					DBUtil.closeQuietly(insertPayVoucher);
+				}
+			}
+		});
 	}
 
 	@Override
 	public void insertEntry(Entry entry) {
-		// TODO Auto-generated method stub
-		
+		executeTransaction(new Transaction<Boolean>() {
+			
+			@Override
+			public Boolean execute(Connection conn) throws SQLException {
+				PreparedStatement insertEntry = null;
+				
+				try {
+					insertEntry = conn.prepareStatement(
+						"insert into entries (pay_voucher_id, date, service_performed, where_performed, hours) " + 
+						"values (?, ?, ?, ?, ?)"
+					);
+					
+					insertEntry.setInt(1, entry.getPayVoucherID());
+					insertEntry.setString(2, entry.getDate());
+					insertEntry.setString(3, entry.getServicePerformed());
+					insertEntry.setString(4, entry.getWherePerformed());
+					insertEntry.setDouble(5, entry.getHours());
+					
+					insertEntry.executeUpdate();
+					
+					return true;
+				} finally {
+					DBUtil.closeQuietly(insertEntry);
+				}
+			}
+		});
 	}
 
 	@Override
 	public PayVoucher signPayVoucher(int voucherID) {
-		// TODO Auto-generated method stub
-		return null;
+		return executeTransaction(new Transaction<PayVoucher>() {
+			@Override
+			public PayVoucher execute(Connection conn) throws SQLException {
+				PreparedStatement stmt1 = null;
+				PreparedStatement stmt2 = null;
+				ResultSet resultSet = null;
+
+				try {
+					stmt1 = conn.prepareStatement(
+						"UPDATE pay_vouchers " + 
+						"SET pay_vouchers.is_signed = True " +
+						"WHERE pay_vouchers.pay_voucher_id = ? "
+					);
+					
+					stmt1.setLong(1, voucherID);
+					stmt1.executeUpdate();
+					
+					stmt2 = conn.prepareStatement(
+						"SELECT pay_vouchers.* " + 
+						"FROM pay_vouchers " +
+						"WHERE pay_vouchers.pay_voucher_id = ? "
+					);
+					
+					stmt2.setLong(1, voucherID);
+					
+					resultSet = stmt2.executeQuery();
+					
+					PayVoucher result = new PayVoucher();
+					
+					if (resultSet.next()) {
+						PayVoucher PayVoucher = new PayVoucher();
+						loadPayVoucher(PayVoucher, resultSet, 1);
+
+						result = PayVoucher;
+					}
+					
+					return result;
+				} finally {
+					DBUtil.closeQuietly(resultSet);
+					DBUtil.closeQuietly(stmt1);
+					DBUtil.closeQuietly(stmt2);
+				}
+			}
+		});
+	}
+
+	@Override
+	public void editTutor(UserAccount account, Tutor tutor) {
+		executeTransaction(new Transaction<Boolean>() {
+			
+			@Override
+			public Boolean execute(Connection conn) throws SQLException {
+				PreparedStatement stmt1 = null;
+				PreparedStatement stmt2 = null;
+				PreparedStatement stmt3 = null;
+				PreparedStatement stmt4 = null;
+				ResultSet resultSet = null;
+				ResultSet accountList = null;
+				
+				try {
+					//get a list of all the tutors
+					stmt1 = conn.prepareStatement(
+						"SELECT tutors.* " + 
+						"FROM tutors "
+					);
+					
+					resultSet = stmt1.executeQuery();
+					
+					List<Tutor> result = new ArrayList<Tutor>();
+					
+					while (resultSet.next()) {
+						Tutor Tutor = new Tutor();
+						loadTutor(Tutor, resultSet, 1);
+
+						result.add(Tutor);
+					}
+					
+					for (Tutor tutorList : result) {
+						if (tutorList.getTutorID() == (tutor.getTutorID())) {
+							
+							stmt2 = conn.prepareStatement(
+								"UPDATE tutors " + 
+								"SET tutors.name = ?, tutors.email = ?, tutors.student_id = ?, " +
+								"tutors.account_number = ?, tutors.subject = ?, tutors.pay_rate = ? " +
+								"WHERE tutors.tutor_id = ? "
+							);
+							
+							//for some reason the tutor that is passed in has an account id of 0
+							//stmt2.setInt(1, tutor.getAccountID());
+							
+							stmt2.setString(1, tutor.getName());
+							stmt2.setString(2, tutor.getEmail());
+							stmt2.setString(3, tutor.getStudentID());
+							stmt2.setString(4, tutor.getAccountNumber());
+							stmt2.setString(5, tutor.getSubject());
+							stmt2.setDouble(6, tutor.getPayRate());
+							stmt2.setInt(7, tutor.getTutorID());
+							stmt2.executeUpdate();
+						}
+					}
+					
+					stmt3 = conn.prepareStatement(
+							"SELECT user_accounts.* " + 
+							"FROM user_accounts "
+						);
+						
+						accountList = stmt3.executeQuery();
+						
+						List<UserAccount> accounts = new ArrayList<UserAccount>();
+						
+						while (accountList.next()) {
+							UserAccount user = new UserAccount();
+							loadUserAccount(user, accountList, 1);
+
+							accounts.add(user);
+						}
+						
+						for (UserAccount user : accounts) {
+							if (user.getAccountID() == (account.getAccountID())) {
+								stmt4 = conn.prepareStatement(
+									"UPDATE user_accounts " + 
+									"SET user_accounts.username = ?, user_accounts.password = ? " +
+									"WHERE user_accounts.user_account_id = ? "
+								);
+								
+								stmt4.setString(1,account.getUsername());
+								stmt4.setString(2, account.getPassword());
+								stmt4.setInt(3, account.getAccountID());
+								stmt4.executeUpdate();
+							}
+						}
+						
+					return true;
+					
+				} finally {
+					DBUtil.closeQuietly(resultSet);
+					DBUtil.closeQuietly(stmt1);
+					DBUtil.closeQuietly(stmt2);
+					DBUtil.closeQuietly(stmt3);
+					DBUtil.closeQuietly(stmt4);
+				}
+			}
+		});
+	}
+
+	@Override
+	public void assignVoucherSpecific(String startDate, String dueDate, String name) {
+		executeTransaction(new Transaction<Boolean>() {
+			
+			@Override
+			public Boolean execute(Connection conn) throws SQLException {
+				PreparedStatement stmt1 = null;
+				PreparedStatement stmt2 = null;
+				ResultSet resultSet = null;
+				
+				try {
+					//get a list of all the tutors
+					stmt1 = conn.prepareStatement(
+						"SELECT tutors.* " + 
+						"FROM tutors "
+					);
+					
+					resultSet = stmt1.executeQuery();
+					
+					List<Tutor> result = new ArrayList<Tutor>();
+					
+					while (resultSet.next()) {
+						Tutor Tutor = new Tutor();
+						loadTutor(Tutor, resultSet, 1);
+
+						result.add(Tutor);
+					}
+					
+					//for all of the returned tutors add a new pay voucher
+					for (Tutor tutor : result) {
+						if (tutor.getName().equals(name)) {
+							stmt2 = conn.prepareStatement(
+								"INSERT INTO pay_vouchers (tutor_id, start_date, due_date, total_hours, total_pay, is_submitted, is_signed, is_new, is_admin_edited) " +
+								"VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)"
+							);
+							stmt2.setInt(1, tutor.getTutorID());
+							stmt2.setString(2, startDate);
+							stmt2.setString(3, dueDate);
+							stmt2.setDouble(4, 0);
+							stmt2.setDouble(5, 0);
+							stmt2.setBoolean(6, false);
+							stmt2.setBoolean(7, false);
+							stmt2.setBoolean(8, true);
+							stmt2.setBoolean(9, false);
+							
+							stmt2.executeUpdate();
+						}
+					}
+					return true;
+					
+				} finally {
+					DBUtil.closeQuietly(resultSet);
+					DBUtil.closeQuietly(stmt1);
+					DBUtil.closeQuietly(stmt2);
+				}
+			}
+		});
+		
+	}
+
+	@Override
+	public Pair<UserAccount, Tutor> getTutorInfo(String name) {
+		return executeTransaction(new Transaction<Pair<UserAccount, Tutor>>() {
+			@Override
+			public Pair<UserAccount, Tutor> execute(Connection conn) throws SQLException {
+				PreparedStatement stmt1 = null;
+				PreparedStatement stmt2 = null;
+				ResultSet tutorList = null;
+				ResultSet accountList = null;
+
+				try {
+					stmt1 = conn.prepareStatement(
+						"select tutors.* " + 
+						"from tutors " + 
+						"where tutors.name = ? "
+					);
+					
+					stmt1.setString(1, name);
+					tutorList = stmt1.executeQuery();
+					
+					Pair<UserAccount, Tutor> result = null;
+					
+					Tutor Tutor = new Tutor();
+					
+					if (tutorList.next()) {
+						loadTutor(Tutor, tutorList, 1);
+					
+						stmt2 = conn.prepareStatement(
+							"select user_accounts.* " + 
+							"from user_accounts " + 
+							"where user_accounts.user_account_id = ? "
+						);
+							
+						stmt2.setInt(1, Tutor.getAccountID());
+						accountList = stmt2.executeQuery();
+						
+						UserAccount UserAccount = new UserAccount();
+						
+						if (accountList.next()) {
+							loadUserAccount(UserAccount, accountList, 1);
+						}
+						
+						result = (new Pair<UserAccount, Tutor>(UserAccount, Tutor));
+					}
+					
+					return result;
+				
+				} finally {
+					DBUtil.closeQuietly(tutorList);
+					DBUtil.closeQuietly(accountList);
+					DBUtil.closeQuietly(stmt1);
+					DBUtil.closeQuietly(stmt2);
+				}
+			}
+		});
 	}
 
 }

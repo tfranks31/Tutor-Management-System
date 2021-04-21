@@ -2,12 +2,9 @@ package controller;
 
 import static org.junit.Assert.assertEquals;
 
-import java.util.List;
-
 import org.junit.Before;
 import org.junit.Test;
 
-import model.Tutor;
 import model.UserAccount;
 import tutorsdb.persist.DatabaseProvider;
 import tutorsdb.persist.FakeDatabase;
@@ -22,8 +19,8 @@ public class LoginControllerTest {
     public void setUp() {
 		
 		DatabaseProvider.setInstance(new FakeDatabase());
-		db = DatabaseProvider.getInstance();
 		controller = new LoginController();
+		db = DatabaseProvider.getInstance();
     }
 	
 	@Test
@@ -38,8 +35,8 @@ public class LoginControllerTest {
 		
 		db.insertUserAccount(newAccount);
 		
-		assertEquals(newAccount, controller.getUserFromLogin(username, password));
+		assertEquals(newAccount.getUsername(), controller.getUserFromLogin(username, password).getUsername());
 		
-		db.deleteUserAccount(newAccount);
+		db.deleteUserAccount(controller.getUserFromLogin(username, password));
 	}
 }

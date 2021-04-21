@@ -15,31 +15,31 @@ public class TutorTest {
 	}
 
 	@Test
-	public void testSetGetName() {
+	public void testSetName() {
 		model.setName("Ethan");
 		assertTrue(model.getName().equals("Ethan"));
 	}
 
 	@Test
-	public void testSetGetEmail() {
+	public void testSetEmail() {
 		model.setEmail("testemail@gmail.com");
 		assertTrue(model.getEmail().equals("testemail@gmail.com"));
 	}
 
 	@Test
-	public void testSetGetPayRate() {
+	public void testSetPayRate() {
 		model.setPayRate(7.25);
 		assertTrue(model.getPayRate() == 7.25);
 	}
 
 	@Test
-	public void testSetGetSubject() {
+	public void testSetSubject() {
 		model.setSubject("Computer Science");
 		assertTrue(model.getSubject().equals("Computer Science"));
 	}
 
 	@Test
-	public void testSetGetTutorID() {
+	public void testSetTutorID() {
 		model.setTutorID(12344321);
 		assertTrue(model.getTutorID() == 12344321);
 	}
@@ -52,7 +52,7 @@ public class TutorTest {
 	}
 	
 	@Test
-	public void testGetSetStudentID() {
+	public void testSetStudentID() {
 		
 		String studentID = "55";
 		model.setStudentID(studentID);
@@ -60,11 +60,61 @@ public class TutorTest {
 	}
 	
 	@Test
-	public void testGetSetAccountID() {
+	public void testSetAccountID() {
 		
 		model.setAccountID(1);
 		assertEquals(1, model.getAccountID());
 	}
-	// test submit payvoucher test
-	// get payvoucher test
+	
+	@Test
+	public void testGetName() {
+		model.setName("Ethan");
+		assertTrue(model.getName().equals("Ethan"));
+	}
+
+	@Test
+	public void testGetEmail() {
+		model.setEmail("testemail@gmail.com");
+		assertTrue(model.getEmail().equals("testemail@gmail.com"));
+	}
+
+	@Test
+	public void testGetPayRate() {
+		model.setPayRate(7.25);
+		assertTrue(model.getPayRate() == 7.25);
+	}
+
+	@Test
+	public void testGetSubject() {
+		model.setSubject("Computer Science");
+		assertTrue(model.getSubject().equals("Computer Science"));
+	}
+
+	@Test
+	public void testGetTutorID() {
+		model.setTutorID(12344321);
+		assertTrue(model.getTutorID() == 12344321);
+	}
+
+	@Test
+	public void testGetAccountNumber() {
+		String accountNumber = "ab55";
+		model.setAccountNumber(accountNumber);
+		assertTrue(model.getAccountNumber().equals(accountNumber));
+	}
+	
+	@Test
+	public void testGetStudentID() {
+		
+		String studentID = "55";
+		model.setStudentID(studentID);
+		assertTrue(model.getStudentID().equals(studentID));
+	}
+	
+	@Test
+	public void testGetAccountID() {
+		
+		model.setAccountID(1);
+		assertEquals(1, model.getAccountID());
+	}
 }

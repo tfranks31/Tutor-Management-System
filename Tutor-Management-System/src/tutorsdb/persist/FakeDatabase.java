@@ -121,12 +121,27 @@ public class FakeDatabase implements IDatabase {
 	public List<Tuple<Tutor, PayVoucher, Entry>> findEntryByVoucher(int voucherID) {
 		List<Tuple<Tutor, PayVoucher, Entry>> result = new ArrayList<Tuple<Tutor, PayVoucher, Entry>>();
 		
-		for (PayVoucher voucher: payVoucherList) {
-			for (Tutor tutor : tutorList) {
-				if (voucher.getTutorID() == tutor.getTutorID()) {
-					if (voucher.getPayVoucherID() == voucherID) {
-						for (Entry entry: entryList) {
-							if (entry.getPayVoucherID() == voucher.getPayVoucherID()) {
+		//iterates over every pay voucher and tutor, check if they have the same tutor ID
+		for (PayVoucher dbVoucher: payVoucherList) {
+			for (Tutor dbTutor : tutorList) {
+				if (dbVoucher.getTutorID() == dbTutor.getTutorID()) {
+					if (dbVoucher.getPayVoucherID() == voucherID) {
+		
+						//iterates over entry list and checks to see if the entry corresponds to the voucher
+						//if so it add the entry to the result
+						for (Entry dbEntry: entryList) {
+							if (dbEntry.getPayVoucherID() == dbVoucher.getPayVoucherID()) {
+								
+								Tutor tutor = new Tutor(dbTutor.getName(), dbTutor.getEmail(), dbTutor.getSubject(), dbTutor.getPayRate(),
+										dbTutor.getTutorID(), dbTutor.getAccountID(), dbTutor.getAccountNumber(), dbTutor.getStudentID());
+								
+								PayVoucher voucher = new PayVoucher(dbVoucher.getDueDate(), dbVoucher.getStartDate(), dbVoucher.getTotalHours(), 
+										dbVoucher.getTotalPay(), dbVoucher.getIsSubmitted(), dbVoucher.getIsSigned(), dbVoucher.getIsNew(),
+										dbVoucher.getIsAdminEdited(), dbVoucher.getPayVoucherID(), dbVoucher.getTutorID());
+								
+								Entry entry = new Entry(dbEntry.getDate(), dbEntry.getServicePerformed(), dbEntry.getWherePerformed(), 
+										dbEntry.getHours(), dbEntry.getEntryID(), dbEntry.getPayVoucherID());
+								
 								result.add(new Tuple<Tutor, PayVoucher, Entry>(tutor, voucher, entry));
 							}
 						}
@@ -137,10 +152,18 @@ public class FakeDatabase implements IDatabase {
 		
 		//if voucher is empty returns tutor and voucher info with blank entry
 		if (result.isEmpty()) {
-			for (PayVoucher voucher: payVoucherList) {
-				for (Tutor tutor : tutorList) {
-					if (voucher.getTutorID() == tutor.getTutorID()) {
-						if (voucher.getPayVoucherID() == voucherID) {
+			for (PayVoucher dbvoucher: payVoucherList) {
+				for (Tutor dbtutor : tutorList) {
+					if (dbvoucher.getTutorID() == dbtutor.getTutorID()) {
+						if (dbvoucher.getPayVoucherID() == voucherID) {
+							
+							Tutor tutor = new Tutor(dbtutor.getName(), dbtutor.getEmail(), dbtutor.getSubject(), dbtutor.getPayRate(),
+									dbtutor.getTutorID(), dbtutor.getAccountID(), dbtutor.getAccountNumber(), dbtutor.getStudentID());
+							
+							PayVoucher voucher = new PayVoucher(dbvoucher.getDueDate(), dbvoucher.getStartDate(), dbvoucher.getTotalHours(), 
+									dbvoucher.getTotalPay(), dbvoucher.getIsSubmitted(), dbvoucher.getIsSigned(), dbvoucher.getIsNew(),
+									dbvoucher.getIsAdminEdited(), dbvoucher.getPayVoucherID(), dbvoucher.getTutorID());
+							
 							Entry entry = null;
 							result.add(new Tuple<Tutor, PayVoucher, Entry>(tutor, voucher, entry));
 						}
@@ -154,6 +177,7 @@ public class FakeDatabase implements IDatabase {
 
 	@Override
 	public UserAccount accountByLogin(String username, String password) {
+		//finds corresponding account from log in credentials
 		for (UserAccount account: accountList) {
 			if (account.getUsername().equals(username) && account.getPassword().equals(password)) {
 				UserAccount result = account;
@@ -213,6 +237,7 @@ public class FakeDatabase implements IDatabase {
 			}
 		}
 			
+		//returns all vouchers of the search parameter is blank
 		if (search.equals("")) {
 			for (PayVoucher voucher : payVoucherList) {
 				for (Tutor tutor : tutorList) {
@@ -240,6 +265,7 @@ public class FakeDatabase implements IDatabase {
 
 	@Override
 	public List<Pair<Tutor, PayVoucher>> findAllPayVouchers() {
+		//returns every voucher with correspond tutor
 		List<Pair<Tutor, PayVoucher>>  result = new ArrayList<Pair<Tutor, PayVoucher>>();
 		for (Tutor tutor : tutorList) {
 			for (PayVoucher voucher: payVoucherList) {
@@ -253,6 +279,8 @@ public class FakeDatabase implements IDatabase {
 
 	@Override
 	public PayVoucher submitPayVoucher(int voucherID) {
+		//checks to see if a voucher in the list has a corresponding id
+		//updates the isSibmitted parameter to true if so
 		for (PayVoucher voucher: payVoucherList) {
 			if (voucher.getPayVoucherID() == voucherID) {
 				voucher.setIsSubmitted(true);
@@ -265,16 +293,22 @@ public class FakeDatabase implements IDatabase {
 	@Override
 	public void updateVoucher(List<Entry> entries, PayVoucher voucher) {
 		for (Entry entry : entries) {
-			
+			//removes blank entries from a submitted voucher
 			if (entry.getDate().equals("") && entry.getHours() == 0.0 && 
 				entry.getServicePerformed().equals("") && entry.getWherePerformed().equals("")) {
 				
-				entryList.remove(entry);
-				continue;
+				for (int i = 0; i < entryList.size(); i++) {
+					
+					if (entryList.get(i).getEntryID() == entry.getEntryID()) {
+						
+						entryList.remove(entryList.get(i));
+						i--;
+					}
+				}
 			}
 			//checks if the entry is new, if new, it is assigned a corresponding ID
 			//and gets added to entry list
-			if (entry.getEntryID() == -1) {
+			else if (entry.getEntryID() == -1) {
 				
 				entry.setEntryID(entryList.size() + 1);
 				entry.setPayVoucherID(voucher.getPayVoucherID());
@@ -307,9 +341,9 @@ public class FakeDatabase implements IDatabase {
 
 	@Override
 	public void assignVoucher(String startDate, String dueDate) {
-		
+		//creates and assigns a pay voucher to every tutor with a set
+		//start and end date
 		for (Tutor tutor : tutorList) {
-			
 			PayVoucher voucher = new PayVoucher();
 			voucher.setStartDate(startDate);
 			voucher.setDueDate(dueDate);
@@ -327,6 +361,8 @@ public class FakeDatabase implements IDatabase {
 
 	@Override
 	public PayVoucher signPayVoucher(int voucherID) {
+		//checks to see if a voucher in the list has a corresponding id
+		//updates the isSibmitted parameter to true if so
 		for (PayVoucher voucher: payVoucherList) {
 			if (voucher.getPayVoucherID() == voucherID) {
 				voucher.setIsSigned(true);
@@ -336,4 +372,62 @@ public class FakeDatabase implements IDatabase {
 		return null;
 	}
 
+	@Override
+	public void editTutor(UserAccount account, Tutor tutor) {
+		// Set IDs
+		for (Tutor dbTutor: tutorList) {
+			if (dbTutor.getTutorID() == tutor.getTutorID()) {
+				dbTutor.setAccountNumber(tutor.getAccountNumber());
+				dbTutor.setEmail(tutor.getEmail());
+				dbTutor.setName(tutor.getName());
+				dbTutor.setPayRate(tutor.getPayRate());
+				dbTutor.setStudentID(tutor.getStudentID());
+				dbTutor.setSubject(tutor.getSubject());
+			}
+		}
+
+		for (UserAccount user : accountList) {
+			if (user.getAccountID() == account.getAccountID()) {
+				user.setPassword(account.getPassword());
+				user.setUsername(account.getUsername());
+			}
+		}
+	}
+
+	@Override
+	public void assignVoucherSpecific(String startDate, String dueDate, String name) {
+		for (Tutor tutor : tutorList) {
+			if (tutor.getName().equals(name)) {
+				PayVoucher voucher = new PayVoucher();
+				voucher.setStartDate(startDate);
+				voucher.setDueDate(dueDate);
+				voucher.setTutorID(tutor.getTutorID());
+				voucher.setIsAdminEdited(false);
+				voucher.setIsNew(true);
+				voucher.setPayVoucherID(payVoucherList.size() + 1);
+				voucher.setIsSigned(false);
+				voucher.setIsSubmitted(false);
+				voucher.setTotalHours(0);
+				voucher.setTotalPay(0);
+				payVoucherList.add(voucher);
+			}
+		}
+		
+	}
+
+	@Override
+	public Pair<UserAccount, Tutor> getTutorInfo(String name) {
+		Pair<UserAccount, Tutor> userTutorPair = null;
+		for (Tutor tutor : tutorList) {
+			if (tutor.getName().equals(name)) {
+				for (UserAccount account : accountList) {
+					if (account.getAccountID() == tutor.getAccountID()) {
+						userTutorPair = new Pair<UserAccount, Tutor>(account, tutor);
+					}
+				}
+			}
+		}
+		
+		return userTutorPair;
+	}
 }

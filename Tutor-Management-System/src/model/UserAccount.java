@@ -1,8 +1,8 @@
 package model;
 
 /**
- * The UserAccount class represents an account that can interact with
- * our application. All account types will inherit from the UserAccount class.
+ * The UserAccount class represents an account that can interact with our 
+ * application.
  */
 public class UserAccount {
 	

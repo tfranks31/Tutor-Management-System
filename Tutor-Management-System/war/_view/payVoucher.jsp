@@ -22,6 +22,11 @@
     <div class = "dueDate">
         DueDate: ${dueDate}
     </div>
+
+	<c:if test="${! empty errorMessage}">
+		<div class="error">${errorMessage}</div>
+	</c:if>
+
     <form action="${pageContext.servletContext.contextPath}/payVoucher"method="post" >
         <table>   
             <th>Date</th>

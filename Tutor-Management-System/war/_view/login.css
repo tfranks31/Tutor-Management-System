@@ -11,7 +11,7 @@ body {
     margin-top: 100px;
     padding: 10px; 
     width: 300px;
-    height: 370px;
+    height: 340px;
     text-align: center;
     background: #e1eae2;
     background-size: cover;
@@ -40,4 +40,9 @@ body {
 
 .label {
     font-size: 20px;
+}
+
+.error {
+	margin-top: 5px;
+	color: #ff0000;
 }

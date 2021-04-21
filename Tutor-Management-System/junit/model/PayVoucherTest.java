@@ -8,7 +8,6 @@ import org.junit.Test;
 
 public class PayVoucherTest{
     private PayVoucher model;
-    Entry entry = new Entry();
 
     @Before
     public void setUp(){
@@ -16,95 +15,128 @@ public class PayVoucherTest{
     }
 
     @Test
-    public void testSetGetIsSubmitted(){
+    public void testSetIsSubmitted(){
         model.setIsSubmitted(true);
         assertTrue(model.getIsSubmitted());
     }
 
     @Test
-    public void testSetGetIsSigned(){
+    public void testSetIsSigned(){
         model.setIsSigned(true);
         assertTrue(model.getIsSigned());
     }
 
     @Test
-    public void testSetGetIsNew(){
+    public void testSetIsNew(){
         model.setIsNew(true);
         assertTrue(model.getIsNew());
     }
 
     @Test
-    public void testSetGetIsAdminEdited(){
+    public void testSetIsAdminEdited(){
         model.setIsAdminEdited(true);
         assertTrue(model.getIsAdminEdited());
     }
 
     @Test
-    public void testSetGetDueDate(){
+    public void testSetDueDate(){
         model.setDueDate("03/20/21");
         assertTrue(model.getDueDate() == "03/20/21");
     }
 
-//    @Test
-//    public void testCalculatePay(){
-//        double pay = 25 * 7.25;
-//        model.calculatePay(25, 7.25);
-//        assertTrue(model.getTotalPay() == pay);
-//    }
-    
     @Test 
-    public void testGetSetTotalPay() {
+    public void testSetTotalPay() {
     	
     	model.setTotalPay(15.5);
     	assertTrue(model.getTotalPay() == 15.5);
     }
-
-//    @Test
-//    public void testCalculateTotalHours(){
-//        //Sets hours of each entry to its index in the default entry array in
-//        //the payVoucher. Then calls getTotalHours()
-//        for (int i = 0; i < 10; i++){ 
-//            entry.setHours((double) 2);
-//            model.setEntry(i, entry);
-//        }
-//        
-//        model.CalculateTotalHours();
-//        assertTrue(model.getTotalHours() == 20.0);
-//    }
     
     @Test
-    public void testGetSetTotalHours(){
+    public void testSetTotalHours(){
         model.setTotalHours(13);
         assertTrue(model.getTotalHours() == 13);
     }
     
-//    @Test
-//    public void testSetEntry() {
-//    	Entry entry = new Entry();
-//    	entry.setDate("03/14/2021");
-//    	entry.setHours(2.0);
-//    	entry.setServicePerformed("Tutoring");
-//    	entry.setWherePerformed("zoom");
-//    	model.setEntry(0, entry);
-//    	assertEquals(model.getEntry(0), entry);
-//    }
-    
     @Test
-    public void testGetSetStartDate() {
+    public void testSetStartDate() {
     	
     	model.setStartDate("3/14/2021");
     	assertEquals("3/14/2021", model.getStartDate());
     }
     
     @Test
-    public void testGetSetPayVoucherID() {
+    public void testSetPayVoucherID() {
     	
     	model.setPayVoucherID(1);
     	assertEquals(1, model.getPayVoucherID());
     }
     
     @Test
-    public void testGetSetTutorID() {
+    public void testSetTutorID() {
+    	
+    	model.setTutorID(1);
+    	assertEquals(1, model.getTutorID());
+    }
+    
+    @Test
+    public void testGetIsSubmitted(){
+        model.setIsSubmitted(true);
+        assertTrue(model.getIsSubmitted());
+    }
+
+    @Test
+    public void testGetIsSigned(){
+        model.setIsSigned(true);
+        assertTrue(model.getIsSigned());
+    }
+
+    @Test
+    public void testGetIsNew(){
+        model.setIsNew(true);
+        assertTrue(model.getIsNew());
+    }
+
+    @Test
+    public void testGetIsAdminEdited(){
+        model.setIsAdminEdited(true);
+        assertTrue(model.getIsAdminEdited());
+    }
+
+    @Test
+    public void testGetDueDate(){
+        model.setDueDate("03/20/21");
+        assertTrue(model.getDueDate() == "03/20/21");
+    }
+
+    @Test 
+    public void testGetTotalPay() {
+    	
+    	model.setTotalPay(15.5);
+    	assertTrue(model.getTotalPay() == 15.5);
+    }
+    
+    @Test
+    public void testGetTotalHours(){
+        model.setTotalHours(13);
+        assertTrue(model.getTotalHours() == 13);
+    }
+    
+    @Test
+    public void testGetStartDate() {
+    	
+    	model.setStartDate("3/14/2021");
+    	assertEquals("3/14/2021", model.getStartDate());
+    }
+    
+    @Test
+    public void testGetPayVoucherID() {
+    	
+    	model.setPayVoucherID(1);
+    	assertEquals(1, model.getPayVoucherID());
+    }
+    
+    @Test
+    public void testGetTutorID() {
     	
     	model.setTutorID(1);
     	assertEquals(1, model.getTutorID());

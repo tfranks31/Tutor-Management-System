@@ -8,12 +8,15 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import controller.AddTutorController;
+import model.Pair;
 import model.Tutor;
 import model.UserAccount;
 
 public class AddTutorServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
-	private AddTutorController controller = null; 
+	private AddTutorController controller; 
+	private boolean editTutor;
+	
 
 	@Override
 	protected void doGet(HttpServletRequest req, HttpServletResponse resp)
@@ -22,25 +25,60 @@ public class AddTutorServlet extends HttpServlet {
 		System.out.println("AddTutor Servlet: doGet");	
 		
 		UserAccount account = (UserAccount) req.getSession().getAttribute("user");
+		
+		if (account != null) {
+			editTutor = (boolean)req.getSession().getAttribute("edit");
+			req.setAttribute("edit", editTutor);	
+		}
+		
+		// If user not logged in, redirect to login
 		if (account == null) {
 			
+			System.out.println("AddTutor Servlet: null account");
+			
 			resp.sendRedirect("login");
-			return;
 		}
+		// Verify that only admins can get to this page
 		else if (!account.getIsAdmin()) {
 			
+			System.out.println("AddTutor Servlet: not admin");
+			
 			resp.sendRedirect("search");
-			return;
 		}
 		
 		// Go back to search
-		if (req.getParameter("back") != null) {
+		else if (req.getParameter("back") != null) {
+			
+			System.out.println("AddTutor Servlet: back");
 			
 			resp.sendRedirect("search");
+		} else if (editTutor) {
+			
+			System.out.println("AddTutor Servlet: edit load");
+			
+			controller = new AddTutorController();
+			
+			UserAccount user = (UserAccount) req.getSession().getAttribute("editUser");
+			Tutor tutor = (Tutor) req.getSession().getAttribute("editTutor");
+			String[] name = tutor.getName().split(" ");
+			
+			req.setAttribute("firstName", name[0]);
+			req.setAttribute("lastName", name[1]);
+			req.setAttribute("username", user.getUsername());
+			req.setAttribute("password", user.getPassword());
+			req.setAttribute("email", tutor.getEmail());
+			req.setAttribute("studentID", tutor.getStudentID());
+			req.setAttribute("accountNumber", tutor.getAccountNumber());
+			req.setAttribute("payRate", tutor.getPayRate());
+			req.setAttribute("subject", tutor.getSubject());
+			
+			req.getRequestDispatcher("/_view/addTutor.jsp").forward(req, resp);
 		}
 		
 		// Load addTutor
 		else {
+			
+			System.out.println("AddTutor Servlet: default Load");
 			
 			// Call JSP to generate empty form
 			req.getRequestDispatcher("/_view/addTutor.jsp").forward(req, resp);
@@ -54,6 +92,8 @@ public class AddTutorServlet extends HttpServlet {
 		
 		System.out.println("AddTutor Servlet: doPost");
 		
+		controller = new AddTutorController();
+		
 		String firstName = req.getParameter("firstName");
 		String lastName = req.getParameter("lastName");
 		String username = req.getParameter("username");
@@ -66,27 +106,52 @@ public class AddTutorServlet extends HttpServlet {
 		
 		// If the tutor information is valid, continue to the search page
 		if (tutorValidate(req)) {
+			if (req.getParameter("addTutor") != null) {
+				
+				System.out.println("AddTutor Servlet: tutorAdded");
+				
+				UserAccount newAccount = new UserAccount();
+				newAccount.setUsername(username);
+				newAccount.setPassword(password);
+				newAccount.setIsAdmin(false);
+				
+				Tutor newTutor = new Tutor();
+				newTutor.setName(firstName + " " + lastName);
+				newTutor.setEmail(email);
+				newTutor.setStudentID(studentID);
+				newTutor.setAccountNumber(accountNumber);
+				newTutor.setSubject(subject);
+				newTutor.setPayRate(Double.parseDouble(payRate));
+				
+				controller.addTutor(newAccount, newTutor);
+				
+				req.setAttribute("tutorName", firstName + " " + lastName);
+				
+				req.getRequestDispatcher("/search").forward(req, resp);
+			}else if (req.getParameter("editTutorInfo") != null) {
+				
+				System.out.println("AddTutor Servlet: tutorEdited");
+									
+				UserAccount updatedAccount = new UserAccount();
+				updatedAccount.setUsername(username);
+				updatedAccount.setPassword(password);
+				updatedAccount.setIsAdmin(false);
+				updatedAccount.setAccountID(((UserAccount) req.getSession().getAttribute("editUser")).getAccountID());
+				
+				Tutor updatedTutor = new Tutor();
+				updatedTutor.setName(firstName + " " + lastName);
+				updatedTutor.setEmail(email);
+				updatedTutor.setStudentID(studentID);
+				updatedTutor.setAccountNumber(accountNumber);
+				updatedTutor.setSubject(subject);
+				updatedTutor.setPayRate(Double.parseDouble(payRate));
+				updatedTutor.setTutorID(((Tutor) req.getSession().getAttribute("editTutor")).getTutorID());
+				
+				controller.editTutor(updatedAccount, updatedTutor);
+				req.setAttribute("editTutorName", firstName + " " + lastName);
+				req.getRequestDispatcher("/search").forward(req, resp);
+			}
 			
-			controller = new AddTutorController();
-			
-			UserAccount newAccount = new UserAccount();
-			newAccount.setUsername(username);
-			newAccount.setPassword(password);
-			newAccount.setIsAdmin(false);
-			
-			Tutor newTutor = new Tutor();
-			newTutor.setName(firstName + " " + lastName);
-			newTutor.setEmail(email);
-			newTutor.setStudentID(studentID);
-			newTutor.setAccountNumber(accountNumber);
-			newTutor.setSubject(subject);
-			newTutor.setPayRate(Double.parseDouble(payRate));
-			
-			controller.addTutor(newAccount, newTutor);
-			
-			req.setAttribute("tutorName", firstName + " " + lastName);
-			
-			req.getRequestDispatcher("/search").forward(req, resp);
 		}
 		
 		// If the tutor information is invalid, set all parameters with inputed

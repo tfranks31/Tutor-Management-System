@@ -13,8 +13,6 @@ import model.UserAccount;
 public class LoginServlet extends HttpServlet{
 	private static final long serialVersionUID = 1L;
 	private LoginController controller = null;
-	private String username;
-	private String password;
 	
 	@Override
 	protected void doGet(HttpServletRequest req, HttpServletResponse resp)
@@ -22,6 +20,7 @@ public class LoginServlet extends HttpServlet{
 
 		System.out.println("Login Servlet: doGet");	
 		
+		// Formally log out of the session
 		req.getSession().setAttribute("user", null);
 		
 		req.getRequestDispatcher("/_view/login.jsp").forward(req, resp);
@@ -31,30 +30,40 @@ public class LoginServlet extends HttpServlet{
 	protected void doPost(HttpServletRequest req, HttpServletResponse resp)
 			throws ServletException, IOException {
 
-		System.out.println("Login Servlet: doPost");	
+		System.out.println("Login Servlet: doPost");
+		
+        controller = new LoginController();
 		
 		// Go to search if the user has logged in
 		if (loginValidate(req)) {
+			
+			System.out.println("Login Servlet: login sucessful");
+			
 			resp.sendRedirect("search");
 		}
-		// Load addTutor
+		// Reload login
 		else {
 			// Call JSP to generate empty form
+			
+			System.out.println("Login Servlet: loginFailed");
+			
 			req.getRequestDispatcher("/_view/login.jsp").forward(req, resp);
 		}
 		
 	}
     
     private boolean loginValidate(HttpServletRequest req) {
-        username = req.getParameter("username");
-        password = req.getParameter("password");
+    	
+    	// Validate login information and retrieve the account
+        String username = req.getParameter("username");
+        String password = req.getParameter("password");
         
-        controller = new LoginController();
         UserAccount user = controller.getUserFromLogin(username, password);
         
         if (user == null) {
+        	req.setAttribute("errorMessage", "Invalid username or password");
         	return false;
-        }else {
+        } else {
         	req.getSession().setAttribute("user", user);
         	return true;
         }
