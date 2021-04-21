@@ -1,14 +1,11 @@
 package tutorsdb.persist;
 
-<<<<<<< HEAD
-
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 
 import org.junit.Before;
 import org.junit.Test;
 
-=======
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 
@@ -19,9 +16,9 @@ import org.junit.Before;
 import org.junit.Test;
 
 import model.Entry;
+import model.Pair;
 import model.PayVoucher;
 import model.Tuple;
->>>>>>> devBranch
 import model.Tutor;
 import model.UserAccount;
 
@@ -190,5 +187,26 @@ public class DerbyDatabaseTests {
 		}
 		
 		assertEquals(count, 0);
+	}
+	
+	@Test
+	public void testGetTutorInfo() {
+		UserAccount account = new UserAccount();
+		Tutor tutor = new Tutor();
+		
+		account.setUsername("username");
+		account.setPassword("password");
+		tutor.setName("Steven Seymour");
+
+		
+		db.addTutor(account, tutor);
+		
+		Pair<UserAccount, Tutor> testing = new Pair<UserAccount, Tutor>(account, tutor);
+		
+		assertEquals(db.getTutorInfo("Steven Seymour").getRight().getName(), testing.getRight().getName());
+		
+		db.deleteTutor(testing.getRight());
+		db.deleteUserAccount(account);
+		
 	}
 }
