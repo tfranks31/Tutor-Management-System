@@ -10,6 +10,7 @@ import org.junit.Before;
 import org.junit.Test;
 
 import model.Entry;
+import model.Pair;
 import model.PayVoucher;
 import model.Tuple;
 import model.Tutor;
@@ -169,5 +170,17 @@ public class DerbyDatabaseTests {
 		assertEquals(newAccount.getUsername(), db.accountByLogin(username, password).getUsername());
 		
 		db.deleteUserAccount(db.accountByLogin(username, password));
+	}
+	
+	@Test
+	public void testFindVoucherBySearch() {
+		
+		Tutor tutor = new Tutor();
+		tutor.setName("Tyler Franks");
+		
+		List<Pair<Tutor, PayVoucher>> test = db.findVoucherBySearch("Tyler Franks");
+		Tutor testTutor = test.get(0).getLeft();
+	
+		assertTrue(testTutor.getName().equals(tutor.getName()));
 	}
 }
