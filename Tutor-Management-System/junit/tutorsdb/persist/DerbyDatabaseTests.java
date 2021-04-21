@@ -323,6 +323,22 @@ public class DerbyDatabaseTests {
 	}
 	
 	@Test
+	public void testSubmitPayVouchers() {
+		
+		PayVoucher payVoucher = new PayVoucher("03/04/2021", "03/02/2021", 0, 0, false, false, false, false, -1, 1);
+		db.insertPayVoucher(payVoucher);
+		PayVoucher dbPayVoucher = db.getPayVouchers().get(db.getPayVouchers().size() - 1);
+		
+		db.submitPayVoucher(dbPayVoucher.getPayVoucherID());
+		List<PayVoucher> dbPayVouchers = db.getPayVouchers();
+		
+		assertTrue(dbPayVouchers.get(dbPayVouchers.size() - 1).getIsSubmitted());
+		
+		db.deletePayVoucher(dbPayVoucher);
+		
+	}
+	
+	@Test
 	public void testInsertPayVoucher1() {
 		db.assignVoucher("April", "May");
 		List<PayVoucher> vouchers = db.getPayVouchers();
@@ -341,5 +357,93 @@ public class DerbyDatabaseTests {
 			db.deletePayVoucher(delete);
 		}
 
+	}
+	
+	@Test
+	public void testGetPayVoucher() {
+		
+		PayVoucher newVoucher = new PayVoucher("04/27/2021", "04/20/2021", 0.0,
+				  0.0, false, false, true, false, 1,1);
+		
+		db.insertPayVoucher(newVoucher);
+		
+		List<PayVoucher> PayVoucherList = db.getPayVouchers();
+		
+		// Newly added objects should be the last object in the list
+		PayVoucher dbVoucher = PayVoucherList.get(PayVoucherList.size() - 1);
+		
+		// Check that the objects were successfully entered
+		assertEquals(dbVoucher.getStartDate(), newVoucher.getStartDate());
+		assertEquals(dbVoucher.getDueDate(), newVoucher.getDueDate());
+		assertEquals(dbVoucher.getIsAdminEdited(), newVoucher.getIsAdminEdited());
+		assertEquals(dbVoucher.getIsNew(), newVoucher.getIsNew());
+		assertEquals(dbVoucher.getIsSigned(), newVoucher.getIsSigned());
+		assertEquals(dbVoucher.getIsSubmitted(), newVoucher.getIsSubmitted());
+		assertTrue(dbVoucher.getTotalHours() == newVoucher.getTotalHours());
+		assertTrue(dbVoucher.getTotalPay() == newVoucher.getTotalPay());
+		assertEquals(dbVoucher.getTutorID(), newVoucher.getTutorID());
+		
+		// Remove test objects from tutorsdb
+		db.deletePayVoucher(dbVoucher);
+	}
+	
+	@Test
+	public void testInsertEntries() {
+		
+		Entry newEntry = new Entry("04/27/2021", "tutoring", "zoom",
+				 0.0, 1, 1);
+		
+		db.insertEntry(newEntry);
+		
+		List<Entry> EntriesList = db.getEntries();
+		
+		// Newly added objects should be the last object in the list
+		Entry dbEntry = EntriesList.get(EntriesList.size() - 1);
+		
+		// Check that the objects were successfully entered
+		assertEquals(dbEntry.getDate(), newEntry.getDate());
+		assertEquals(dbEntry.getServicePerformed(), newEntry.getServicePerformed());
+		assertEquals(dbEntry.getWherePerformed(), newEntry.getWherePerformed());
+		assertTrue(dbEntry.getHours() == newEntry.getHours());
+		
+		// Remove test objects from tutorsdb
+		db.deleteEntry(dbEntry);
+	}
+	
+	@Test
+	public void testGetEntries() {
+		
+		Entry newEntry = new Entry("04/27/2021", "tutoring", "zoom",
+				 0.0, 1, 1);
+		
+		db.insertEntry(newEntry);
+		
+		List<Entry> EntriesList = db.getEntries();
+		
+		// Newly added objects should be the last object in the list
+		Entry dbEntry = EntriesList.get(EntriesList.size() - 1);
+		
+		// Check that the objects were successfully entered
+		assertEquals(dbEntry.getDate(), newEntry.getDate());
+		assertEquals(dbEntry.getServicePerformed(), newEntry.getServicePerformed());
+		assertEquals(dbEntry.getWherePerformed(), newEntry.getWherePerformed());
+		assertTrue(dbEntry.getHours() == newEntry.getHours());
+		
+		// Remove test objects from tutorsdb
+		db.deleteEntry(dbEntry);
+	}
+	
+	@Test
+	public void testSignPayVoucher() {
+		PayVoucher payVoucher = new PayVoucher("03/04/2021", "03/02/2021", 0, 0, false, false, false, false, -1, 1);
+		db.insertPayVoucher(payVoucher);
+		PayVoucher dbPayVoucher = db.getPayVouchers().get(db.getPayVouchers().size() - 1);
+		
+		db.signPayVoucher(dbPayVoucher.getPayVoucherID());
+		List<PayVoucher> dbPayVouchers = db.getPayVouchers();
+		
+		assertTrue(dbPayVouchers.get(dbPayVouchers.size() - 1).getIsSigned());
+		
+		db.deletePayVoucher(dbPayVoucher);
 	}
 }
