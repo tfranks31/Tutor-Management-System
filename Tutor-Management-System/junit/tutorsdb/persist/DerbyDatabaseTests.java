@@ -268,4 +268,24 @@ public class DerbyDatabaseTests {
 		assertEquals(test.get(5).getRight().getPayVoucherID(), vouchers.get(5).getPayVoucherID());
 		assertEquals(test.get(6).getRight().getPayVoucherID(), vouchers.get(6).getPayVoucherID());
 	}
+	
+	@Test
+	public void testInsertPayVoucher1() {
+		db.assignVoucher("April", "May");
+		List<PayVoucher> vouchers = db.getPayVouchers();
+		
+		String startDate = vouchers.get(vouchers.size() - 1).getStartDate();
+		String dueDate = vouchers.get(vouchers.size() - 1).getDueDate();
+		
+		assertTrue(startDate.equals("April"));
+		assertTrue(dueDate.equals("May"));
+		
+		List<Tutor> tutors = db.getTutors();
+		
+		for (int i = 1; i <= tutors.size(); i++) {
+			
+			PayVoucher delete = vouchers.get(vouchers.size() - i);
+			db.deletePayVoucher(delete);
+		}
+	}
 }
