@@ -199,9 +199,9 @@ public class DerbyDatabaseTests {
 		
 		Tutor testTutor = db.getTutors().get(db.getTutors().size() - 1);
 		assertTrue(testTutor.getName().equals("SuperRandomNameWeWillNeverUse"));
-		
+		UserAccount deleteMe = db.getUserAccounts().get(db.getUserAccounts().size()-1);
 		db.deleteTutor(testTutor);
-		db.deleteUserAccount(account);
+		db.deleteUserAccount(deleteMe);
 		
 		for (int i = 0; i < db.getTutors().size(); i++) {
 			if (db.getTutors().get(i).getName().equals("SuperRandomNameWeWillNeverUse")) {
@@ -229,7 +229,7 @@ public class DerbyDatabaseTests {
 		assertEquals(db.getTutorInfo("Steven Seymour").getRight().getName(), testing.getRight().getName());
 		
 		db.deleteTutor(testing.getRight());
-		db.deleteUserAccount(account);
+		db.deleteUserAccount(testing.getLeft());
 	}
 	
 	public void testAccountByLogin() {
