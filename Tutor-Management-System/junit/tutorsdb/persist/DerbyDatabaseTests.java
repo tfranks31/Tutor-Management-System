@@ -183,7 +183,6 @@ public class DerbyDatabaseTests {
 	}
 	
 	@Test
-<<<<<<< HEAD
 	public void testDeleteTutor() {
 		UserAccount account = new UserAccount();
 		Tutor tutor = new Tutor();
@@ -229,8 +228,8 @@ public class DerbyDatabaseTests {
 		
 		db.deleteTutor(testing.getRight());
 		db.deleteUserAccount(account);
-		
-=======
+	}
+	
 	public void testAccountByLogin() {
 		
 		String username = "test";
@@ -341,6 +340,6 @@ public class DerbyDatabaseTests {
 			PayVoucher delete = vouchers.get(vouchers.size() - i);
 			db.deletePayVoucher(delete);
 		}
->>>>>>> devBranch
+
 	}
 }
