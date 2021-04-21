@@ -34,10 +34,14 @@ public class AddTutorServlet extends HttpServlet {
 		// If user not logged in, redirect to login
 		if (account == null) {
 			
+			System.out.println("AddTutor Servlet: null account");
+			
 			resp.sendRedirect("login");
 		}
 		// Verify that only admins can get to this page
 		else if (!account.getIsAdmin()) {
+			
+			System.out.println("AddTutor Servlet: not admin");
 			
 			resp.sendRedirect("search");
 		}
@@ -45,8 +49,12 @@ public class AddTutorServlet extends HttpServlet {
 		// Go back to search
 		else if (req.getParameter("back") != null) {
 			
+			System.out.println("AddTutor Servlet: back");
+			
 			resp.sendRedirect("search");
 		} else if (editTutor) {
+			
+			System.out.println("AddTutor Servlet: edit load");
 			
 			controller = new AddTutorController();
 			
@@ -69,6 +77,8 @@ public class AddTutorServlet extends HttpServlet {
 		
 		// Load addTutor
 		else {
+			
+			System.out.println("AddTutor Servlet: default Load");
 			
 			// Call JSP to generate empty form
 			req.getRequestDispatcher("/_view/addTutor.jsp").forward(req, resp);
@@ -97,6 +107,9 @@ public class AddTutorServlet extends HttpServlet {
 		// If the tutor information is valid, continue to the search page
 		if (tutorValidate(req)) {
 			if (req.getParameter("addTutor") != null) {
+				
+				System.out.println("AddTutor Servlet: tutorAdded");
+				
 				UserAccount newAccount = new UserAccount();
 				newAccount.setUsername(username);
 				newAccount.setPassword(password);
@@ -116,7 +129,8 @@ public class AddTutorServlet extends HttpServlet {
 				
 				req.getRequestDispatcher("/search").forward(req, resp);
 			}else if (req.getParameter("editTutorInfo") != null) {
-				System.out.println("Edit");
+				
+				System.out.println("AddTutor Servlet: tutorEdited");
 									
 				UserAccount updatedAccount = new UserAccount();
 				updatedAccount.setUsername(username);

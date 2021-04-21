@@ -36,11 +36,17 @@ public class LoginServlet extends HttpServlet{
 		
 		// Go to search if the user has logged in
 		if (loginValidate(req)) {
+			
+			System.out.println("Login Servlet: login sucessful");
+			
 			resp.sendRedirect("search");
 		}
 		// Reload login
 		else {
 			// Call JSP to generate empty form
+			
+			System.out.println("Login Servlet: loginFailed");
+			
 			req.getRequestDispatcher("/_view/login.jsp").forward(req, resp);
 		}
 		

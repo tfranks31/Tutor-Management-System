@@ -31,11 +31,15 @@ public class PayVoucherServlet extends HttpServlet{
 		// If user not logged in, redirect to login
 		if (account == null) {
 			
+			System.out.println("PayVoucher Servlet: null user");
+			
 			resp.sendRedirect("login");
 		}
 		
 		// If user manually tries to access payvoucher view redirect to search
 		else if (req.getParameter("ID") == null) {
+			
+			System.out.println("PayVoucher Servlet: null user");
 			
 			resp.sendRedirect("search");
 		}
@@ -43,10 +47,14 @@ public class PayVoucherServlet extends HttpServlet{
 		// Go back to search
 		else if (req.getParameter("back") != null) {
 			
+			System.out.println("PayVoucher Servlet: back");
+			
 			resp.sendRedirect("search");
 		}
 		// Load and generate rows
 		else {
+			
+			System.out.println("PayVoucher Servlet: load");
 			
 			// Load payVoucher with the specified id
 			if (req.getParameter("ID") != null) {

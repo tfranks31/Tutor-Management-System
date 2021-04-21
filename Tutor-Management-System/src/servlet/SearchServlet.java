@@ -38,11 +38,15 @@ public class SearchServlet extends HttpServlet{
 		// If user not logged in, redirect to login
 		if (account == null) {
 			
+			System.out.println("Search Servlet: nullUser");
+			
 			resp.sendRedirect("login");
 		}
 		
 		// User wants to add a tutor
 		else if (req.getParameter("addTutor") != null) {
+			
+			System.out.println("Search Servlet: addTutor");
 			
 			//defaults to false
 			req.getSession().setAttribute("edit", editTutor);
@@ -52,11 +56,17 @@ public class SearchServlet extends HttpServlet{
 		
 		// User wants to logout
 		else if (req.getParameter("logout") != null) {
+			
+			System.out.println("Search Servlet: logout");
+			
 			resp.sendRedirect("login");
 		}
 		
 		// Load search
 		else {
+			
+			System.out.println("Search Servlet: loadSearch");
+			
 			ArrayList<Pair<Tutor, PayVoucher>> tutorVoucherList = new ArrayList<Pair<Tutor, PayVoucher>>();
 			
 			// Get all Tutors and their vouchers
@@ -93,6 +103,8 @@ public class SearchServlet extends HttpServlet{
 		// User selected to view a pay voucher
 		if (req.getParameter("ID") != null) {
 			
+			System.out.println("Search Servlet: load Voucher");
+			
 			req.getRequestDispatcher("/payVoucher").forward(req, resp);
 		}
 		
@@ -103,6 +115,8 @@ public class SearchServlet extends HttpServlet{
 			
 			if (assignmentType.equals("allTutors")) {
 				
+				System.out.println("Search Servlet: assign voucher all");
+				
 				if (searchValidate(req)) {
 					
 					// Assign the voucher to all tutors
@@ -110,6 +124,8 @@ public class SearchServlet extends HttpServlet{
 				}			
 			}
 			if (assignmentType.equals("oneTutor")) {
+				
+				System.out.println("Search Servlet: assign voucher specific");
 				
 				if (searchValidate(req)) {
 					
@@ -139,6 +155,8 @@ public class SearchServlet extends HttpServlet{
 		
 		// User wants to search the pay vouchers with a search parameter
 		else if (req.getParameter("search") != null) {
+			
+			System.out.println("Search Servlet: search");
 			
 			controller = new SearchController();
 			searchParameter = req.getParameter("search");
@@ -181,6 +199,9 @@ public class SearchServlet extends HttpServlet{
 		//Redirects to edit tutor page
 		else if(req.getParameter("editTutor") != null && !req.getParameter("editTutorName").equals("")) {
 			//sets session variables
+			
+			System.out.println("Search Servlet: edit tutor");
+			
 			boolean editTutor = true;
 			String editName = (String) req.getParameter("editTutorName");
 			
