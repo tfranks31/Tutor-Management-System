@@ -45,7 +45,14 @@ public class DerbyDatabaseTests {
 		
 		// Check that the objects were successfully entered
 		assertEquals(dbAccount.getUsername(), newAccount.getUsername());
+		assertEquals(dbAccount.getPassword(), newAccount.getPassword());
+		assertEquals(dbAccount.getIsAdmin(), newAccount.getIsAdmin());
 		assertEquals(dbTutor.getName(), newTutor.getName());
+		assertEquals(dbTutor.getEmail(), newTutor.getEmail());
+		assertEquals(dbTutor.getAccountNumber(), newTutor.getAccountNumber());
+		assertTrue(dbTutor.getPayRate() == newTutor.getPayRate());
+		assertEquals(dbTutor.getStudentID(), newTutor.getStudentID());
+		assertEquals(dbTutor.getSubject(), newTutor.getSubject());
 		
 		// Remove test objects from tutorsdb
 		db.deleteTutor(dbTutor);
@@ -66,7 +73,9 @@ public class DerbyDatabaseTests {
 		
 		// Check that the objects were successfully entered
 		assertEquals(dbAccount.getUsername(), newAccount.getUsername());
-		
+		assertEquals(dbAccount.getPassword(), newAccount.getPassword());
+		assertEquals(dbAccount.getIsAdmin(), newAccount.getIsAdmin());
+	
 		// Remove test objects from tutorsdb
 		db.deleteUserAccount(dbAccount);
 	}
@@ -85,6 +94,11 @@ public class DerbyDatabaseTests {
 		
 		// Check that the objects were successfully entered
 		assertEquals(dbTutor.getName(), newTutor.getName());
+		assertEquals(dbTutor.getEmail(), newTutor.getEmail());
+		assertEquals(dbTutor.getAccountNumber(), newTutor.getAccountNumber());
+		assertTrue(dbTutor.getPayRate() == newTutor.getPayRate());
+		assertEquals(dbTutor.getStudentID(), newTutor.getStudentID());
+		assertEquals(dbTutor.getSubject(), newTutor.getSubject());
 		
 		// Remove test objects from tutorsdb
 		db.deleteTutor(dbTutor);
@@ -104,6 +118,8 @@ public class DerbyDatabaseTests {
 		
 		// Check that the objects were successfully entered
 		assertEquals(dbAccount.getUsername(), newAccount.getUsername());
+		assertEquals(dbAccount.getPassword(), newAccount.getPassword());
+		assertEquals(dbAccount.getIsAdmin(), newAccount.getIsAdmin());
 		
 		// Remove test objects from tutorsdb
 		db.deleteUserAccount(dbAccount);
@@ -123,7 +139,12 @@ public class DerbyDatabaseTests {
 		
 		// Check that the objects were successfully entered
 		assertEquals(dbTutor.getName(), newTutor.getName());
-		
+		assertEquals(dbTutor.getEmail(), newTutor.getEmail());
+		assertEquals(dbTutor.getAccountNumber(), newTutor.getAccountNumber());
+		assertTrue(dbTutor.getPayRate() == newTutor.getPayRate());
+		assertEquals(dbTutor.getStudentID(), newTutor.getStudentID());
+		assertEquals(dbTutor.getSubject(), newTutor.getSubject());
+
 		// Remove test objects from tutorsdb
 		db.deleteTutor(dbTutor);
 	}
@@ -182,5 +203,33 @@ public class DerbyDatabaseTests {
 		Tutor testTutor = test.get(0).getLeft();
 	
 		assertTrue(testTutor.getName().equals(tutor.getName()));
+	}
+	
+	@Test
+	public void testInsertPayVoucher() {
+		
+		PayVoucher newVoucher = new PayVoucher("04/27/2021", "04/20/2021", 0.0,
+				  0.0, false, false, true, false, 1,1);
+		
+		db.insertPayVoucher(newVoucher);
+		
+		List<PayVoucher> PayVoucherList = db.getPayVouchers();
+		
+		// Newly added objects should be the last object in the list
+		PayVoucher dbVoucher = PayVoucherList.get(PayVoucherList.size() - 1);
+		
+		// Check that the objects were successfully entered
+		assertEquals(dbVoucher.getStartDate(), newVoucher.getStartDate());
+		assertEquals(dbVoucher.getDueDate(), newVoucher.getDueDate());
+		assertEquals(dbVoucher.getIsAdminEdited(), newVoucher.getIsAdminEdited());
+		assertEquals(dbVoucher.getIsNew(), newVoucher.getIsNew());
+		assertEquals(dbVoucher.getIsSigned(), newVoucher.getIsSigned());
+		assertEquals(dbVoucher.getIsSubmitted(), newVoucher.getIsSubmitted());
+		assertTrue(dbVoucher.getTotalHours() == newVoucher.getTotalHours());
+		assertTrue(dbVoucher.getTotalPay() == newVoucher.getTotalPay());
+		assertEquals(dbVoucher.getTutorID(), newVoucher.getTutorID());
+		
+		// Remove test objects from tutorsdb
+		db.deletePayVoucher(dbVoucher);
 	}
 }
