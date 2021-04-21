@@ -252,4 +252,20 @@ public class DerbyDatabaseTests {
 		// Remove test objects from tutorsdb
 		db.deletePayVoucher(dbVoucher);
 	}
+	
+	@Test
+	public void testFindAllPayVouchers() {
+		
+		List<PayVoucher> vouchers = db.getPayVouchers();
+		List<Pair<Tutor, PayVoucher>> test = db.findAllPayVouchers();
+		
+		assertEquals(test.size(), vouchers.size());
+		assertEquals(test.get(0).getRight().getPayVoucherID(), vouchers.get(0).getPayVoucherID());
+		assertEquals(test.get(1).getRight().getPayVoucherID(), vouchers.get(1).getPayVoucherID());
+		assertEquals(test.get(2).getRight().getPayVoucherID(), vouchers.get(2).getPayVoucherID());
+		assertEquals(test.get(3).getRight().getPayVoucherID(), vouchers.get(3).getPayVoucherID());
+		assertEquals(test.get(4).getRight().getPayVoucherID(), vouchers.get(4).getPayVoucherID());
+		assertEquals(test.get(5).getRight().getPayVoucherID(), vouchers.get(5).getPayVoucherID());
+		assertEquals(test.get(6).getRight().getPayVoucherID(), vouchers.get(6).getPayVoucherID());
+	}
 }
