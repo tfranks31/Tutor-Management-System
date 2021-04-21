@@ -153,4 +153,21 @@ public class DerbyDatabaseTests {
 		db.deletePayVoucher(dbPayVoucher);
 		db.deleteTutor(dbTutor);
 	}
+	
+	@Test
+	public void testAccountByLogin() {
+		
+		String username = "test";
+		String password = "test";
+		UserAccount newAccount = new UserAccount();
+		newAccount.setAccountID(-1);
+		newAccount.setUsername(username);
+		newAccount.setPassword(password);
+		
+		db.insertUserAccount(newAccount);
+		
+		assertEquals(newAccount.getUsername(), db.accountByLogin(username, password).getUsername());
+		
+		db.deleteUserAccount(db.accountByLogin(username, password));
+	}
 }
