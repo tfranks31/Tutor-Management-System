@@ -446,4 +446,25 @@ public class DerbyDatabaseTests {
 		
 		db.deletePayVoucher(dbPayVoucher);
 	}
+	
+	@Test
+	public void testAssignVoucherSpecific() {
+		
+		Tutor newTutor = new Tutor("user pass", "user@user.use", "use", 1.0, -1, 1, "321", "123");
+		db.insertTutor(newTutor);
+		Tutor dbTutor = db.getTutors().get(db.getTutors().size() - 1);
+		
+		db.assignVoucherSpecific("April", "May", dbTutor.getName());
+		List<PayVoucher> vouchers = db.getPayVouchers();
+		
+		String startDate = vouchers.get(vouchers.size() - 1).getStartDate();
+		String dueDate = vouchers.get(vouchers.size() - 1).getDueDate();
+		
+		assertTrue(startDate.equals("April"));
+		assertTrue(dueDate.equals("May"));
+			
+		PayVoucher delete = vouchers.get(vouchers.size() - 1);
+		db.deletePayVoucher(delete);
+		db.deleteTutor(dbTutor);
+	}
 }
