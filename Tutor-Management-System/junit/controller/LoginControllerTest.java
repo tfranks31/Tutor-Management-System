@@ -19,8 +19,8 @@ public class LoginControllerTest {
     public void setUp() {
 		
 		DatabaseProvider.setInstance(new FakeDatabase());
-		db = DatabaseProvider.getInstance();
 		controller = new LoginController();
+		db = DatabaseProvider.getInstance();
     }
 	
 	@Test
@@ -35,8 +35,8 @@ public class LoginControllerTest {
 		
 		db.insertUserAccount(newAccount);
 		
-		assertEquals(newAccount, controller.getUserFromLogin(username, password));
+		assertEquals(newAccount.getUsername(), controller.getUserFromLogin(username, password).getUsername());
 		
-		db.deleteUserAccount(newAccount);
+		db.deleteUserAccount(controller.getUserFromLogin(username, password));
 	}
 }

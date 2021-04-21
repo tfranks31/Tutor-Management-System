@@ -625,8 +625,9 @@ public class DerbyDatabase implements IDatabase {
 					stmt = conn.prepareStatement(
 						"select pay_vouchers.*, tutors.* " + 
 						"from pay_vouchers, tutors " + 
-						"where pay_vouchers.tutor_id = tutors.tutor_id " + 
-						"ORDER BY tutors.name, pay_vouchers.pay_voucher_id "
+						"where pay_vouchers.tutor_id = tutors.tutor_id "
+//						+ 
+//						"ORDER BY tutors.name, pay_vouchers.pay_voucher_id "
 					);
 					
 					List<Pair<Tutor, PayVoucher>> result = new ArrayList<Pair<Tutor, PayVoucher>>();

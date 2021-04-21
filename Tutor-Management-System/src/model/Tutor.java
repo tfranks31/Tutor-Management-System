@@ -49,6 +49,7 @@ public class Tutor{
 		this.payRate = payRate;
 		this.tutorID = tutorID;
 		this.studentID = studentID;
+		this.accountID = accountID;
 	}
 
 	/**
