@@ -500,19 +500,22 @@ public class DerbyDatabase implements IDatabase {
 						resultSet = stmt3.executeQuery();
 					} else {
 						// searches by name or start date or due date or subject
+						String fuzzy = "%" + search + "%";
+						
 						stmt4 = conn.prepareStatement(
 							"select tutors.*, pay_vouchers.* " + 
 							"from tutors, pay_vouchers " + 
-							"where (tutors.name = ? " + 
+							"where (UPPER(tutors.name) LIKE UPPER(?) " + 
 							"OR pay_vouchers.due_date = ? " +
 							"OR pay_vouchers.start_date = ? " + 
-							"OR tutors.subject = ?) " +
+							"OR UPPER(tutors.subject) LIKE UPPER(?)) " +
 							"AND pay_vouchers.tutor_id = tutors.tutor_id "
 						);
-						stmt4.setString(1, search);
+						
+						stmt4.setString(1, fuzzy);
 						stmt4.setString(2, search);
 						stmt4.setString(3, search);
-						stmt4.setString(4, search);
+						stmt4.setString(4, fuzzy);
 						resultSet = stmt4.executeQuery();
 					}
 					
