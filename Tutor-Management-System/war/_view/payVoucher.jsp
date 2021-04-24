@@ -33,14 +33,16 @@
             <th>Hours</th>
             <th>Service Performed</th>
             <th>Where Performed</th>
-            <c:forEach items="${entries}" var="entry">
-		        <tr>
-		            <td><input type="text" name="cell" value="${entry.date}"></td>
-		            <td><input type="text" name="cell" value="${entry.hours}"></td>
-		            <td><input type="text" name="cell" value="${entry.servicePerformed}"></td>
-		            <td><input type="text" name="cell" value="${entry.wherePerformed}"></td>			            
-		        </tr>
-		    </c:forEach>
+            <c:if test="${cellLength >= 0}">
+	            <c:forEach var="i" begin="0" end="${cellLength}" step="4">
+	            	<tr>
+			            <td><input type="text" name="cell" value="${cells[i]}"></td>
+			            <td><input type="text" name="cell" value="${cells[i + 1]}"></td>
+			            <td><input type="text" name="cell" value="${cells[i + 2]}"></td>
+			            <td><input type="text" name="cell" value="${cells[i + 3]}"></td>			            
+			        </tr>
+	            </c:forEach>
+	        </c:if>
             <c:forEach var="i" begin="1" end="${tableSize}" step="1">
             	<tr>
             		<c:forEach var="j" begin="1" end="4" step="1">
