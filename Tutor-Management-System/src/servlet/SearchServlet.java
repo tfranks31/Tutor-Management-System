@@ -81,7 +81,8 @@ public class SearchServlet extends HttpServlet{
 				}
 			}
 			
-			if(tutorVoucherList.isEmpty()) {
+			if (tutorVoucherList.isEmpty()) {
+				req.setAttribute("errorMessage", "There were no pay vouchers found");
 				System.out.println("Search Servlet: no Voucher Found");
 			}
 			
@@ -148,6 +149,11 @@ public class SearchServlet extends HttpServlet{
 				}
 			}
 			
+			if (tutorVoucherList.isEmpty()) {
+				req.setAttribute("errorMessage", "There were no pay vouchers found");
+				System.out.println("Search Servlet: no Voucher Found");
+			}
+			
 			// Update search with the vouchers
 			req.setAttribute("payVouchers", tutorVoucherList);
 			req.getRequestDispatcher("/_view/search.jsp").forward(req, resp);
@@ -164,23 +170,7 @@ public class SearchServlet extends HttpServlet{
 			ArrayList<Pair<Tutor, PayVoucher>> tutorVoucherList = new ArrayList<Pair<Tutor, PayVoucher>>();
 			
 			// Get all pay vouchers
-			ArrayList<Pair<Tutor, PayVoucher>> allTutorVoucherList = controller.getAllVouchers();
-			
-			if (searchParameter == null) {
-				//call all pay vouchers
-				allTutorVoucherList = controller.getAllVouchers();
-				if (allTutorVoucherList.isEmpty()) {
-					req.setAttribute("errorMessage", "There were no pay vouchers found");
-					System.out.println("Search Servlet: no Voucher Found");
-				}
-			}else {
-				//call pay voucher per search
-				allTutorVoucherList = controller.getVoucherFromSearch(searchParameter);
-				if (allTutorVoucherList.isEmpty()) {
-					req.setAttribute("errorMessage", "There were no pay vouchers found");
-					System.out.println("Search Servlet: no Voucher Found");
-				}
-			}
+			ArrayList<Pair<Tutor, PayVoucher>> allTutorVoucherList = controller.getVoucherFromSearch(searchParameter);
 			
 			// Filter out tutors and vouchers based on account info
 			for (Pair<Tutor, PayVoucher> tutorVoucher : allTutorVoucherList) {
@@ -189,6 +179,11 @@ public class SearchServlet extends HttpServlet{
 					
 					tutorVoucherList.add(tutorVoucher);
 				}
+			}
+
+			if (tutorVoucherList.isEmpty()) {
+				req.setAttribute("errorMessage", "There were no pay vouchers found");
+				System.out.println("Search Servlet: no Voucher Found");
 			}
 
 			// Update search with the vouchers
@@ -245,6 +240,11 @@ public class SearchServlet extends HttpServlet{
 				
 				tutorVoucherList.add(tutorVoucher);
 			}
+		}
+		
+		if (tutorVoucherList.isEmpty()) {
+			req.setAttribute("errorMessage", "There were no pay vouchers found");
+			System.out.println("Search Servlet: no Voucher Found");
 		}
 		
 		// Update search with the vouchers

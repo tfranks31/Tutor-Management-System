@@ -191,62 +191,26 @@ public class FakeDatabase implements IDatabase {
 	public List<Pair<Tutor, PayVoucher>> findVoucherBySearch(String search) {
 		List<Pair<Tutor, PayVoucher>> result = new ArrayList<Pair<Tutor, PayVoucher>>();
 		
-		//checks for vouchers by username
+		String upperSearch = search.toUpperCase();
+		
 		for (Tutor tutor : tutorList) {
-			if (tutor.getName().equals(search)) {
-				for (PayVoucher voucher : payVoucherList) {
-					if (tutor.getTutorID() == voucher.getTutorID()) {
-						result.add(new Pair<Tutor, PayVoucher>(tutor, voucher));
-					}
-				}
-			}
-		}
-		
-		//checks for vouchers by start or due date
-		for (PayVoucher voucher: payVoucherList) {
-			if (voucher.getDueDate().equals(search) || voucher.getStartDate().equals(search)) {
-				for (Tutor tutor : tutorList) {
-					if (voucher.getTutorID() == tutor.getTutorID()) {
-						result.add(new Pair<Tutor, PayVoucher>(tutor, voucher));
-					}
-				}
-			}
-		}
-		
-		//checks for vouchers by submitted
-		if (search.equals("submitted") || search.equals("Submitted")) {
-			for (PayVoucher voucher : payVoucherList) {
-				if(voucher.getIsSubmitted()) {
-					for (Tutor tutor : tutorList) {
-						if (tutor.getTutorID() == voucher.getTutorID()) {
-							result.add(new Pair<Tutor, PayVoucher>(tutor, voucher));
-						}
-					}
-				}
-			}
-		}
-		
-		//checks for vouchers by signed
-		if (search.equals("signed") || search.equals("Signed")) {
-			for (PayVoucher voucher : payVoucherList) {
-				for (Tutor tutor : tutorList) {
-					if (voucher.getTutorID() == tutor.getTutorID() && voucher.getIsSigned() == true) {
-						result.add(new Pair<Tutor, PayVoucher>(tutor, voucher));
-					}
-				}
-			}
-		}
 			
-		//returns all vouchers of the search parameter is blank
-		if (search.equals("")) {
 			for (PayVoucher voucher : payVoucherList) {
-				for (Tutor tutor : tutorList) {
-					if (voucher.getTutorID() == tutor.getTutorID()) {
+				
+				if (tutor.getTutorID() == voucher.getTutorID()) {
+					
+					if (tutor.getName().toUpperCase().contains(upperSearch) ||
+						tutor.getSubject().toUpperCase().contains(upperSearch) ||
+						voucher.getDueDate().equals(search) || voucher.getStartDate().equals(search) ||
+						(upperSearch.equals("SUBMITTED") && voucher.getIsSubmitted()) 
+						|| (upperSearch.equals("SIGNED") && voucher.getIsSigned())) {
+						
 						result.add(new Pair<Tutor, PayVoucher>(tutor, voucher));
 					}
 				}
 			}
 		}
+		
 		return result;
 	}
 

@@ -473,7 +473,7 @@ public class DerbyDatabase implements IDatabase {
 				
 				try {
 					// show submitted vouchers
-					if (search.equals("Submitted") || search.equals("submitted")) {
+					if (search.toUpperCase().equals("SUBMITTED")) {
 						stmt1 = conn.prepareStatement(
 							"select tutors.*, pay_vouchers.* " + 
 							"from tutors, pay_vouchers " + 
@@ -482,7 +482,7 @@ public class DerbyDatabase implements IDatabase {
 						);
 						resultSet = stmt1.executeQuery();
 					// show signed vouchers
-					} else if (search.equals("Signed") || search.equals("signed")) {
+					} else if (search.toUpperCase().equals("SIGNED")) {
 						stmt2 = conn.prepareStatement(
 							"select tutors.*, pay_vouchers.* " + 
 							"from tutors, pay_vouchers " + 
