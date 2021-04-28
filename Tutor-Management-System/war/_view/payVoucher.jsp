@@ -63,6 +63,10 @@
 		    </p>
 		</div>
 		
+		<div>
+			<input type="submit" class="export" id="export" name="exportVoucher" value="Export Pay Voucher">
+		</div>
+		
 		<input type="submit" class="submit" id="update" name="updateVoucher" value="Update Pay Voucher">
 		
 		<c:choose>

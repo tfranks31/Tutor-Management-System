@@ -1,6 +1,11 @@
 package servlet;
 
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.io.FileWriter;
 import java.io.IOException;
+import java.io.OutputStream;
 import java.util.ArrayList;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
@@ -283,6 +288,10 @@ public class PayVoucherServlet extends HttpServlet{
 						// Sign and get the updated voucher
 						voucher = controller.signPayVoucher(voucher.getPayVoucherID());
 					}
+					else if (req.getParameter("exportVoucher") != null) {
+						
+						exportPayVoucherToCSV(cells, voucher, tutor, req, resp);
+					}
 				}
 			}		
 		}
@@ -365,4 +374,48 @@ public class PayVoucherServlet extends HttpServlet{
 		return true;
 	}
 	
+	private void exportPayVoucherToCSV(String[] cells, PayVoucher voucher, Tutor tutor, HttpServletRequest req, HttpServletResponse resp) {
+		
+		String[] name = tutor.getName().split(" ");
+		String date = voucher.getDueDate().replace("/", "-");
+		
+		StringBuilder voucherInfo = new StringBuilder();
+		
+		voucherInfo.append("DATE");
+		voucherInfo.append(',');
+		voucherInfo.append("HOURS");
+		voucherInfo.append(',');
+		voucherInfo.append("WHAT_PERFORMED");
+		voucherInfo.append(',');
+		voucherInfo.append("WHERE_PERFORMED");
+		voucherInfo.append('\n');
+		
+		for (int i = 0; i < cells.length; i += 4) {
+			
+			voucherInfo.append(cells[i]);
+			voucherInfo.append(',');
+			voucherInfo.append(cells[i + 1]);
+			voucherInfo.append(',');
+			voucherInfo.append(cells[i + 2]);
+			voucherInfo.append(',');
+			voucherInfo.append(cells[i + 3]);
+			voucherInfo.append('\n');
+		}		
+		
+		try {
+
+			resp.setContentType("text/csv");
+			resp.setHeader("Content-Disposition","attachment; filename=" + name[1] + "_" + name[0] + "_" + date + "_Pay_Voucher.csv");
+			
+			OutputStream outputStream = resp.getOutputStream();
+	        outputStream.write(voucherInfo.toString().getBytes());
+	        outputStream.flush();
+	        outputStream.close();
+		} 
+		catch (IOException e) {
+			
+			System.out.println(e.getMessage());
+			req.setAttribute("errorMessage", "Export to CSV failed!");
+		}
+	}
 }
