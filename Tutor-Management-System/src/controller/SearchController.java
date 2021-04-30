@@ -94,4 +94,22 @@ public class SearchController {
 		userTutor = db.getTutorInfo(name);
 		return userTutor;
 	}
+	
+	
+	/**
+	 * Returns an instance of respective tutor to the entered user ID
+	 * @param user userAccount of session user
+	 * @return Tutor object of respective user account
+	 */
+	public Tutor getTutorByUserID(UserAccount user){
+		ArrayList<Tutor> tutorList = (ArrayList<Tutor>) db.getTutors();
+		
+		for (Tutor tutor : tutorList) {
+			if (tutor.getAccountID() == user.getAccountID()) {
+				return tutor;
+			}
+		}
+		
+		return null;
+	}
 }

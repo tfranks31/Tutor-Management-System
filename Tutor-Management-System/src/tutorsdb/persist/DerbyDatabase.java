@@ -1527,4 +1527,10 @@ public class DerbyDatabase implements IDatabase {
 		});
 	}
 
+	@Override
+	public void updatePasswordWithUserID(UserAccount user, String password) {
+		// TODO Auto-generated method stub
+		
+	}
+
 }

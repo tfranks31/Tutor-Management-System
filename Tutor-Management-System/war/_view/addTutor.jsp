@@ -30,6 +30,9 @@
                 <c:when test="${edit}">
                     Edit Tutor
                 </c:when>
+                <c:when test="${!user.isAdmin}">
+                    Tutor Profile
+                </c:when>
                 <c:otherwise>
                     Add a Tutor
                 </c:otherwise>
@@ -48,7 +51,7 @@
                                 <input type="text" id="firstName" name="firstName" placeholder="First Name" value="${firstName}">
                             </c:when>
                             <c:otherwise>
-                                <p name="firstName">${firstName}</p>
+                                <input type="text" id="firstName" name="firstName" value="${firstName}" readonly>
                             </c:otherwise>
                         </c:choose>
                     </td>
@@ -58,7 +61,7 @@
                                 <input type="text" id="lastName" name="lastName" placeholder="Last Name" value="${lastName}">
                             </c:when>
                             <c:otherwise>
-                                <p name="lastName">${lastName}</p>
+                                <input type="text" id="lastName" name="lastName" value="${lastName}" readonly>
                             </c:otherwise>
                         </c:choose>
 
@@ -73,24 +76,17 @@
                                 <input type="text" id="username" name="username" placeholder="Username" value="${username}">
                             </c:when>
                             <c:otherwise>
-                                <p name="username">${username}</p>
+                                <input type="text" id="username" name="username" value="${username}" readonly>
                             </c:otherwise>
                         </c:choose>
                     </td>               
                     <td>
-                        <c:choose>
-                            <c:when test="${user.isAdmin}">
-                                <input type="text" id="password" name="password" placeholder="Password" value="${password}">
-                            </c:when>
-                            <c:otherwise>
-                                <p name="password">${password}</p>
-                            </c:otherwise>
-                        </c:choose>
+                        <input type="text" id="password" name="password" placeholder="Password" value="${password}">
                     </td>
                 </tr>
                 <tr>
                     <td>
-                        <label for="email" class="label">Email:</label>
+                        <label for="email" class="label" >Email:</label>
                     </td>
                     <td>
                     <c:choose>
@@ -98,7 +94,7 @@
                             <input type="text" id="email" name="email" placeholder="Email" value="${email}">
                         </c:when>
                         <c:otherwise>
-                            <p name="email">${email}</p>
+                            <input type="text" id="email" name="email" value="${email}" readonly>
                         </c:otherwise>
                     </c:choose>
                     </td>
@@ -113,7 +109,7 @@
                                 <input type="text" id="studentID" name="studentID" placeholder="Student ID" value="${studentID}">
                             </c:when>
                             <c:otherwise>
-                                <p name="studentID">${studentID}</p>
+                                <input type="text" id="studentID" name="studentID" value="${studentID}" readonly>
                             </c:otherwise>
                         </c:choose>
                     </td>
@@ -123,7 +119,7 @@
                                 <input type="text" id="accountNumber" name="accountNumber" placeholder="Account Number" value="${accountNumber}">
                             </c:when>
                             <c:otherwise>
-                                <p name="accountNumber">${accountNumber}</p>
+                                <input type="text" id="accountNumber" name="accountNumber" value="${accountNumber}" readonly>
                             </c:otherwise>
                         </c:choose>     
                     </td>
@@ -138,7 +134,7 @@
                                 <input type="text" id="subject" name="subject" placeholder="Subject" value="${subject}">
                             </c:when>
                             <c:otherwise>
-                                <p name="subject">${subject}</p>
+                                <input type="text" id="subject" name="subject" value="${subject}" readonly>
                             </c:otherwise>
                         </c:choose>
                     </td>
@@ -148,7 +144,7 @@
                                 <input type="text" id="payRate" name="payRate" placeholder="Pay Rate" value="${payRate}">
                             </c:when>
                             <c:otherwise>
-                                <p name="payRate">${payRate}</p>
+                                <input type="text" id="payRate" name="payRate" placeholder="Pay Rate" value="${payRate}" readonly>
                             </c:otherwise>
                         </c:choose>
                     </td>
@@ -163,6 +159,9 @@
                 <c:choose>
                     <c:when test="${edit}">
                         <input type="submit" name="editTutorInfo" value="Edit">
+                    </c:when>
+                    <c:when test="${!user.isAdmin}">
+                        <input type="submit" name="updatePassword" value="Update Password">
                     </c:when>
                     <c:otherwise>
                         <input type="submit" name="addTutor" value="Add Tutor">

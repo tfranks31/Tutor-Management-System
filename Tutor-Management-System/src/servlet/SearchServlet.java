@@ -208,6 +208,9 @@ public class SearchServlet extends HttpServlet{
 				req.getSession().setAttribute("editTutor", userTutorPair.getRight());
 				//req.getSession().setAttribute("editName", editName);
 				
+				boolean editProfile = true;
+				req.getSession().setAttribute("viewProfile", editProfile);
+				
 				//redirects to page
 				resp.sendRedirect("addTutor");
 				
@@ -217,12 +220,23 @@ public class SearchServlet extends HttpServlet{
 			else {
 				loadDefaultSearch(req, resp, account);
 			}
+		}else if (req.getParameter("tutorProfile") != null){
+			Tutor tutor = controller.getTutorByUserID(account);
+			
+			boolean editProfile = true;
+			req.getSession().setAttribute("viewProfile", editProfile);
+			req.getSession().setAttribute("tutorProfileInfo", tutor);
+			
+			boolean editTutor = false;
+			req.getSession().setAttribute("edit", editTutor);
+			
+			//redirects to page
+			resp.sendRedirect("addTutor");
 		}
-		
 		// Default generate pay vouchers
 		else {
 			loadDefaultSearch(req, resp, account);
-;		}
+		}
 	}
 	
 	// Default generate pay vouchers

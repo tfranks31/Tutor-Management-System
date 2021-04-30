@@ -112,14 +112,22 @@
 		    	</form>
 			</div>
 		</c:if>
-		
-		<form action="${pageContext.servletContext.contextPath}/search" method="get">
-			<c:if test="${user.isAdmin}">
-				<input type="submit" id="addTutor" name="addTutor" value="Add Tutor" class="addTutor"></input>
-				</br></br>
-			</c:if>
-		</form>
-		
+	
+		<c:choose>
+			<c:when test="${user.isAdmin}">
+				<form action="${pageContext.servletContext.contextPath}/search" method="get">
+					<input type="submit" id="addTutor" name="addTutor" value="Add Tutor" class="addTutor"></input>
+					</br></br>
+				</form>
+			</c:when>
+			<c:otherwise>
+				<form action="${pageContext.servletContext.contextPath}/search" method="post">
+					<input type="submit" id="addTutor" name="tutorProfile" value="Tutor Profile" class="addTutor"></input>
+					</br></br>
+				</form>
+			</c:otherwise>
+		</c:choose>
+
 		<form action="${pageContext.servletContext.contextPath}/search" method="post">
 			<c:if test="${user.isAdmin}">
 				<input type="submit" id="editTutor" name="editTutor" value="Edit Tutor" class="addTutor"></input>

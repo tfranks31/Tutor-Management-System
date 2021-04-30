@@ -185,4 +185,6 @@ public interface IDatabase {
 	 * @return A pair consisting of the Tutor and it's respective account
 	 */
 	public Pair<UserAccount, Tutor>getTutorInfo(String name);
+	
+	public void updatePasswordWithUserID(UserAccount user, String password);
 }

@@ -52,4 +52,13 @@ public class AddTutorController {
 	public void editTutor(UserAccount account, Tutor tutor) {
 		db.editTutor(account, tutor);
 	}
+	
+	/**
+	 * Utility method that updates the password of a tutor with request of the tutor
+	 * @param User userAccount of session user
+	 * @param Password string of updated password 
+	 */
+	public void updatePassword(UserAccount User, String Password) {
+		db.updatePasswordWithUserID(User, Password);
+	}
 }

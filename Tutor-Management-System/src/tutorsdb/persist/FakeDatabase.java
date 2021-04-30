@@ -394,4 +394,13 @@ public class FakeDatabase implements IDatabase {
 		
 		return userTutorPair;
 	}
+
+	@Override
+	public void updatePasswordWithUserID(UserAccount user, String password) {
+		for (UserAccount account : accountList) {
+			if (account.getAccountID() == user.getAccountID()) {
+				account.setPassword(password);
+			}
+		}
+	}
 }
