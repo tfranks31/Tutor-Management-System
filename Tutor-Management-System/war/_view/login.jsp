@@ -3,6 +3,7 @@
 <head>
     <title>Login</title>
     <link rel="stylesheet" href="./_view/login.css">
+    <link rel="stylesheet" href="login.css">
 </head>
 <body>
     <div id="loginBox">
@@ -13,9 +14,11 @@
             <label for="password" class="label">Password</label></br>
             <input id="input" type="password" name="password" value="${password}"></br></br></br>
             <input id="submit" type="submit" name="login" value="Login"></br></br>
+            
         	<c:if test="${! empty errorMessage}">
                 <div class="error">${errorMessage}</div>
             </c:if>
+            
             <!-- <a href="ForgotPassword">Forgot Password</a> -->
         </form>
     </div>

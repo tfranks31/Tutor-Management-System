@@ -7,6 +7,21 @@
         <link rel="stylesheet" href="./_view/addTutor.css">
     </head>
     <body>
+    
+   	 	<%
+	
+		response.setHeader("cache-control", "no-cache, no-store, must-revalidate");
+	
+		response.setHeader("pragma", "no-cache");
+	
+		response.setHeader("expires", "0");
+	
+		if (session.getAttribute("user") == null) {
+			response.sendRedirect("login.jsp");
+		}
+	
+		%>
+		
     	<div class="super-class background-image"></div>
     
    	 	<div class="super-class content">
