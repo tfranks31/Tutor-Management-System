@@ -24,6 +24,8 @@ public class SearchServlet extends HttpServlet{
 	private SearchController controller = null;
 	String searchParameter = null;
 	boolean editTutor = false;
+	boolean editProfile = false;
+	
 	@Override
 	protected void doGet(HttpServletRequest req, HttpServletResponse resp)
 			throws ServletException, IOException {
@@ -50,7 +52,7 @@ public class SearchServlet extends HttpServlet{
 			
 			//defaults to false
 			req.getSession().setAttribute("edit", editTutor);
-			
+			req.getSession().setAttribute("viewProfile", editProfile);
 			resp.sendRedirect("addTutor");
 		}
 		
@@ -208,7 +210,7 @@ public class SearchServlet extends HttpServlet{
 				req.getSession().setAttribute("editTutor", userTutorPair.getRight());
 				//req.getSession().setAttribute("editName", editName);
 				
-				boolean editProfile = true;
+				editProfile = true;
 				req.getSession().setAttribute("viewProfile", editProfile);
 				
 				//redirects to page
@@ -226,6 +228,9 @@ public class SearchServlet extends HttpServlet{
 			boolean editProfile = true;
 			req.getSession().setAttribute("viewProfile", editProfile);
 			req.getSession().setAttribute("tutorProfileInfo", tutor);
+			
+			editProfile = false;
+			req.getSession().setAttribute("viewProfile", editProfile);
 			
 			boolean editTutor = false;
 			req.getSession().setAttribute("edit", editTutor);
