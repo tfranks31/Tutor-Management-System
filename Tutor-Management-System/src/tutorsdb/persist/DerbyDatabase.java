@@ -372,6 +372,8 @@ public class DerbyDatabase implements IDatabase {
 							PayVoucher PayVoucher = new PayVoucher();
 							loadPayVoucher(PayVoucher, resultSet2, 9);
 							//loadEntry(Entry, resultSet2, 19);
+							PayVoucher.setStartDate(PayVoucher.getStartDate().substring(5) + "/" + PayVoucher.getStartDate().substring(0, 4));
+							PayVoucher.setDueDate(PayVoucher.getDueDate().substring(5) + "/" + PayVoucher.getDueDate().substring(0, 4));
 							result.add(new Tuple<Tutor, PayVoucher, Entry>(Tutor, PayVoucher, Entry));
 						}
 					} else {
@@ -396,8 +398,12 @@ public class DerbyDatabase implements IDatabase {
 								loadTutor(Tutor, resultSet2, 1);
 								PayVoucher PayVoucher = new PayVoucher();
 								loadPayVoucher(PayVoucher, resultSet2, 9);
+								PayVoucher.setStartDate(PayVoucher.getStartDate().substring(5) + "/" + PayVoucher.getStartDate().substring(0, 4));
+								PayVoucher.setDueDate(PayVoucher.getDueDate().substring(5) + "/" + PayVoucher.getDueDate().substring(0, 4));
+								
 								Entry Entry = new Entry();
 								loadEntry(Entry, resultSet2, 19);
+								Entry.setDate(Entry.getDate().substring(5) + "/" + Entry.getDate().substring(0, 4));
 								
 								result.add(new Tuple<Tutor, PayVoucher, Entry>(Tutor, PayVoucher, Entry));
 							} 
@@ -478,7 +484,8 @@ public class DerbyDatabase implements IDatabase {
 							"select tutors.*, pay_vouchers.* " + 
 							"from tutors, pay_vouchers " + 
 							"where pay_vouchers.is_submitted = true " +
-							"AND pay_vouchers.tutor_id = tutors.tutor_id "
+							"AND pay_vouchers.tutor_id = tutors.tutor_id " + 
+							"Order by pay_vouchers.due_date DESC"
 						);
 						resultSet = stmt1.executeQuery();
 					// show signed vouchers
@@ -487,7 +494,8 @@ public class DerbyDatabase implements IDatabase {
 							"select tutors.*, pay_vouchers.* " + 
 							"from tutors, pay_vouchers " + 
 							"where pay_vouchers.is_signed = true " +
-							"AND pay_vouchers.tutor_id = tutors.tutor_id "
+							"AND pay_vouchers.tutor_id = tutors.tutor_id " + 
+							"Order by pay_vouchers.due_date DESC"
 						);
 						resultSet = stmt2.executeQuery();
 					// show all vouchers
@@ -495,12 +503,18 @@ public class DerbyDatabase implements IDatabase {
 						stmt3 = conn.prepareStatement(
 							"select tutors.*, pay_vouchers.* " + 
 							"from tutors, pay_vouchers " + 
-							"where pay_vouchers.tutor_id = tutors.tutor_id "
+							"where pay_vouchers.tutor_id = tutors.tutor_id " + 
+							"Order by pay_vouchers.due_date DESC"
 						);
 						resultSet = stmt3.executeQuery();
 					} else {
 						// searches by name or start date or due date or subject
 						String fuzzy = "%" + search + "%";
+						String date = null;
+						
+						if (search.length() == 10) {
+							date = search.substring(6) + "/" + search.substring(0, 5);
+						}
 						
 						stmt4 = conn.prepareStatement(
 							"select tutors.*, pay_vouchers.* " + 
@@ -509,12 +523,13 @@ public class DerbyDatabase implements IDatabase {
 							"OR pay_vouchers.due_date = ? " +
 							"OR pay_vouchers.start_date = ? " + 
 							"OR UPPER(tutors.subject) LIKE UPPER(?)) " +
-							"AND pay_vouchers.tutor_id = tutors.tutor_id "
+							"AND pay_vouchers.tutor_id = tutors.tutor_id " + 
+							"Order by pay_vouchers.due_date DESC"
 						);
 						
 						stmt4.setString(1, fuzzy);
-						stmt4.setString(2, search);
-						stmt4.setString(3, search);
+						stmt4.setString(2, date);
+						stmt4.setString(3, date);
 						stmt4.setString(4, fuzzy);
 						resultSet = stmt4.executeQuery();
 					}
@@ -527,6 +542,9 @@ public class DerbyDatabase implements IDatabase {
 						loadTutor(Tutor, resultSet, 1);
 						PayVoucher PayVoucher = new PayVoucher();
 						loadPayVoucher(PayVoucher, resultSet, 9);
+						PayVoucher.setStartDate(PayVoucher.getStartDate().substring(5) + "/" + PayVoucher.getStartDate().substring(0, 4));
+						PayVoucher.setDueDate(PayVoucher.getDueDate().substring(5) + "/" + PayVoucher.getDueDate().substring(0, 4));
+						
 						result.add(new Pair<Tutor, PayVoucher>(Tutor, PayVoucher));
 					}
 
@@ -628,9 +646,9 @@ public class DerbyDatabase implements IDatabase {
 					stmt = conn.prepareStatement(
 						"select pay_vouchers.*, tutors.* " + 
 						"from pay_vouchers, tutors " + 
-						"where pay_vouchers.tutor_id = tutors.tutor_id "
-//						+ 
-//						"ORDER BY tutors.name, pay_vouchers.pay_voucher_id "
+						"where pay_vouchers.tutor_id = tutors.tutor_id " + 
+						"Order by pay_vouchers.due_date DESC"
+						
 					);
 					
 					List<Pair<Tutor, PayVoucher>> result = new ArrayList<Pair<Tutor, PayVoucher>>();
@@ -642,6 +660,8 @@ public class DerbyDatabase implements IDatabase {
 						// retrieve attributes from resultSet starting with index 1
 						PayVoucher PayVoucher = new PayVoucher();
 						loadPayVoucher(PayVoucher, resultSet, 1);
+						PayVoucher.setStartDate(PayVoucher.getStartDate().substring(5) + "/" + PayVoucher.getStartDate().substring(0, 4));
+						PayVoucher.setDueDate(PayVoucher.getDueDate().substring(5) + "/" + PayVoucher.getDueDate().substring(0, 4));
 						Tutor Tutor = new Tutor();
 						loadTutor(Tutor, resultSet, 11);
 
@@ -723,6 +743,8 @@ public class DerbyDatabase implements IDatabase {
 				
 				try {
 					for (Entry entry : entries) {
+						String date = entry.getDate().substring(6) + "/" + entry.getDate().substring(0, 5);
+						
 						if (entry.getEntryID() == -1) {
 							stmt5 = conn.prepareStatement(
 								"INSERT into entries (pay_voucher_id, date, service_performed, where_performed, hours) " + 
@@ -730,7 +752,7 @@ public class DerbyDatabase implements IDatabase {
 							);
 							
 							stmt5.setInt(1, voucher.getPayVoucherID());
-							stmt5.setString(2, entry.getDate());
+							stmt5.setString(2, date);
 							stmt5.setString(3, entry.getServicePerformed());
 							stmt5.setString(4, entry.getWherePerformed());
 							stmt5.setDouble(5, entry.getHours());
@@ -755,7 +777,7 @@ public class DerbyDatabase implements IDatabase {
 								"AND entries.pay_voucher_id = ? "
 							);
 							
-							stmt1.setString(1, entry.getDate());
+							stmt1.setString(1, date);
 							stmt1.setString(2, entry.getServicePerformed());
 							stmt1.setString(3, entry.getWherePerformed());
 							stmt1.setDouble(4, entry.getHours());
@@ -852,7 +874,14 @@ public class DerbyDatabase implements IDatabase {
 				PreparedStatement stmt1 = null;
 				PreparedStatement stmt2 = null;
 				ResultSet resultSet = null;
-				
+				String start = null;
+				String due = null;
+				//if (startDate.length() == 10) {
+					start = startDate.substring(startDate.length() - 4) + "/" + startDate.substring(0, startDate.length() - 5);
+				//}
+				//if (dueDate.length() == 10) {
+					due = dueDate.substring(dueDate.length() - 4) + "/" + dueDate.substring(0, dueDate.length() - 5);
+				//}
 				try {
 					//get a list of all the tutors
 					stmt1 = conn.prepareStatement(
@@ -877,8 +906,8 @@ public class DerbyDatabase implements IDatabase {
 							"VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)"
 						);
 						stmt2.setInt(1, tutor.getTutorID());
-						stmt2.setString(2, startDate);
-						stmt2.setString(3, dueDate);
+						stmt2.setString(2, start);
+						stmt2.setString(3, due);
 						stmt2.setDouble(4, 0);
 						stmt2.setDouble(5, 0);
 						stmt2.setBoolean(6, false);
@@ -978,7 +1007,8 @@ public class DerbyDatabase implements IDatabase {
 				try {
 					stmt = conn.prepareStatement(
 						"select pay_vouchers.* " + 
-						"from pay_vouchers " 
+						"from pay_vouchers " +
+						"Order by pay_vouchers.due_date DESC"
 					);
 					
 					List<PayVoucher> result = new ArrayList<PayVoucher>();
@@ -988,7 +1018,8 @@ public class DerbyDatabase implements IDatabase {
 					while (resultSet.next()) {
 						PayVoucher PayVoucher = new PayVoucher();
 						loadPayVoucher(PayVoucher, resultSet, 1);
-
+						PayVoucher.setStartDate(PayVoucher.getStartDate().substring(5) + "/" + PayVoucher.getStartDate().substring(0, 4));
+						PayVoucher.setDueDate(PayVoucher.getDueDate().substring(5) + "/" + PayVoucher.getDueDate().substring(0, 4));
 						result.add(PayVoucher);
 					}
 
@@ -1022,7 +1053,7 @@ public class DerbyDatabase implements IDatabase {
 					while (resultSet.next()) {
 						Entry Entry = new Entry();
 						loadEntry(Entry, resultSet, 1);
-
+						Entry.setDate(Entry.getDate().substring(5) + "/" + Entry.getDate().substring(0, 4));
 						result.add(Entry);
 					}
 
@@ -1206,7 +1237,8 @@ public class DerbyDatabase implements IDatabase {
 			@Override
 			public Boolean execute(Connection conn) throws SQLException {
 				PreparedStatement insertPayVoucher = null;
-				
+				String startDate = payVoucher.getStartDate().substring(6) + "/" + payVoucher.getStartDate().substring(0, 5);
+				String dueDate = payVoucher.getDueDate().substring(6) + "/" + payVoucher.getDueDate().substring(0, 5);
 				try {
 					insertPayVoucher = conn.prepareStatement(
 						"insert into pay_vouchers (tutor_id, start_date, due_date, total_hours, total_pay, is_submitted, is_signed, is_new, is_admin_edited) " +
@@ -1214,8 +1246,8 @@ public class DerbyDatabase implements IDatabase {
 					);
 		
 					insertPayVoucher.setInt(1, payVoucher.getTutorID());
-					insertPayVoucher.setString(2, payVoucher.getStartDate());
-					insertPayVoucher.setString(3, payVoucher.getDueDate());
+					insertPayVoucher.setString(2, startDate);
+					insertPayVoucher.setString(3, dueDate);
 					insertPayVoucher.setDouble(4, payVoucher.getTotalHours());
 					insertPayVoucher.setDouble(5, payVoucher.getTotalPay());
 					insertPayVoucher.setBoolean(6, payVoucher.getIsSubmitted());
@@ -1240,7 +1272,8 @@ public class DerbyDatabase implements IDatabase {
 			@Override
 			public Boolean execute(Connection conn) throws SQLException {
 				PreparedStatement insertEntry = null;
-				
+				String date = entry.getDate().substring(6) + "/" + entry.getDate().substring(0, 5);
+		
 				try {
 					insertEntry = conn.prepareStatement(
 						"insert into entries (pay_voucher_id, date, service_performed, where_performed, hours) " + 
@@ -1248,7 +1281,7 @@ public class DerbyDatabase implements IDatabase {
 					);
 					
 					insertEntry.setInt(1, entry.getPayVoucherID());
-					insertEntry.setString(2, entry.getDate());
+					insertEntry.setString(2, date);
 					insertEntry.setString(3, entry.getServicePerformed());
 					insertEntry.setString(4, entry.getWherePerformed());
 					insertEntry.setDouble(5, entry.getHours());
@@ -1297,7 +1330,8 @@ public class DerbyDatabase implements IDatabase {
 					if (resultSet.next()) {
 						PayVoucher PayVoucher = new PayVoucher();
 						loadPayVoucher(PayVoucher, resultSet, 1);
-
+						PayVoucher.setStartDate(PayVoucher.getStartDate().substring(5) + "/" + PayVoucher.getStartDate().substring(0, 4));
+						PayVoucher.setDueDate(PayVoucher.getDueDate().substring(5) + "/" + PayVoucher.getDueDate().substring(0, 4));
 						result = PayVoucher;
 					}
 					
@@ -1419,7 +1453,8 @@ public class DerbyDatabase implements IDatabase {
 				PreparedStatement stmt1 = null;
 				PreparedStatement stmt2 = null;
 				ResultSet resultSet = null;
-				
+				String start = startDate.substring(startDate.length() - 4) + "/" + startDate.substring(0, startDate.length() - 5);
+				String due = dueDate.substring(dueDate.length() - 4) + "/" + dueDate.substring(0, dueDate.length() - 5);
 				try {
 					//get a list of all the tutors
 					stmt1 = conn.prepareStatement(
@@ -1446,8 +1481,8 @@ public class DerbyDatabase implements IDatabase {
 								"VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)"
 							);
 							stmt2.setInt(1, tutor.getTutorID());
-							stmt2.setString(2, startDate);
-							stmt2.setString(3, dueDate);
+							stmt2.setString(2, start);
+							stmt2.setString(3, due);
 							stmt2.setDouble(4, 0);
 							stmt2.setDouble(5, 0);
 							stmt2.setBoolean(6, false);
@@ -1467,7 +1502,6 @@ public class DerbyDatabase implements IDatabase {
 				}
 			}
 		});
-		
 	}
 
 	@Override
@@ -1529,8 +1563,28 @@ public class DerbyDatabase implements IDatabase {
 
 	@Override
 	public void updatePasswordWithUserID(UserAccount user, String password) {
-		// TODO Auto-generated method stub
-		
+		executeTransaction(new Transaction<Boolean>() {
+			
+			@Override
+			public Boolean execute(Connection conn) throws SQLException {
+				PreparedStatement stmt = null;
+				try {
+					stmt = conn.prepareStatement(
+						"UPDATE user_accounts " + 
+						"SET user_accounts.password = ? " +
+						"WHERE user_accounts.user_account_id = ? "
+					);
+					
+					stmt.setString(1, password);
+					stmt.setInt(2, user.getAccountID());
+					stmt.executeUpdate();
+						
+					return true;
+					
+				} finally {
+					DBUtil.closeQuietly(stmt);
+				}
+			}
+		});
 	}
-
 }

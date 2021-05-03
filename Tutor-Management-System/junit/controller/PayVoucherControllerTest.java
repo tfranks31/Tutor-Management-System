@@ -15,6 +15,7 @@ import model.Tuple;
 import model.Tutor;
 import model.UserAccount;
 import tutorsdb.persist.DatabaseProvider;
+import tutorsdb.persist.DerbyDatabase;
 import tutorsdb.persist.FakeDatabase;
 import tutorsdb.persist.IDatabase;
 
@@ -25,8 +26,8 @@ public class PayVoucherControllerTest {
 	
 	@Before
     public void setUp() {
-		
-		DatabaseProvider.setInstance(new FakeDatabase());
+		//DatabaseProvider.setInstance(new FakeDatabase());
+		DatabaseProvider.setInstance(new DerbyDatabase());
 		controller = new PayVoucherController();
 		db = DatabaseProvider.getInstance();
     }
@@ -38,11 +39,11 @@ public class PayVoucherControllerTest {
 		db.insertTutor(newTutor);
 		Tutor dbTutor = db.getTutors().get(db.getTutors().size() - 1);
 		
-		PayVoucher newPayVoucher = new PayVoucher("03/04/2021", "03/02/2021", 0, 0, false, false, false, false, -1, dbTutor.getTutorID());
+		PayVoucher newPayVoucher = new PayVoucher("03/04/0001", "03/02/0001", 0, 0, false, false, false, false, -1, dbTutor.getTutorID());
 		db.insertPayVoucher(newPayVoucher);
 		PayVoucher dbPayVoucher = db.getPayVouchers().get(db.getPayVouchers().size() - 1);
 		
-		Entry newEntry = new Entry("03/03/2021", "Tutoring", "zoom", 1, -1, dbPayVoucher.getPayVoucherID());
+		Entry newEntry = new Entry("03/03/0001", "Tutoring", "zoom", 1, -1, dbPayVoucher.getPayVoucherID());
 		db.insertEntry(newEntry);
 		Entry dbEntry = db.getEntries().get(db.getEntries().size() - 1);
 		
@@ -61,11 +62,11 @@ public class PayVoucherControllerTest {
 	@Test
 	public void testUpdateVoucherWithEntries() {
 		
-		PayVoucher payVoucher = new PayVoucher("03/04/2021", "03/02/2021", 0, 0, false, false, false, false, -1, 1);
+		PayVoucher payVoucher = new PayVoucher("03/04/0001", "03/02/0001", 0, 0, false, false, false, false, -1, 1);
 		db.insertPayVoucher(payVoucher);
 		PayVoucher dbPayVoucher = db.getPayVouchers().get(db.getPayVouchers().size() - 1);
 		
-		Entry entry = new Entry("03/03/2021", "Tutoring", "zoom", 1, -1, -1);
+		Entry entry = new Entry("03/03/0001", "Tutoring", "zoom", 1, -1, -1);
 		ArrayList<Entry> entries = new ArrayList<Entry>();
 		entries.add(entry);
 		
@@ -113,7 +114,7 @@ public class PayVoucherControllerTest {
 	@Test
 	public void testSubmitPayVoucher() {
 		
-		PayVoucher payVoucher = new PayVoucher("03/04/2021", "03/02/2021", 0, 0, false, false, false, false, -1, 1);
+		PayVoucher payVoucher = new PayVoucher("03/04/0001", "03/02/0001", 0, 0, false, false, false, false, -1, 1);
 		db.insertPayVoucher(payVoucher);
 		PayVoucher dbPayVoucher = db.getPayVouchers().get(db.getPayVouchers().size() - 1);
 		
@@ -128,7 +129,7 @@ public class PayVoucherControllerTest {
 	@Test
 	public void testSignPayVoucher() {
 		
-		PayVoucher payVoucher = new PayVoucher("03/04/2021", "03/02/2021", 0, 0, false, false, false, false, -1, 1);
+		PayVoucher payVoucher = new PayVoucher("03/04/0001", "03/02/0001", 0, 0, false, false, false, false, -1, 1);
 		db.insertPayVoucher(payVoucher);
 		PayVoucher dbPayVoucher = db.getPayVouchers().get(db.getPayVouchers().size() - 1);
 		

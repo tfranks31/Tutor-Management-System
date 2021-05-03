@@ -7,6 +7,7 @@ import org.junit.Test;
 
 import model.UserAccount;
 import tutorsdb.persist.DatabaseProvider;
+import tutorsdb.persist.DerbyDatabase;
 import tutorsdb.persist.FakeDatabase;
 import tutorsdb.persist.IDatabase;
 
@@ -18,7 +19,7 @@ public class LoginControllerTest {
 	@Before
     public void setUp() {
 		
-		DatabaseProvider.setInstance(new FakeDatabase());
+		DatabaseProvider.setInstance(new DerbyDatabase());
 		controller = new LoginController();
 		db = DatabaseProvider.getInstance();
     }

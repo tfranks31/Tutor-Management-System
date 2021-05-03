@@ -10,6 +10,7 @@ import org.junit.Test;
 import model.Tutor;
 import model.UserAccount;
 import tutorsdb.persist.DatabaseProvider;
+import tutorsdb.persist.DerbyDatabase;
 import tutorsdb.persist.FakeDatabase;
 import tutorsdb.persist.IDatabase;
 
@@ -22,7 +23,7 @@ public class AddTutorControllerTest {
     public void setUp() {
 		
 		// Set and get the tutordb instance and initialize AddTutorController
-		DatabaseProvider.setInstance(new FakeDatabase());
+		DatabaseProvider.setInstance(new DerbyDatabase());
 		controller = new AddTutorController();
 		db = DatabaseProvider.getInstance();		
     }

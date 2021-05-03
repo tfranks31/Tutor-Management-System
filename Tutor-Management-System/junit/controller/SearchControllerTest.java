@@ -13,6 +13,7 @@ import model.PayVoucher;
 import model.Tutor;
 import model.UserAccount;
 import tutorsdb.persist.DatabaseProvider;
+import tutorsdb.persist.DerbyDatabase;
 import tutorsdb.persist.FakeDatabase;
 import tutorsdb.persist.IDatabase;
 
@@ -25,7 +26,8 @@ public class SearchControllerTest {
     public void setUp() {
 		
 		// Set and get the tutordb instance and initialize AddTutorController
-		DatabaseProvider.setInstance(new FakeDatabase());
+		//DatabaseProvider.setInstance(new FakeDatabase());
+		DatabaseProvider.setInstance(new DerbyDatabase());
 		controller = new SearchController();
 		db = DatabaseProvider.getInstance();
     }
@@ -58,14 +60,14 @@ public class SearchControllerTest {
 	
 	@Test
 	public void testAssignPayVoucher() {
-		controller.assignPayVoucherAll("April", "May");
+		controller.assignPayVoucherAll("04/01/0001", "05/01/0001");
 		List<PayVoucher> vouchers = db.getPayVouchers();
 		
 		String startDate = vouchers.get(vouchers.size() - 1).getStartDate();
 		String dueDate = vouchers.get(vouchers.size() - 1).getDueDate();
 		
-		assertTrue(startDate.equals("April"));
-		assertTrue(dueDate.equals("May"));
+		assertTrue(startDate.equals("04/01/0001"));
+		assertTrue(dueDate.equals("05/01/0001"));
 		
 		List<Tutor> tutors = db.getTutors();
 		
@@ -106,14 +108,13 @@ public class SearchControllerTest {
 		db.insertTutor(newTutor);
 		Tutor dbTutor = db.getTutors().get(db.getTutors().size() - 1);
 		
-		controller.assignPayVoucherSpecific("April", "May", dbTutor.getName());
+		controller.assignPayVoucherSpecific("04/01/0001", "05/01/0001", dbTutor.getName());
 		List<PayVoucher> vouchers = db.getPayVouchers();
 		
 		String startDate = vouchers.get(vouchers.size() - 1).getStartDate();
 		String dueDate = vouchers.get(vouchers.size() - 1).getDueDate();
-		
-		assertTrue(startDate.equals("April"));
-		assertTrue(dueDate.equals("May"));
+		assertTrue(startDate.equals("04/01/0001"));
+		assertTrue(dueDate.equals("05/01/0001"));
 			
 		PayVoucher delete = vouchers.get(vouchers.size() - 1);
 		db.deletePayVoucher(delete);

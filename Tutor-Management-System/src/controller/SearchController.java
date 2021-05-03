@@ -9,6 +9,7 @@ import model.UserAccount;
 import model.Pair;
 import tutorsdb.persist.DatabaseProvider;
 import tutorsdb.persist.DerbyDatabase;
+import tutorsdb.persist.FakeDatabase;
 import tutorsdb.persist.IDatabase;
 
 /**
@@ -21,6 +22,7 @@ public class SearchController {
 	 * Refresh database instance when constructed.
 	 */
 	public SearchController() {
+		//DatabaseProvider.setInstance(new FakeDatabase());
 		DatabaseProvider.setInstance(new DerbyDatabase());
 		db = DatabaseProvider.getInstance();
 	}

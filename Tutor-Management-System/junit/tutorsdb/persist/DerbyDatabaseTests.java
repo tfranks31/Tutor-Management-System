@@ -26,6 +26,7 @@ public class DerbyDatabaseTests {
 	public void setUp() throws Exception {
 		
 		// creating DB instance here
+		//DatabaseProvider.setInstance(new FakeDatabase());
 		DatabaseProvider.setInstance(new DerbyDatabase());
 		db = DatabaseProvider.getInstance();				
 	}
@@ -158,11 +159,11 @@ public class DerbyDatabaseTests {
 		db.insertTutor(newTutor);
 		Tutor dbTutor = db.getTutors().get(db.getTutors().size() - 1);
 		
-		PayVoucher newPayVoucher = new PayVoucher("03/04/2021", "03/02/2021", 0, 0, false, false, false, false, -1, dbTutor.getTutorID());
+		PayVoucher newPayVoucher = new PayVoucher("03/04/0001", "03/02/0001", 0, 0, false, false, false, false, -1, dbTutor.getTutorID());
 		db.insertPayVoucher(newPayVoucher);
 		PayVoucher dbPayVoucher = db.getPayVouchers().get(db.getPayVouchers().size() - 1);
 		
-		Entry newEntry = new Entry("03/03/2021", "Tutoring", "zoom", 1, -1, dbPayVoucher.getPayVoucherID());
+		Entry newEntry = new Entry("03/03/0001", "Tutoring", "zoom", 1, -1, dbPayVoucher.getPayVoucherID());
 		db.insertEntry(newEntry);
 		Entry dbEntry = db.getEntries().get(db.getEntries().size() - 1);
 		
@@ -247,7 +248,7 @@ public class DerbyDatabaseTests {
 	
 	@Test
 	public void testUpdateVoucher(){
-		PayVoucher payVoucher = new PayVoucher("03/04/2021", "03/02/2021", 0, 0, false, false, false, false, -1, 1);
+		PayVoucher payVoucher = new PayVoucher("03/04/0001", "03/02/0001", 0, 0, false, false, false, false, -1, 1);
 		db.insertPayVoucher(payVoucher);
 		PayVoucher dbPayVoucher = db.getPayVouchers().get(db.getPayVouchers().size() - 1);
 		
@@ -280,7 +281,7 @@ public class DerbyDatabaseTests {
 	@Test
 	public void testInsertPayVoucher() {
 		
-		PayVoucher newVoucher = new PayVoucher("04/27/2021", "04/20/2021", 0.0,
+		PayVoucher newVoucher = new PayVoucher("04/27/0001", "04/20/0001", 0.0,
 				  0.0, false, false, true, false, 1,1);
 		
 		db.insertPayVoucher(newVoucher);
@@ -324,7 +325,7 @@ public class DerbyDatabaseTests {
 	@Test
 	public void testSubmitPayVouchers() {
 		
-		PayVoucher payVoucher = new PayVoucher("03/04/2021", "03/02/2021", 0, 0, false, false, false, false, -1, 1);
+		PayVoucher payVoucher = new PayVoucher("03/04/0001", "03/02/0001", 0, 0, false, false, false, false, -1, 1);
 		db.insertPayVoucher(payVoucher);
 		PayVoucher dbPayVoucher = db.getPayVouchers().get(db.getPayVouchers().size() - 1);
 		
@@ -340,7 +341,7 @@ public class DerbyDatabaseTests {
 	@Test
 	public void testGetPayVoucher() {
 		
-		PayVoucher newVoucher = new PayVoucher("04/27/2021", "04/20/2021", 0.0,
+		PayVoucher newVoucher = new PayVoucher("04/27/0001", "04/20/0001", 0.0,
 				  0.0, false, false, true, false, 1,1);
 		
 		db.insertPayVoucher(newVoucher);
@@ -368,7 +369,7 @@ public class DerbyDatabaseTests {
 	@Test
 	public void testInsertEntries() {
 		
-		Entry newEntry = new Entry("04/27/2021", "tutoring", "zoom",
+		Entry newEntry = new Entry("04/27/0001", "tutoring", "zoom",
 				 0.0, 1, 1);
 		
 		db.insertEntry(newEntry);
@@ -391,7 +392,7 @@ public class DerbyDatabaseTests {
 	@Test
 	public void testGetEntries() {
 		
-		Entry newEntry = new Entry("04/27/2021", "tutoring", "zoom",
+		Entry newEntry = new Entry("04/27/0001", "tutoring", "zoom",
 				 0.0, 1, 1);
 		
 		db.insertEntry(newEntry);
@@ -413,7 +414,7 @@ public class DerbyDatabaseTests {
 	
 	@Test
 	public void testSignPayVoucher() {
-		PayVoucher payVoucher = new PayVoucher("03/04/2021", "03/02/2021", 0, 0, false, false, false, false, -1, 1);
+		PayVoucher payVoucher = new PayVoucher("03/04/0001", "03/02/0001", 0, 0, false, false, false, false, -1, 1);
 		db.insertPayVoucher(payVoucher);
 		PayVoucher dbPayVoucher = db.getPayVouchers().get(db.getPayVouchers().size() - 1);
 		
@@ -432,14 +433,14 @@ public class DerbyDatabaseTests {
 		db.insertTutor(newTutor);
 		Tutor dbTutor = db.getTutors().get(db.getTutors().size() - 1);
 		
-		db.assignVoucherSpecific("April", "May", dbTutor.getName());
+		db.assignVoucherSpecific("04/01/0001", "05/01/0001", dbTutor.getName());
 		List<PayVoucher> vouchers = db.getPayVouchers();
 		
 		String startDate = vouchers.get(vouchers.size() - 1).getStartDate();
 		String dueDate = vouchers.get(vouchers.size() - 1).getDueDate();
 		
-		assertTrue(startDate.equals("April"));
-		assertTrue(dueDate.equals("May"));
+		assertTrue(startDate.equals("04/01/0001"));
+		assertTrue(dueDate.equals("05/01/0001"));
 			
 		PayVoucher delete = vouchers.get(vouchers.size() - 1);
 		db.deletePayVoucher(delete);
@@ -480,7 +481,7 @@ public class DerbyDatabaseTests {
 	@Test
 	public void testDeleteEntry() {
 		
-		Entry newEntry = new Entry("04/27/2001", "nothingWasDoneHereNoOneWorked", "notALocationThatWillEverBeUsed",
+		Entry newEntry = new Entry("04/27/0001", "nothingWasDoneHereNoOneWorked", "notALocationThatWillEverBeUsed",
 				 0.0, 1, 1);
 		
 		db.insertEntry(newEntry);
@@ -489,7 +490,6 @@ public class DerbyDatabaseTests {
 		
 		// Newly added objects should be the last object in the list
 		Entry dbEntry = EntriesList.get(EntriesList.size() - 1);
-		
 		// Check that the objects were successfully entered
 		assertEquals(dbEntry.getDate(), newEntry.getDate());
 		assertEquals(dbEntry.getServicePerformed(), newEntry.getServicePerformed());
