@@ -44,7 +44,7 @@ public class PayVoucherServlet extends HttpServlet{
 		// If user manually tries to access payvoucher view redirect to search
 		else if (req.getParameter("ID") == null) {
 			
-			System.out.println("PayVoucher Servlet: null user");
+			System.out.println("PayVoucher Servlet: No selected Pay Voucher");
 			
 			resp.sendRedirect("search");
 		}
@@ -138,6 +138,7 @@ public class PayVoucherServlet extends HttpServlet{
 		ArrayList<Entry> entries = new ArrayList<Entry>();
 		PayVoucher voucher = tutorVoucherEntryList.get(0).getMiddle(); //all voucher instances are identical
 		Tutor tutor = tutorVoucherEntryList.get(0).getLeft(); //add tutor instances are identical
+		boolean callRefresh = true;
 		
 		// Populate entries
 		for (Tuple<Tutor, PayVoucher, Entry> tutorVoucherEntry : tutorVoucherEntryList) {
@@ -290,6 +291,7 @@ public class PayVoucherServlet extends HttpServlet{
 					}
 					else if (req.getParameter("exportVoucher") != null) {
 						
+						callRefresh = false;
 						exportPayVoucherToCSV(cells, voucher, tutor, req, resp);
 					}
 				}
@@ -313,7 +315,11 @@ public class PayVoucherServlet extends HttpServlet{
 		req.setAttribute("totalPay", voucher.getTotalPay());
 		
 		// Refresh payVoucher
-		req.getRequestDispatcher("/_view/payVoucher.jsp").forward(req, resp);
+		
+		if (callRefresh) {
+			
+			req.getRequestDispatcher("/_view/payVoucher.jsp").forward(req, resp);
+		}
 	}
 	
 	private boolean validate(HttpServletRequest req, String[] cells) {
