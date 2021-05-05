@@ -258,6 +258,23 @@ public class PayVoucherServlet extends HttpServlet{
 					voucher.setTotalHours(controller.calculateTotalHours(entries));
 					voucher.setTotalPay(controller.calculateTotalPay(tutor, voucher));
 					
+					UserAccount account = (UserAccount) req.getSession().getAttribute("user");
+					
+					if (voucher.getIsNew() && !account.getIsAdmin()) {
+						
+						controller.markPayVoucherNotNew(voucher.getPayVoucherID());
+					}
+					
+					if (voucher.getIsAdminEdited() && !account.getIsAdmin()) {
+						
+						controller.markPayVoucherEditedByAdmin(voucher.getPayVoucherID(), false);
+					}
+					
+					if (account.getIsAdmin()) {
+						
+						controller.markPayVoucherEditedByAdmin(voucher.getPayVoucherID(), true);
+					}
+					
 					controller.updateVoucherWithEntries(entries, voucher);
 					
 					// Get the refreshed entry list to account for removed entries

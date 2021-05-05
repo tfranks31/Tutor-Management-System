@@ -55,7 +55,7 @@
     		<th>Pay Vouchers</th>
         	<th>Tutor Name</th>
         	<th>Subject</th>
-        	<th>Voucher Submitted</th>
+        	<th>Status</th>
         	<th>Due Date</th>
         	</tr>
        	 	<c:forEach items="${payVouchers}" var="voucher">
@@ -68,14 +68,20 @@
 					</td>
                 	<td> ${voucher.left.name} </td>
                 	<td> ${voucher.left.subject} </td>
-                	<c:choose>
-                		<c:when test="${voucher.right.isSubmitted}">
-                			<td> &#10003 </td>
-                		</c:when>
-                		<c:otherwise>
-							<td></td>
-						</c:otherwise>
-					</c:choose>
+                	<td>
+                		<c:if test="${voucher.right.isSubmitted}">
+                			&#128196
+                		</c:if>
+						<c:if test="${voucher.right.isNew}">
+                			&#11088
+                		</c:if>
+                		<c:if test="${voucher.right.isSigned}">
+                			&#9989
+                		</c:if>
+                		<c:if test="${voucher.right.isAdminEdited}">
+                			&#10071
+                		</c:if>
+					</td>
                 	<td> ${voucher.right.dueDate}</td>
            	 	</tr>
        		 </c:forEach>

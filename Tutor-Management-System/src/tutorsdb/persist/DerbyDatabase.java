@@ -1587,4 +1587,16 @@ public class DerbyDatabase implements IDatabase {
 			}
 		});
 	}
+
+	@Override
+	public void markPayVoucherNotNew(int voucherID) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void markPayVoucherEditedByAdmin(int voucherID, boolean isEdited) {
+		// TODO Auto-generated method stub
+		
+	}
 }

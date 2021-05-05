@@ -187,4 +187,8 @@ public interface IDatabase {
 	public Pair<UserAccount, Tutor>getTutorInfo(String name);
 	
 	public void updatePasswordWithUserID(UserAccount user, String password);
+	
+	public void markPayVoucherNotNew(int voucherID);
+	
+	public void markPayVoucherEditedByAdmin(int voucherID, boolean isEdited);
 }

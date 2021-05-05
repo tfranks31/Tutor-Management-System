@@ -112,4 +112,14 @@ public class PayVoucherController {
 		// Mark the payVoucher as signed
 		return db.signPayVoucher(voucherID);
 	}
+	
+	public void markPayVoucherNotNew(int voucherID) {
+		
+		db.markPayVoucherNotNew(voucherID);
+	}
+	
+	public void markPayVoucherEditedByAdmin(int voucherID, boolean isEdited) {
+		
+		db.markPayVoucherEditedByAdmin(voucherID, isEdited);
+	}
 }

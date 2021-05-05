@@ -403,4 +403,30 @@ public class FakeDatabase implements IDatabase {
 			}
 		}
 	}
+
+	@Override
+	public void markPayVoucherNotNew(int voucherID) {
+		
+		for (PayVoucher voucher : payVoucherList) {
+			
+			if (voucher.getPayVoucherID() == voucherID) {
+				
+				voucher.setIsNew(false);
+				break;
+			}
+		}
+	}
+
+	@Override
+	public void markPayVoucherEditedByAdmin(int voucherID, boolean isEdited) {
+		
+		for (PayVoucher voucher : payVoucherList) {
+			
+			if (voucher.getPayVoucherID() == voucherID) {
+				
+				voucher.setIsAdminEdited(isEdited);
+				break;
+			}
+		}
+	}
 }
