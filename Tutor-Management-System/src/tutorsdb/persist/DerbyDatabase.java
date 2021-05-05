@@ -1590,13 +1590,54 @@ public class DerbyDatabase implements IDatabase {
 
 	@Override
 	public void markPayVoucherNotNew(int voucherID) {
-		// TODO Auto-generated method stub
-		
+		executeTransaction(new Transaction<Boolean>() {
+			
+			@Override
+			public Boolean execute(Connection conn) throws SQLException {
+				PreparedStatement stmt = null;
+				try {
+					stmt = conn.prepareStatement(
+						"UPDATE pay_vouchers " + 
+						"SET pay_vouchers.is_new = False " +
+						"WHERE pay_vouchers.pay_voucher_id = ? "
+					);
+					
+					stmt.setInt(1, voucherID);
+					stmt.executeUpdate();
+						
+					return true;
+					
+				} finally {
+					DBUtil.closeQuietly(stmt);
+				}
+			}
+		});
 	}
 
 	@Override
 	public void markPayVoucherEditedByAdmin(int voucherID, boolean isEdited) {
-		// TODO Auto-generated method stub
-		
+		executeTransaction(new Transaction<Boolean>() {
+			
+			@Override
+			public Boolean execute(Connection conn) throws SQLException {
+				PreparedStatement stmt = null;
+				try {
+					stmt = conn.prepareStatement(
+						"UPDATE pay_vouchers " + 
+						"SET pay_vouchers.is_admin_edited = ? " +
+						"WHERE pay_vouchers.pay_voucher_id = ? "
+					);
+					
+					stmt.setBoolean(1, isEdited);
+					stmt.setInt(2, voucherID);
+					stmt.executeUpdate();
+						
+					return true;
+					
+				} finally {
+					DBUtil.closeQuietly(stmt);
+				}
+			}
+		});
 	}
 }
