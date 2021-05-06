@@ -29,18 +29,26 @@
 	<div class="super-class background-image"></div>
 	
 	<div class="super-class content">
+	
     	<h1 class = "Header"> Search</h1>
-    
+    	
+    	<form action="${pageContext.servletContext.contextPath}/search" method="get">
+        	<input type="submit" class="logout" id="logout" name="logout" value="Logout">
+    	</form>
+    	
     	<div class = "search">
         	<form action="${pageContext.servletContext.contextPath}/search" method="post">
             	<input type="text" id="searchBox" name="search" value="${searchParameter}">
             	<button id= "searchBTN">&#128269</button>
         	</form>
     	</div>
-
-    	<form action="${pageContext.servletContext.contextPath}/search" method="get">
-        	<input type="submit" class="logout" id="logout" name="logout" value="Logout">
-    	</form>
+    	
+    	<p id="key">
+			&#128196 = Submitted </br>
+			&#11088 = New </br>
+			&#9989 = Signed </br>
+			&#10071 = Edited by Admin			
+		</p>
     
     	<c:if test="${! empty tutorName}">
     		<div class="successAdd">${tutorName} was added as a tutor</div>

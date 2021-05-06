@@ -66,9 +66,9 @@ html, body {
 }
 
 #logout {
-	float: right;
+	float: left;
 	margin-top: -47px;
-	margin-right: 24px;
+	margin-left: 24px;
 	background-color: black;
 	color: white;
 	font-size: 15px;
@@ -77,6 +77,10 @@ html, body {
 	width: 95px;
 	border-radius: 35px;
 	border: 0px;
+}
+
+#key {
+	float: right;
 }
 
 .successAdd {
