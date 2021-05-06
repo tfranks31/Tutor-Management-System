@@ -22,7 +22,7 @@ public class SearchController {
 	 * Refresh database instance when constructed.
 	 */
 	public SearchController() {
-		//DatabaseProvider.setInstance(new FakeDatabase());
+
 		DatabaseProvider.setInstance(new DerbyDatabase());
 		db = DatabaseProvider.getInstance();
 	}

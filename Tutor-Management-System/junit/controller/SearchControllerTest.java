@@ -26,8 +26,7 @@ public class SearchControllerTest {
     public void setUp() {
 		
 		// Set and get the tutordb instance and initialize AddTutorController
-		//DatabaseProvider.setInstance(new FakeDatabase());
-		DatabaseProvider.setInstance(new DerbyDatabase());
+		DatabaseProvider.setInstance(new FakeDatabase());
 		controller = new SearchController();
 		db = DatabaseProvider.getInstance();
     }

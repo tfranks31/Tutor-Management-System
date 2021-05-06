@@ -60,13 +60,33 @@ public class FakeDatabase implements IDatabase {
 	@Override
 	public List<PayVoucher> getPayVouchers() {
 		
-		return payVoucherList;
+		List<PayVoucher> modifiedPayVoucherList = new ArrayList<PayVoucher>();
+		
+		for (PayVoucher dbPayVoucher : payVoucherList) {
+			
+			PayVoucher modifiedPayVoucher = new PayVoucher(dbPayVoucher.getDueDate().substring(5) + "/" + dbPayVoucher.getDueDate().substring(0, 4),
+					dbPayVoucher.getStartDate().substring(5) + "/" + dbPayVoucher.getStartDate().substring(0, 4), dbPayVoucher.getTotalHours(),
+					dbPayVoucher.getTotalPay(), dbPayVoucher.getIsSubmitted(), dbPayVoucher.getIsSigned(), dbPayVoucher.getIsNew(),
+					dbPayVoucher.getIsAdminEdited(), dbPayVoucher.getPayVoucherID(), dbPayVoucher.getTutorID());
+			
+			modifiedPayVoucherList.add(modifiedPayVoucher);
+		}
+		
+		return modifiedPayVoucherList;
 	}
 	
 	@Override
 	public List<Entry> getEntries() {
 		
-		return entryList;
+		List<Entry> modifiedEntryList = new ArrayList<Entry>();
+		for (Entry dbEntry : entryList) {
+			
+			Entry modifiedEntry = new Entry(dbEntry.getDate().substring(5) + "/" + dbEntry.getDate().substring(0, 4), dbEntry.getServicePerformed(),
+					dbEntry.getWherePerformed(), dbEntry.getHours(), dbEntry.getEntryID(), dbEntry.getPayVoucherID());
+			
+			modifiedEntryList.add(modifiedEntry);
+		}
+		return modifiedEntryList;
 	}
 	
 	@Override
@@ -108,12 +128,15 @@ public class FakeDatabase implements IDatabase {
 	@Override
 	public void insertPayVoucher(PayVoucher payVoucher) {
 		
+		payVoucher.setDueDate(payVoucher.getDueDate().substring(payVoucher.getDueDate().length() - 4) + "/" + payVoucher.getDueDate().substring(0, payVoucher.getDueDate().length() - 5));
+		payVoucher.setStartDate(payVoucher.getStartDate().substring(payVoucher.getStartDate().length() - 4) + "/" + payVoucher.getStartDate().substring(0, payVoucher.getStartDate().length() - 5));
 		payVoucherList.add(payVoucher);
 	}
 
 	@Override
 	public void insertEntry(Entry entry) {
 		
+		entry.setDate(entry.getDate().substring(6) + "/" + entry.getDate().substring(0, 5));
 		entryList.add(entry);
 	}
 	
@@ -135,12 +158,13 @@ public class FakeDatabase implements IDatabase {
 								Tutor tutor = new Tutor(dbTutor.getName(), dbTutor.getEmail(), dbTutor.getSubject(), dbTutor.getPayRate(),
 										dbTutor.getTutorID(), dbTutor.getAccountID(), dbTutor.getAccountNumber(), dbTutor.getStudentID());
 								
-								PayVoucher voucher = new PayVoucher(dbVoucher.getDueDate(), dbVoucher.getStartDate(), dbVoucher.getTotalHours(), 
+								PayVoucher voucher = new PayVoucher(dbVoucher.getDueDate().substring(5) + "/" + dbVoucher.getDueDate().substring(0, 4), 
+										dbVoucher.getStartDate().substring(5) + "/" + dbVoucher.getStartDate().substring(0, 4), dbVoucher.getTotalHours(), 
 										dbVoucher.getTotalPay(), dbVoucher.getIsSubmitted(), dbVoucher.getIsSigned(), dbVoucher.getIsNew(),
 										dbVoucher.getIsAdminEdited(), dbVoucher.getPayVoucherID(), dbVoucher.getTutorID());
 								
-								Entry entry = new Entry(dbEntry.getDate(), dbEntry.getServicePerformed(), dbEntry.getWherePerformed(), 
-										dbEntry.getHours(), dbEntry.getEntryID(), dbEntry.getPayVoucherID());
+								Entry entry = new Entry(dbEntry.getDate().substring(5) + "/" + dbEntry.getDate().substring(0, 4), dbEntry.getServicePerformed(), 
+										dbEntry.getWherePerformed(), dbEntry.getHours(), dbEntry.getEntryID(), dbEntry.getPayVoucherID());
 								
 								result.add(new Tuple<Tutor, PayVoucher, Entry>(tutor, voucher, entry));
 							}
@@ -152,17 +176,18 @@ public class FakeDatabase implements IDatabase {
 		
 		//if voucher is empty returns tutor and voucher info with blank entry
 		if (result.isEmpty()) {
-			for (PayVoucher dbvoucher: payVoucherList) {
+			for (PayVoucher dbVoucher: payVoucherList) {
 				for (Tutor dbtutor : tutorList) {
-					if (dbvoucher.getTutorID() == dbtutor.getTutorID()) {
-						if (dbvoucher.getPayVoucherID() == voucherID) {
+					if (dbVoucher.getTutorID() == dbtutor.getTutorID()) {
+						if (dbVoucher.getPayVoucherID() == voucherID) {
 							
 							Tutor tutor = new Tutor(dbtutor.getName(), dbtutor.getEmail(), dbtutor.getSubject(), dbtutor.getPayRate(),
 									dbtutor.getTutorID(), dbtutor.getAccountID(), dbtutor.getAccountNumber(), dbtutor.getStudentID());
 							
-							PayVoucher voucher = new PayVoucher(dbvoucher.getDueDate(), dbvoucher.getStartDate(), dbvoucher.getTotalHours(), 
-									dbvoucher.getTotalPay(), dbvoucher.getIsSubmitted(), dbvoucher.getIsSigned(), dbvoucher.getIsNew(),
-									dbvoucher.getIsAdminEdited(), dbvoucher.getPayVoucherID(), dbvoucher.getTutorID());
+							PayVoucher voucher = new PayVoucher(dbVoucher.getDueDate().substring(5) + "/" + dbVoucher.getDueDate().substring(0, 4), 
+									dbVoucher.getStartDate().substring(5) + "/" + dbVoucher.getStartDate().substring(0, 4), dbVoucher.getTotalHours(), 
+									dbVoucher.getTotalPay(), dbVoucher.getIsSubmitted(), dbVoucher.getIsSigned(), dbVoucher.getIsNew(),
+									dbVoucher.getIsAdminEdited(), dbVoucher.getPayVoucherID(), dbVoucher.getTutorID());
 							
 							Entry entry = null;
 							result.add(new Tuple<Tutor, PayVoucher, Entry>(tutor, voucher, entry));
@@ -195,16 +220,21 @@ public class FakeDatabase implements IDatabase {
 		
 		for (Tutor tutor : tutorList) {
 			
-			for (PayVoucher voucher : payVoucherList) {
+			for (PayVoucher dbVoucher : payVoucherList) {
 				
-				if (tutor.getTutorID() == voucher.getTutorID()) {
+				if (tutor.getTutorID() == dbVoucher.getTutorID()) {
 					
 					if (tutor.getName().toUpperCase().contains(upperSearch) ||
 						tutor.getSubject().toUpperCase().contains(upperSearch) ||
-						voucher.getDueDate().equals(search) || voucher.getStartDate().equals(search) ||
-						(upperSearch.equals("SUBMITTED") && voucher.getIsSubmitted()) 
-						|| (upperSearch.equals("SIGNED") && voucher.getIsSigned())) {
+						(dbVoucher.getDueDate().substring(5) + "/" + dbVoucher.getDueDate().substring(0, 4)).equals(search) || 
+						(dbVoucher.getStartDate().substring(5) + "/" + dbVoucher.getStartDate().substring(0, 4)).equals(search) ||
+						(upperSearch.equals("SUBMITTED") && dbVoucher.getIsSubmitted()) 
+						|| (upperSearch.equals("SIGNED") && dbVoucher.getIsSigned())) {
 						
+						PayVoucher voucher = new PayVoucher(dbVoucher.getDueDate().substring(5) + "/" + dbVoucher.getDueDate().substring(0, 4), 
+								dbVoucher.getStartDate().substring(5) + "/" + dbVoucher.getStartDate().substring(0, 4), dbVoucher.getTotalHours(), 
+								dbVoucher.getTotalPay(), dbVoucher.getIsSubmitted(), dbVoucher.getIsSigned(), dbVoucher.getIsNew(),
+								dbVoucher.getIsAdminEdited(), dbVoucher.getPayVoucherID(), dbVoucher.getTutorID());
 						result.add(new Pair<Tutor, PayVoucher>(tutor, voucher));
 					}
 				}
@@ -232,8 +262,14 @@ public class FakeDatabase implements IDatabase {
 		//returns every voucher with correspond tutor
 		List<Pair<Tutor, PayVoucher>>  result = new ArrayList<Pair<Tutor, PayVoucher>>();
 		for (Tutor tutor : tutorList) {
-			for (PayVoucher voucher: payVoucherList) {
-				if (tutor.getTutorID() == voucher.getTutorID()) {
+			for (PayVoucher dbVoucher: payVoucherList) {
+				if (tutor.getTutorID() == dbVoucher.getTutorID()) {
+					
+					PayVoucher voucher = new PayVoucher(dbVoucher.getDueDate().substring(5) + "/" + dbVoucher.getDueDate().substring(0, 4), 
+							dbVoucher.getStartDate().substring(5) + "/" + dbVoucher.getStartDate().substring(0, 4), dbVoucher.getTotalHours(), 
+							dbVoucher.getTotalPay(), dbVoucher.getIsSubmitted(), dbVoucher.getIsSigned(), dbVoucher.getIsNew(),
+							dbVoucher.getIsAdminEdited(), dbVoucher.getPayVoucherID(), dbVoucher.getTutorID());
+					
 					result.add(new Pair<Tutor, PayVoucher>(tutor, voucher));
 				}
 			}
@@ -245,9 +281,15 @@ public class FakeDatabase implements IDatabase {
 	public PayVoucher submitPayVoucher(int voucherID) {
 		//checks to see if a voucher in the list has a corresponding id
 		//updates the isSibmitted parameter to true if so
-		for (PayVoucher voucher: payVoucherList) {
-			if (voucher.getPayVoucherID() == voucherID) {
-				voucher.setIsSubmitted(true);
+		for (PayVoucher dbVoucher: payVoucherList) {
+			if (dbVoucher.getPayVoucherID() == voucherID) {
+				dbVoucher.setIsSubmitted(true);
+				
+				PayVoucher voucher = new PayVoucher(dbVoucher.getDueDate().substring(5) + "/" + dbVoucher.getDueDate().substring(0, 4), 
+						dbVoucher.getStartDate().substring(5) + "/" + dbVoucher.getStartDate().substring(0, 4), dbVoucher.getTotalHours(), 
+						dbVoucher.getTotalPay(), dbVoucher.getIsSubmitted(), dbVoucher.getIsSigned(), dbVoucher.getIsNew(),
+						dbVoucher.getIsAdminEdited(), dbVoucher.getPayVoucherID(), dbVoucher.getTutorID());
+				
 				return voucher;
 			}
 		}
@@ -257,6 +299,7 @@ public class FakeDatabase implements IDatabase {
 	@Override
 	public void updateVoucher(List<Entry> entries, PayVoucher voucher) {
 		for (Entry entry : entries) {
+			
 			//removes blank entries from a submitted voucher
 			if (entry.getDate().equals("") && entry.getHours() == 0.0 && 
 				entry.getServicePerformed().equals("") && entry.getWherePerformed().equals("")) {
@@ -274,17 +317,21 @@ public class FakeDatabase implements IDatabase {
 			//and gets added to entry list
 			else if (entry.getEntryID() == -1) {
 				
+				String date = entry.getDate().substring(6) + "/" + entry.getDate().substring(0, 5);
 				entry.setEntryID(entryList.size() + 1);
 				entry.setPayVoucherID(voucher.getPayVoucherID());
+				entry.setDate(date);
 				entryList.add(entry);
 			}
 			else {
+				
+				String date = entry.getDate().substring(6) + "/" + entry.getDate().substring(0, 5);
 				//if entry already exists, it updates the already existing entry in the database
 				for (Entry dbEntry : entryList) {
 					
 					if (dbEntry.getEntryID() == entry.getEntryID()) {
 						
-						dbEntry.setDate(entry.getDate());
+						dbEntry.setDate(date);
 						dbEntry.setHours(entry.getHours());
 						dbEntry.setServicePerformed(entry.getServicePerformed());
 						dbEntry.setWherePerformed(entry.getWherePerformed());
@@ -307,10 +354,12 @@ public class FakeDatabase implements IDatabase {
 	public void assignVoucher(String startDate, String dueDate) {
 		//creates and assigns a pay voucher to every tutor with a set
 		//start and end date
+		String start = startDate.substring(startDate.length() - 4) + "/" + startDate.substring(0, startDate.length() - 5);
+		String due = dueDate.substring(dueDate.length() - 4) + "/" + dueDate.substring(0, dueDate.length() - 5);
 		for (Tutor tutor : tutorList) {
 			PayVoucher voucher = new PayVoucher();
-			voucher.setStartDate(startDate);
-			voucher.setDueDate(dueDate);
+			voucher.setStartDate(start);
+			voucher.setDueDate(due);
 			voucher.setTutorID(tutor.getTutorID());
 			voucher.setIsAdminEdited(false);
 			voucher.setIsNew(true);
@@ -327,9 +376,16 @@ public class FakeDatabase implements IDatabase {
 	public PayVoucher signPayVoucher(int voucherID) {
 		//checks to see if a voucher in the list has a corresponding id
 		//updates the isSibmitted parameter to true if so
-		for (PayVoucher voucher: payVoucherList) {
-			if (voucher.getPayVoucherID() == voucherID) {
-				voucher.setIsSigned(true);
+		
+		for (PayVoucher dbVoucher: payVoucherList) {
+			if (dbVoucher.getPayVoucherID() == voucherID) {
+				dbVoucher.setIsSigned(true);
+				
+				PayVoucher voucher = new PayVoucher(dbVoucher.getDueDate().substring(5) + "/" + dbVoucher.getDueDate().substring(0, 4), 
+						dbVoucher.getStartDate().substring(5) + "/" + dbVoucher.getStartDate().substring(0, 4), dbVoucher.getTotalHours(), 
+						dbVoucher.getTotalPay(), dbVoucher.getIsSubmitted(), dbVoucher.getIsSigned(), dbVoucher.getIsNew(),
+						dbVoucher.getIsAdminEdited(), dbVoucher.getPayVoucherID(), dbVoucher.getTutorID());
+				
 				return voucher;
 			}
 		}
@@ -360,11 +416,15 @@ public class FakeDatabase implements IDatabase {
 
 	@Override
 	public void assignVoucherSpecific(String startDate, String dueDate, String name) {
+		
+		String start = startDate.substring(startDate.length() - 4) + "/" + startDate.substring(0, startDate.length() - 5);
+		String due = dueDate.substring(dueDate.length() - 4) + "/" + dueDate.substring(0, dueDate.length() - 5);
+		
 		for (Tutor tutor : tutorList) {
 			if (tutor.getName().equals(name)) {
 				PayVoucher voucher = new PayVoucher();
-				voucher.setStartDate(startDate);
-				voucher.setDueDate(dueDate);
+				voucher.setStartDate(start);
+				voucher.setDueDate(due);
 				voucher.setTutorID(tutor.getTutorID());
 				voucher.setIsAdminEdited(false);
 				voucher.setIsNew(true);

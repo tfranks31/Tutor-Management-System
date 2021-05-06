@@ -26,7 +26,6 @@ public class DerbyDatabaseTests {
 	public void setUp() throws Exception {
 		
 		// creating DB instance here
-		//DatabaseProvider.setInstance(new FakeDatabase());
 		DatabaseProvider.setInstance(new DerbyDatabase());
 		db = DatabaseProvider.getInstance();				
 	}

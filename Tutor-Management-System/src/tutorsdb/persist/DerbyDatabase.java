@@ -712,7 +712,8 @@ public class DerbyDatabase implements IDatabase {
 					if (resultSet.next()) {
 						PayVoucher PayVoucher = new PayVoucher();
 						loadPayVoucher(PayVoucher, resultSet, 1);
-
+						PayVoucher.setStartDate(PayVoucher.getStartDate().substring(5) + "/" + PayVoucher.getStartDate().substring(0, 4));
+						PayVoucher.setDueDate(PayVoucher.getDueDate().substring(5) + "/" + PayVoucher.getDueDate().substring(0, 4));
 						result = PayVoucher;
 					}
 					

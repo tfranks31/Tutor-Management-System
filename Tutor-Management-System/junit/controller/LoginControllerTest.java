@@ -19,7 +19,7 @@ public class LoginControllerTest {
 	@Before
     public void setUp() {
 		
-		DatabaseProvider.setInstance(new DerbyDatabase());
+		DatabaseProvider.setInstance(new FakeDatabase());
 		controller = new LoginController();
 		db = DatabaseProvider.getInstance();
     }

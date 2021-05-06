@@ -23,7 +23,7 @@ public class AddTutorControllerTest {
     public void setUp() {
 		
 		// Set and get the tutordb instance and initialize AddTutorController
-		DatabaseProvider.setInstance(new DerbyDatabase());
+		DatabaseProvider.setInstance(new FakeDatabase());
 		controller = new AddTutorController();
 		db = DatabaseProvider.getInstance();		
     }

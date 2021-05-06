@@ -26,8 +26,8 @@ public class PayVoucherControllerTest {
 	
 	@Before
     public void setUp() {
-		//DatabaseProvider.setInstance(new FakeDatabase());
-		DatabaseProvider.setInstance(new DerbyDatabase());
+
+		DatabaseProvider.setInstance(new FakeDatabase());
 		controller = new PayVoucherController();
 		db = DatabaseProvider.getInstance();
     }
@@ -51,8 +51,8 @@ public class PayVoucherControllerTest {
 		Tuple<Tutor, PayVoucher, Entry> tuple = tupleList.get(tupleList.size() - 1);
 		
 		assertEquals(newTutor.getName(), tuple.getLeft().getName());
-		assertEquals(newPayVoucher.getDueDate(), tuple.getMiddle().getDueDate());
-		assertEquals(newEntry.getDate(), tuple.getRight().getDate());
+		assertEquals("03/04/0001", tuple.getMiddle().getDueDate());
+		assertEquals("03/03/0001", tuple.getRight().getDate());
 		
 		db.deleteEntry(dbEntry);
 		db.deletePayVoucher(dbPayVoucher);
@@ -74,7 +74,7 @@ public class PayVoucherControllerTest {
 		
 		List<Entry> dbEntries = db.getEntries();
 		
-		assertEquals(entry.getDate(), dbEntries.get(dbEntries.size() - 1).getDate());
+		assertEquals("03/03/0001", dbEntries.get(dbEntries.size() - 1).getDate());
 		
 		db.deleteEntry(dbEntries.get(dbEntries.size() - 1));
 		db.deletePayVoucher(dbPayVoucher);
