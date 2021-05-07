@@ -17,6 +17,7 @@ public class AddTutorServlet extends HttpServlet {
 	private AddTutorController controller; 
 	private boolean editTutor;
 	private boolean tutorProfile;
+	private boolean addTutor;
 
 	@Override
 	protected void doGet(HttpServletRequest req, HttpServletResponse resp)
@@ -31,6 +32,8 @@ public class AddTutorServlet extends HttpServlet {
 			req.setAttribute("edit", editTutor);
 			tutorProfile = (boolean)req.getSession().getAttribute("viewProfile");
 			req.setAttribute("viewProle", tutorProfile);
+			addTutor = (boolean)req.getSession().getAttribute("viewProfile");
+			req.setAttribute("addTutor", addTutor);
 		}
 		
 		// If user not logged in, redirect to login
@@ -40,15 +43,7 @@ public class AddTutorServlet extends HttpServlet {
 			
 			resp.sendRedirect("login");
 		}
-		/*
-		// Verify that only admins can get to this page
-		else if (!account.getIsAdmin()) {
-			
-			System.out.println("AddTutor Servlet: not admin");
-			
-			resp.sendRedirect("search");
-		}
-		*/
+
 		// Go back to search
 		else if (req.getParameter("back") != null) {
 			

@@ -25,6 +25,7 @@ public class SearchServlet extends HttpServlet{
 	String searchParameter = null;
 	boolean editTutor = false;
 	boolean editProfile = false;
+	boolean addTutor = false;
 	
 	@Override
 	protected void doGet(HttpServletRequest req, HttpServletResponse resp)
@@ -36,23 +37,30 @@ public class SearchServlet extends HttpServlet{
 		
 		UserAccount account = (UserAccount) req.getSession().getAttribute("user");
 		
+		//sets all unused session variables and local counterparts to zero
+		editTutor = false;
+		req.getSession().setAttribute("edit", editTutor);
+		editProfile = false;
+		req.getSession().setAttribute("viewProfile", editProfile);
+		addTutor = false;
+		req.getSession().setAttribute("addTutor", addTutor);
 		
 		// If user not logged in, redirect to login
+		
 		if (account == null) {
 			
 			System.out.println("Search Servlet: nullUser");
 			
 			resp.sendRedirect("login");
 		}
-		
 		// User wants to add a tutor
 		else if (req.getParameter("addTutor") != null) {
 			
 			System.out.println("Search Servlet: addTutor");
 			
-			//defaults to false
-			req.getSession().setAttribute("edit", editTutor);
-			req.getSession().setAttribute("viewProfile", editProfile);
+			addTutor = true;
+			req.getSession().setAttribute("addTutor", addTutor);
+			
 			resp.sendRedirect("addTutor");
 		}
 		
@@ -228,12 +236,6 @@ public class SearchServlet extends HttpServlet{
 			boolean editProfile = true;
 			req.getSession().setAttribute("viewProfile", editProfile);
 			req.getSession().setAttribute("tutorProfileInfo", tutor);
-			
-			editProfile = false;
-			req.getSession().setAttribute("viewProfile", editProfile);
-			
-			boolean editTutor = false;
-			req.getSession().setAttribute("edit", editTutor);
 			
 			//redirects to page
 			resp.sendRedirect("addTutor");

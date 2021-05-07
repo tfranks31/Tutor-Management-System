@@ -7,21 +7,7 @@
         <link rel="stylesheet" href="./_view/addTutor.css">
     </head>
     <body>
-    
-   	 	<%
-	
-		response.setHeader("cache-control", "no-cache, no-store, must-revalidate");
-	
-		response.setHeader("pragma", "no-cache");
-	
-		response.setHeader("expires", "0");
-	
-		if (session.getAttribute("user") == null) {
-			response.sendRedirect("login.jsp");
-		}
-	
-		%>
-		
+    	
     	<div class="super-class background-image"></div>
     
    	 	<div class="super-class content">
@@ -33,9 +19,9 @@
                 <c:when test="${!user.isAdmin}">
                     Tutor Profile
                 </c:when>
-                <c:otherwise>
+                <c:when test="${addTutor}">
                     Add a Tutor
-                </c:otherwise>
+                </c:when>
             </c:choose>
         </div>
 
@@ -81,7 +67,14 @@
                         </c:choose>
                     </td>               
                     <td>
-                        <input type="text" id="password" name="password" placeholder="Password" value="${password}">
+                        <c:choose>
+                            <c:when test="${user.isAdmin}">
+                                <input type="text" id="password" name="password" placeholder="Password" value="${password}">
+                            </c:when>
+                            <c:otherwise>
+                                <input type="text" id="password" name="password" value="${password}">
+                            </c:otherwise>
+                        </c:choose>
                     </td>
                 </tr>
                 <tr>
@@ -144,7 +137,7 @@
                                 <input type="text" id="payRate" name="payRate" placeholder="Pay Rate" value="${payRate}">
                             </c:when>
                             <c:otherwise>
-                                <input type="text" id="payRate" name="payRate" placeholder="Pay Rate" value="${payRate}" readonly>
+                                <input type="text" id="payRate" name="payRate" value="${payRate}" readonly>
                             </c:otherwise>
                         </c:choose>
                     </td>
