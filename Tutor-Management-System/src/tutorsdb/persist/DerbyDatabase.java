@@ -744,13 +744,14 @@ public class DerbyDatabase implements IDatabase {
 				
 				try {
 					for (Entry entry : entries) {
-						String date = entry.getDate().substring(6) + "/" + entry.getDate().substring(0, 5);
 						
 						if (entry.getEntryID() == -1) {
 							stmt5 = conn.prepareStatement(
 								"INSERT into entries (pay_voucher_id, date, service_performed, where_performed, hours) " + 
 								"VALUES (?, ?, ?, ?, ?)"
 							);
+							
+							String date = entry.getDate().substring(6) + "/" + entry.getDate().substring(0, 5);
 							
 							stmt5.setInt(1, voucher.getPayVoucherID());
 							stmt5.setString(2, date);
@@ -777,6 +778,8 @@ public class DerbyDatabase implements IDatabase {
 								"WHERE entries.entry_id = ? " + 
 								"AND entries.pay_voucher_id = ? "
 							);
+							
+							String date = entry.getDate().substring(6) + "/" + entry.getDate().substring(0, 5);
 							
 							stmt1.setString(1, date);
 							stmt1.setString(2, entry.getServicePerformed());
