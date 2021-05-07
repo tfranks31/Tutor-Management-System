@@ -186,9 +186,23 @@ public interface IDatabase {
 	 */
 	public Pair<UserAccount, Tutor>getTutorInfo(String name);
 	
+	/**
+	 * Updates a users password 
+	 * @param user The userAccount who password is being updated
+	 * @param password	String of what the user wants the new password to be
+	 */
 	public void updatePasswordWithUserID(UserAccount user, String password);
 	
+	/**
+	 * A utility method to remove the status of new voucher by setting it to false
+	 * @param voucherID the ID number of the payVoucher getting updated
+	 */
 	public void markPayVoucherNotNew(int voucherID);
 	
+	/**
+	 * A utility method to update the status of a payVoucher isAdminEdited flag
+	 * @param voucherID the ID number of the payVoucher getting updated
+	 * @param isEdited Boolean of the desired updated value
+	 */
 	public void markPayVoucherEditedByAdmin(int voucherID, boolean isEdited);
 }
