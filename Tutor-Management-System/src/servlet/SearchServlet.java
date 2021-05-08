@@ -25,10 +25,10 @@ public class SearchServlet extends HttpServlet{
 	String searchParameter = null;
 	String stillSearching = null;
 	boolean editTutor = false;
-	int pageNumber = 1;
-	
 	boolean editProfile = false;
 	boolean addTutor = false;
+	
+	int pageNumber = 1;
 	
 	@Override
 	protected void doGet(HttpServletRequest req, HttpServletResponse resp)
@@ -40,13 +40,6 @@ public class SearchServlet extends HttpServlet{
 		
 		UserAccount account = (UserAccount) req.getSession().getAttribute("user");
 		
-		//sets all unused session variables and local counterparts to zero
-		editTutor = false;
-		req.getSession().setAttribute("edit", editTutor);
-		editProfile = false;
-		req.getSession().setAttribute("viewProfile", editProfile);
-		addTutor = false;
-		req.getSession().setAttribute("addTutor", addTutor);
 		
 		// If user not logged in, redirect to login
 		
@@ -55,6 +48,23 @@ public class SearchServlet extends HttpServlet{
 			System.out.println("Search Servlet: nullUser");
 			
 			resp.sendRedirect("login");
+		}
+		
+		else if ((editTutor ||  addTutor) && account.getIsAdmin()) {
+
+			//sets all unused session variables and local counterparts to zero
+			editTutor = false;
+			req.getSession().setAttribute("edit", editTutor);
+			
+			editProfile = false;
+			req.getSession().setAttribute("viewProfile", editProfile);
+			
+			addTutor = false;
+			req.getSession().setAttribute("addTutor", addTutor);
+			
+			
+			loadDefaultTutorPage(req, resp);
+			
 		}
 		// User wants to add a tutor
 		else if (req.getParameter("addTutor") != null) {
@@ -77,6 +87,17 @@ public class SearchServlet extends HttpServlet{
 		
 		// Load search
 		else {
+			
+			//sets all unused session variables and local counterparts to zero
+			editTutor = false;
+			req.getSession().setAttribute("edit", editTutor);
+			
+			editProfile = false;
+			req.getSession().setAttribute("viewProfile", editProfile);
+			
+			addTutor = false;
+			req.getSession().setAttribute("addTutor", addTutor);
+			
 			
 			System.out.println("Search Servlet: loadSearch");
 			
@@ -250,36 +271,45 @@ public class SearchServlet extends HttpServlet{
 			stillSearching = searchParameter;
 		} 
 		
+		//user wants to view profile
+		else if (req.getParameter("tutorProfile") != null){
+			Tutor tutor = controller.getTutorByUserID(account);
+			
+			boolean editProfile = true;
+			req.getSession().setAttribute("viewProfile", editProfile);
+			req.getSession().setAttribute("tutorProfileInfo", tutor);
+			
+			//redirects to page
+			resp.sendRedirect("addTutor");
+		}
+		
+		//admin wants to view tutor page
+		else if (req.getParameter("tutorPage") != null){
+			
+			loadDefaultTutorPage(req, resp);
+		}
+		
+		//Admin clicked back button on tutor page
+		else if (req.getParameter("tutorPageBack") != null){
+		
+			loadDefaultSearch(req,resp, account);
+		}
 		//Redirects to edit tutor page
-		else if(req.getParameter("editTutor") != null && !req.getParameter("editTutorName").equals("")) {
-			//sets session variables
+		else if (req.getParameter("userTutorID") != null) {
 			
-			System.out.println("Search Servlet: edit tutor");
+			System.out.println("Search Servlet: Edit Tutor");
 			
-			boolean editTutor = true;
-			String editName = (String) req.getParameter("editTutorName");
+			editTutor = true;
+			req.getSession().setAttribute("edit", editTutor);
 			
-			Pair <UserAccount, Tutor> userTutorPair = controller.getTutorInfo(editName);
-		
-			if (userTutorPair != null) {
-				req.getSession().setAttribute("edit", editTutor);
-				req.getSession().setAttribute("editUser", userTutorPair.getLeft());
-				req.getSession().setAttribute("editTutor", userTutorPair.getRight());
-				//req.getSession().setAttribute("editName", editName);
-				
-				editProfile = true;
-				req.getSession().setAttribute("viewProfile", editProfile);
-				
-				//redirects to page
-				resp.sendRedirect("addTutor");
-				
-			}
-		
+			int userID =  Integer.parseInt(req.getParameter("userTutorID"));
 			
-			//loads the default search page
-			else {
-				loadDefaultSearch(req, resp, account);
-			}
+			Pair<UserAccount, Tutor> userTutorPair = controller.getUserTutorByAccountID(userID);
+			
+			req.getSession().setAttribute("editUser", userTutorPair.getLeft());
+			req.getSession().setAttribute("editTutor", userTutorPair.getRight());
+			
+			resp.sendRedirect("addTutor");
 		}
 		
 		else if(req.getParameter("page1") != null && pageNumber > 1) {
@@ -298,8 +328,6 @@ public class SearchServlet extends HttpServlet{
 				
 				loadDefaultSearch(req, resp, account);		
 				
-				//redirects to page
-				resp.sendRedirect("addTutor");
 			}	
 			loadDefaultSearch(req, resp, account);	
 		}
@@ -490,5 +518,24 @@ public class SearchServlet extends HttpServlet{
 		}
 				
 		return true;
+	}
+	
+	private void loadDefaultTutorPage(HttpServletRequest req, HttpServletResponse resp)
+			throws ServletException, IOException {
+		System.out.println("Search Servelet: load tutor page ");
+		
+		ArrayList<Pair<UserAccount, Tutor>> allUserTutorList = new ArrayList<Pair<UserAccount, Tutor>>();
+		
+		// Get all pay vouchers
+		allUserTutorList =  controller.getAllUserTutors();
+		
+		if (allUserTutorList.isEmpty()) {
+			req.setAttribute("errorMessage", "There were no Tutors found");
+			System.out.println("Search Servlet: no Tutors Found Found");
+		}
+		
+		// Update search with the vouchers
+		req.setAttribute("UserTutors", allUserTutorList);
+		req.getRequestDispatcher("/_view/viewTutors.jsp").forward(req, resp);
 	}
 }

@@ -1647,14 +1647,84 @@ public class DerbyDatabase implements IDatabase {
 
 	@Override
 	public List<Pair<UserAccount, Tutor>> getAllUserTutor() {
-		return null;
-		// TODO Auto-generated method stub
+		return executeTransaction(new Transaction<List<Pair<UserAccount, Tutor>>>() {
+			@Override
+			public List<Pair<UserAccount, Tutor>> execute(Connection conn) throws SQLException {
+				PreparedStatement stmt = null;
+				ResultSet resultSet = null;
+				
+				try {
+					stmt = conn.prepareStatement(
+					"select user_accounts.*, tutors.* " +
+					"from user_accounts, tutors " +
+					"where user_accounts.user_account_id = tutors.user_account_id "
+						
+					);
+					
+					List<Pair<UserAccount, Tutor>> result = new ArrayList<Pair<UserAccount, Tutor>>();
+					
+					resultSet = stmt.executeQuery();
+					
+					while (resultSet.next()) {
+						UserAccount UserAccount = new UserAccount();
+						loadUserAccount(UserAccount, resultSet, 1);
+						Tutor Tutor = new Tutor();
+						loadTutor(Tutor, resultSet, 5);
+						result.add(new Pair<UserAccount, Tutor>(UserAccount, Tutor));
+					}
+					
+					return result;
+				} 
+				
+				finally {
+					DBUtil.closeQuietly(resultSet);
+					DBUtil.closeQuietly(stmt);
+			
+				}
+		
+			}
+		
+		});
 		
 	}
-
+	
 	@Override
 	public Pair<UserAccount, Tutor> getUserTutorByAccountID(int ID) {
-		// TODO Auto-generated method stub
-		return null;
+		return executeTransaction(new Transaction<Pair<UserAccount, Tutor>>() {
+			@Override
+			public Pair<UserAccount, Tutor> execute(Connection conn) throws SQLException {
+				PreparedStatement stmt = null;
+				ResultSet resultSet = null;
+				
+				try {
+					stmt = conn.prepareStatement(
+					"select user_accounts.*, tutors.* " +
+					"from user_accounts, tutors " +
+					"where user_accounts.user_account_id = ? " +
+					"AND user_accounts.user_account_id = tutors.user_account_id "
+					);
+					
+					stmt.setInt(1, ID);
+					
+					resultSet = stmt.executeQuery();
+					
+					Pair<UserAccount, Tutor> result = new Pair<UserAccount, Tutor>(null,null);
+					
+					if (resultSet.next()) {
+						UserAccount UserAccount = new UserAccount();
+						loadUserAccount(UserAccount, resultSet, 1);
+						Tutor Tutor = new Tutor();
+						loadTutor(Tutor, resultSet, 5);
+						result = new Pair<UserAccount, Tutor>(UserAccount,Tutor);
+					}
+					
+				return result;
+				} finally {
+					DBUtil.closeQuietly(resultSet);
+					DBUtil.closeQuietly(stmt);
+				}
+			}
+		});
 	}
 }
+

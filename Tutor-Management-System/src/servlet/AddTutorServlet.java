@@ -145,7 +145,7 @@ public class AddTutorServlet extends HttpServlet {
 				
 				req.setAttribute("tutorName", firstName + " " + lastName);
 				
-				req.getRequestDispatcher("/search").forward(req, resp);
+				resp.sendRedirect("search");
 				
 			}else if (req.getParameter("editTutorInfo") != null) {
 				
@@ -168,7 +168,7 @@ public class AddTutorServlet extends HttpServlet {
 				
 				controller.editTutor(updatedAccount, updatedTutor);
 				req.setAttribute("editTutorName", firstName + " " + lastName);
-				req.getRequestDispatcher("/search").forward(req, resp);
+				resp.sendRedirect("search");
 				
 			}else if (req.getParameter("updatePassword") != null) {
 				
@@ -179,7 +179,7 @@ public class AddTutorServlet extends HttpServlet {
 				controller.updatePassword(account, password);
 				
 				req.setAttribute("editPasswordName", firstName + " " + lastName);
-				req.getRequestDispatcher("/search").forward(req, resp);
+				resp.sendRedirect("search");
 				
 			}
 			

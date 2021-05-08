@@ -22,7 +22,6 @@ public class SearchController {
 	 * Refresh database instance when constructed.
 	 */
 	public SearchController() {
-
 		DatabaseProvider.setInstance(new DerbyDatabase());
 		db = DatabaseProvider.getInstance();
 	}
@@ -113,5 +112,30 @@ public class SearchController {
 		}
 		
 		return null;
+	}
+	
+	/**
+	 * Returns a list of all users linked with their respective tutors
+	 * @return List of a Pair of userAccount and Tutor objects
+	 */
+	public ArrayList<Pair<UserAccount, Tutor>> getAllUserTutors(){
+		
+		ArrayList<Pair<UserAccount, Tutor>> userTutorList = new ArrayList<Pair<UserAccount, Tutor>> ();
+		userTutorList = (ArrayList<Pair<UserAccount, Tutor>>)db.getAllUserTutor();
+		
+		return userTutorList;
+	}
+	
+	
+	/**
+	 * Returns a Pair of UserAccount and Tutor
+	 * @param ID UserAccount Id of the user and tutor to return
+	 * @return a Pair consisting of a userAccount and its respective Tutor
+	 */
+	public Pair<UserAccount, Tutor> getUserTutorByAccountID(int ID){
+	
+		Pair<UserAccount, Tutor> userTutor = db.getUserTutorByAccountID(ID);
+		
+		return userTutor;
 	}
 }
