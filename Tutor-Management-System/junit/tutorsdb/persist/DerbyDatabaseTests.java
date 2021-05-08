@@ -537,4 +537,180 @@ public class DerbyDatabaseTests {
 		db.deleteTutor(dbTutor);
 		db.deleteUserAccount(dbAccount);
 	}
+	
+	@Test
+	public void testUpdatePasswordWithUserID() {
+		
+		UserAccount newAccount = new UserAccount("user", "pass", -1, false);
+		db.insertUserAccount(newAccount);
+		
+		List<UserAccount> accountList = db.getUserAccounts();
+		
+		// Newly added objects should be the last object in the list
+		UserAccount dbAccount = accountList.get(accountList.size() - 1);
+		
+		// Check that the objects were successfully entered
+		assertEquals(dbAccount.getUsername(), newAccount.getUsername());
+		assertEquals(dbAccount.getPassword(), newAccount.getPassword());
+		assertEquals(dbAccount.getIsAdmin(), newAccount.getIsAdmin());
+		//update the password
+		db.updatePasswordWithUserID(dbAccount, "newpassword");
+		//get the account again
+		accountList = db.getUserAccounts();
+		dbAccount = accountList.get(accountList.size() - 1);
+		
+		assertEquals(dbAccount.getUsername(), newAccount.getUsername());
+		assertEquals(dbAccount.getPassword(), "newpassword");
+		assertEquals(dbAccount.getIsAdmin(), newAccount.getIsAdmin());
+		
+		// Remove test objects
+		db.deleteUserAccount(dbAccount);
+	}
+	
+	@Test
+	public void testMarkPayVoucherNotNew() {
+		
+		PayVoucher newVoucher = new PayVoucher("04/27/0001", "04/20/0001", 0.0,
+				  0.0, false, false, true, false, 1,1);
+		
+		db.insertPayVoucher(newVoucher);
+		
+		List<PayVoucher> PayVoucherList = db.getPayVouchers();
+		
+		// Newly added objects should be the last object in the list
+		PayVoucher dbVoucher = PayVoucherList.get(PayVoucherList.size() - 1);
+		
+		// Check that the objects were successfully entered
+		assertEquals(dbVoucher.getStartDate(), newVoucher.getStartDate());
+		assertEquals(dbVoucher.getDueDate(), newVoucher.getDueDate());
+		assertEquals(dbVoucher.getIsAdminEdited(), newVoucher.getIsAdminEdited());
+		assertEquals(dbVoucher.getIsNew(), newVoucher.getIsNew());
+		assertEquals(dbVoucher.getIsSigned(), newVoucher.getIsSigned());
+		assertEquals(dbVoucher.getIsSubmitted(), newVoucher.getIsSubmitted());
+		assertTrue(dbVoucher.getTotalHours() == newVoucher.getTotalHours());
+		assertTrue(dbVoucher.getTotalPay() == newVoucher.getTotalPay());
+		assertEquals(dbVoucher.getTutorID(), newVoucher.getTutorID());
+		
+		db.markPayVoucherNotNew(dbVoucher.getPayVoucherID());
+		PayVoucherList = db.getPayVouchers();
+		dbVoucher = PayVoucherList.get(PayVoucherList.size() - 1);
+		
+		assertFalse(dbVoucher.getIsNew());
+		// Remove test objects
+		db.deletePayVoucher(dbVoucher);
+	}
+	
+	@Test
+	public void testMarkPayVoucherEditedByAdmin() {
+		
+		PayVoucher newVoucher = new PayVoucher("04/27/0001", "04/20/0001", 0.0,
+				  0.0, false, false, true, false, 1,1);
+		
+		db.insertPayVoucher(newVoucher);
+		
+		List<PayVoucher> PayVoucherList = db.getPayVouchers();
+		
+		// Newly added objects should be the last object in the list
+		PayVoucher dbVoucher = PayVoucherList.get(PayVoucherList.size() - 1);
+		
+		// Check that the objects were successfully entered
+		assertEquals(dbVoucher.getStartDate(), newVoucher.getStartDate());
+		assertEquals(dbVoucher.getDueDate(), newVoucher.getDueDate());
+		assertEquals(dbVoucher.getIsAdminEdited(), newVoucher.getIsAdminEdited());
+		assertEquals(dbVoucher.getIsNew(), newVoucher.getIsNew());
+		assertEquals(dbVoucher.getIsSigned(), newVoucher.getIsSigned());
+		assertEquals(dbVoucher.getIsSubmitted(), newVoucher.getIsSubmitted());
+		assertTrue(dbVoucher.getTotalHours() == newVoucher.getTotalHours());
+		assertTrue(dbVoucher.getTotalPay() == newVoucher.getTotalPay());
+		assertEquals(dbVoucher.getTutorID(), newVoucher.getTutorID());
+		
+		assertFalse(dbVoucher.getIsAdminEdited());
+		
+		db.markPayVoucherEditedByAdmin(dbVoucher.getPayVoucherID(), true);
+		PayVoucherList = db.getPayVouchers();
+		dbVoucher = PayVoucherList.get(PayVoucherList.size() - 1);
+		
+		assertTrue(dbVoucher.getIsAdminEdited());
+		// Remove test objects
+		db.deletePayVoucher(dbVoucher);
+	}
+	
+	@Test
+	public void testGetAllUserTutor() {
+		
+		List<Tutor> tutors = db.getTutors();
+		List<UserAccount> userAccounts = db.getUserAccounts();
+		List<Pair<UserAccount, Tutor>> userTutorList = new ArrayList<Pair<UserAccount, Tutor>>();
+		
+		//sorts the list by tutor name to match the sql query sorting by tutor name
+		for (int i = 0; i < tutors.size(); i++) {
+			for (int c = i + 1; c < tutors.size(); c++) {
+				Tutor tempI = tutors.get(i);
+				Tutor tempC = tutors.get(c);
+				int compare = tempI.getName().compareTo(tempC.getName());
+				if (compare > 0) {
+					tutors.set(i,tempC);
+					tutors.set(c,tempI);
+				}
+			}
+		}
+		
+		for (Tutor tutor : tutors) {
+			for (UserAccount user: userAccounts) {
+				if (tutor.getAccountID() == user.getAccountID()) {
+					userTutorList.add(new Pair<UserAccount, Tutor>(user, tutor));
+				}
+			}
+		}
+		
+		List<Pair<UserAccount, Tutor>> test = db.getAllUserTutor();
+		
+		assertEquals(test.size(), userTutorList.size());
+		for (int i = 0; i < userTutorList.size(); i++) {
+			assertEquals(test.get(i).getRight().getAccountID(), userTutorList.get(i).getRight().getAccountID());
+			assertEquals(test.get(i).getLeft().getAccountID(), userTutorList.get(i).getLeft().getAccountID());
+		}
+	}
+	
+	@Test
+	public void testGetUserTutorByAccountID() {
+	
+		UserAccount account = new UserAccount();
+		Tutor tutor = new Tutor();
+		
+		account.setUsername("gettutor");
+		account.setPassword("password");
+		tutor.setName("Steven Seymour");
+
+		db.addTutor(account, tutor);
+		
+		Pair<UserAccount, Tutor> manualTest = new Pair<UserAccount, Tutor>(account, tutor);
+		Pair<UserAccount, Tutor> dbTest = db.getUserTutorByAccountID(db.getTutorInfo("Steven Seymour").getLeft().getAccountID());
+		assertEquals(manualTest.getLeft().getUsername(),dbTest.getLeft().getUsername());
+		assertEquals(manualTest.getLeft().getPassword(),dbTest.getLeft().getPassword());
+		assertEquals(manualTest.getRight().getName(),dbTest.getRight().getName());
+		
+		db.deleteTutor(dbTest.getRight());
+		db.deleteUserAccount(dbTest.getLeft());
+		
+	}
+	
+	@Test
+	public void testGetUserTutorsFromSearch() {
+		
+		Tutor tutor = new Tutor();
+		tutor.setName("Barry B. Benson");
+		UserAccount account = new UserAccount();
+		account.setUsername("Barry");
+		account.setPassword("Vanessa Bloome");
+		db.addTutor(account, tutor);
+		
+		List<Pair<UserAccount, Tutor>> test = db.getUserTutorsFromSearch("Barry B. Benson");
+		Tutor testTutor = test.get(0).getRight();
+	
+		assertTrue(testTutor.getName().equals(tutor.getName()));
+		
+		db.deleteTutor(test.get(0).getRight());
+		db.deleteUserAccount(test.get(0).getLeft());
+	}
 }
