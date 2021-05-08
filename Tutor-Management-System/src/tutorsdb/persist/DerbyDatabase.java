@@ -495,8 +495,6 @@ public class DerbyDatabase implements IDatabase {
 					sortBy = "pay_vouchers.due_date DESC, tutors.name ASC";
 				}
 				
-				System.out.println(sortBy);
-				
 				try {
 					// show submitted vouchers
 					if (search.toUpperCase().equals("SUBMITTED")) {
