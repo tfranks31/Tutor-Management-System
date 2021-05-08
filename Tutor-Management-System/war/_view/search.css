@@ -128,11 +128,6 @@ table{
 .table {
 	margin-top: 10px;
 	max-height: 440px;
-    overflow: auto;
-}
-
-#searchResults {
-	overflow: auto;
 }
 
 #view { 
@@ -148,6 +143,11 @@ table{
 
 th, td{
     padding: 10px;
+    text-align: center;
+}
+
+#name{
+	padding: 10px;
     text-align: center;
 }
 

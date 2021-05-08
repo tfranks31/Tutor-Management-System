@@ -29,6 +29,9 @@ public class SearchServlet extends HttpServlet{
 	
 	boolean editProfile = false;
 	boolean addTutor = false;
+	int countName = 0;
+	int countSubject = 0;
+	int countDate = 0;
 	
 	@Override
 	protected void doGet(HttpServletRequest req, HttpServletResponse resp)
@@ -85,8 +88,7 @@ public class SearchServlet extends HttpServlet{
 			ArrayList<Pair<Tutor, PayVoucher>> tempVoucherList = new ArrayList<Pair<Tutor, PayVoucher>>();
 			
 			// Get all Tutors and their vouchers
-			ArrayList<Pair<Tutor, PayVoucher>> allTutorVoucherList = controller.getAllVouchers();
-			
+			ArrayList<Pair<Tutor, PayVoucher>> allTutorVoucherList = controller.getAllVouchers(null);
 			// Filter out tutors and vouchers based on account info
 	
 			int count = 0;
@@ -148,10 +150,9 @@ public class SearchServlet extends HttpServlet{
 	protected void doPost(HttpServletRequest req, HttpServletResponse resp)
 			throws ServletException, IOException {
 
-		System.out.println("Search Servlet: doPost");	
+		System.out.println("Search Servlet: doPost");
 		
 		controller = new SearchController();
-		
 		UserAccount account = (UserAccount) req.getSession().getAttribute("user");
 		// User selected to view a pay voucher
 		if (req.getParameter("ID") != null) {
@@ -190,8 +191,7 @@ public class SearchServlet extends HttpServlet{
 			ArrayList<Pair<Tutor, PayVoucher>> tutorVoucherList = new ArrayList<Pair<Tutor, PayVoucher>>();
 			
 			// Get all tutors and their vouchers
-			ArrayList<Pair<Tutor, PayVoucher>> allTutorVoucherList = controller.getAllVouchers();
-			
+			ArrayList<Pair<Tutor, PayVoucher>> allTutorVoucherList = controller.getAllVouchers(null);
 			// Filter out tutors and vouchers based on account info
 			for (int i = ((pageNumber - 1) * 7); i < (pageNumber * 7); i++) {
 				
@@ -214,7 +214,43 @@ public class SearchServlet extends HttpServlet{
 		
 		// User wants to search the pay vouchers with a search parameter
 		else if (req.getParameter("search") != null) {
-			
+
+			String sort = req.getParameter("sort");
+			if (sort != null) {
+				if (sort.equals("Tutor Name")){
+					countName ++;
+					countSubject = 0;
+					countDate = 0;
+					System.out.println(countName % 3);
+					if (countName % 3 == 2) {
+						sort = "Name DESC";
+					} else if(countName % 3 == 0) {
+						sort = "Date";
+					}
+				}
+				
+				if (sort.equals("Subject")){
+					countSubject ++;
+					countName = 0;
+					countDate = 0;
+					if (countSubject % 3 == 2) {
+						sort = "Subject DESC";
+					} else if(countSubject % 3 == 0) {
+						sort = "Date";
+					}
+				}
+				
+				if (sort.equals("Due Date")){
+					countDate ++;
+					countSubject = 0;
+					countName = 0;
+					if (countDate % 3 == 2) {
+						sort = "Date ASC";
+					} else if(countDate % 3 == 0) {
+						sort = "Date";
+					}
+				}
+			}
 			System.out.println("Search Servlet: search");
 			
 			controller = new SearchController();
@@ -223,8 +259,7 @@ public class SearchServlet extends HttpServlet{
 			ArrayList<Pair<Tutor, PayVoucher>> tutorVoucherList = new ArrayList<Pair<Tutor, PayVoucher>>();
 			
 			// Get all pay vouchers
-			ArrayList<Pair<Tutor, PayVoucher>> allTutorVoucherList = controller.getVoucherFromSearch(searchParameter);
-			
+			ArrayList<Pair<Tutor, PayVoucher>> allTutorVoucherList = controller.getVoucherFromSearch(searchParameter,sort);
 			// Filter out tutors and vouchers based on account info
 			for (Pair<Tutor, PayVoucher> tutorVoucher : allTutorVoucherList) {
 				
@@ -306,8 +341,8 @@ public class SearchServlet extends HttpServlet{
 		
 		else if (req.getParameter("page2") != null && stillSearching == null) {
 			if (!req.getParameter("page2").equals("") && account.getIsAdmin() && 
-				((controller.getAllVouchers().size() % 7 != 0 && (controller.getAllVouchers().size() / 7) + 1 > pageNumber)) ||
-				(controller.getAllVouchers().size() % 7 == 0 && (controller.getAllVouchers().size() / 7) > pageNumber)) {
+				((controller.getAllVouchers(null).size() % 7 != 0 && (controller.getAllVouchers(null).size() / 7) + 1 > pageNumber)) ||
+				(controller.getAllVouchers(null).size() % 7 == 0 && (controller.getAllVouchers(null).size() / 7) > pageNumber)) {
 			
 				System.out.println("Search Servlet: Next Page");
 				
@@ -322,8 +357,8 @@ public class SearchServlet extends HttpServlet{
 		
 		else if (req.getParameter("page2") != null && stillSearching != null) {
 				if (!req.getParameter("page2").equals("") && account.getIsAdmin() && !stillSearching.equals("") && 
-				((controller.getVoucherFromSearch(stillSearching).size() % 7 != 0 && (controller.getVoucherFromSearch(stillSearching).size() / 7) + 1 > pageNumber)) ||
-				(controller.getVoucherFromSearch(stillSearching).size() % 7 == 0 && (controller.getVoucherFromSearch(stillSearching).size() / 7) > pageNumber)) {
+				((controller.getVoucherFromSearch(stillSearching,null).size() % 7 != 0 && (controller.getVoucherFromSearch(stillSearching,null).size() / 7) + 1 > pageNumber)) ||
+				(controller.getVoucherFromSearch(stillSearching,null).size() % 7 == 0 && (controller.getVoucherFromSearch(stillSearching,null).size() / 7) > pageNumber)) {
 					System.out.println("Search Servlet: Next Page");
 					
 					pageNumber++;
@@ -339,7 +374,7 @@ public class SearchServlet extends HttpServlet{
 		else if (req.getParameter("page2") != null && !req.getParameter("page2").equals("")
 				 && !account.getIsAdmin()) {
 			
-			ArrayList<Pair<Tutor, PayVoucher>> allTutorVoucherList = controller.getAllVouchers();
+			ArrayList<Pair<Tutor, PayVoucher>> allTutorVoucherList = controller.getAllVouchers(null);
 			
 			ArrayList<Pair<Tutor, PayVoucher>> tempVoucherList = new ArrayList<Pair<Tutor, PayVoucher>>();
 			
@@ -376,18 +411,54 @@ public class SearchServlet extends HttpServlet{
 		
 		ArrayList<Pair<Tutor, PayVoucher>> tempVoucherList = new ArrayList<Pair<Tutor, PayVoucher>>();
 		
+		String sort = req.getParameter("sort");
+		if (sort != null) {
+			if (sort.equals("Tutor Name")){
+				countName ++;
+				countSubject = 0;
+				countDate = 0;
+				System.out.println(countName % 3);
+				if (countName % 3 == 2) {
+					sort = "Name DESC";
+				} else if(countName % 3 == 0) {
+					sort = "Date";
+				}
+			}
+			
+			if (sort.equals("Subject")){
+				countSubject ++;
+				countName = 0;
+				countDate = 0;
+				if (countSubject % 3 == 2) {
+					sort = "Subject DESC";
+				} else if(countSubject % 3 == 0) {
+					sort = "Date";
+				}
+			}
+			
+			if (sort.equals("Due Date")){
+				countDate ++;
+				countSubject = 0;
+				countName = 0;
+				if (countDate % 3 == 2) {
+					sort = "Date ASC";
+				} else if(countDate % 3 == 0) {
+					sort = "Date";
+				}
+			}
+		}
 		// Get all pay vouchers
 		ArrayList<Pair<Tutor, PayVoucher>> allTutorVoucherList;
 		
 		if (stillSearching == null) {
-			allTutorVoucherList = controller.getAllVouchers();
+			allTutorVoucherList = controller.getAllVouchers(null);
 		}
 		else {
-			allTutorVoucherList = controller.getVoucherFromSearch(stillSearching);
+			allTutorVoucherList = controller.getVoucherFromSearch(stillSearching,null);
 		}
 		
 		if (account.getIsAdmin()) {
-			
+			allTutorVoucherList = controller.getAllVouchers(sort);
 			// Filter out tutors and vouchers based on account info
 			if (stillSearching == null) {
 				for (int i = ((pageNumber - 1) * 7); i < (pageNumber * 7); i++) {
@@ -423,7 +494,6 @@ public class SearchServlet extends HttpServlet{
 				}	
 			}
 		}
-		
 		else  {
 			
 			// Filter out tutors and vouchers based on account info

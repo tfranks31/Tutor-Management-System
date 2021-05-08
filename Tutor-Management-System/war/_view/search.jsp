@@ -25,7 +25,11 @@
 	}
 	
 	%>
-	
+	<script>
+	function submitform(formname) {
+	    document[formname].submit();
+	}
+	</script>
 	<div class="super-class background-image"></div>
 	
 	<div class="super-class content">
@@ -61,10 +65,22 @@
     	<div class="table">
     	<table id = "searchResults">
     		<th>Pay Vouchers</th>
-        	<th>Tutor Name</th>
-        	<th>Subject</th>
+    		<th>
+        		<form action="${pageContext.servletContext.contextPath}/search" method="post">
+        			<input type="submit" class = "name" id = "name" name="sort" value="Tutor Name">
+        		</form>
+        	</th>
+        	<th>
+        		<form action="${pageContext.servletContext.contextPath}/search" method="post">
+        			<input type="submit" class = "subject" id = "subject" name="sort" value="Subject">
+        		</form>
+        	</th>
         	<th>Status</th>
-        	<th>Due Date</th>
+        	<th>
+        		<form action="${pageContext.servletContext.contextPath}/search" method="post">
+        			<input type="submit" class = "date" id = "date" name="sort" value="Due Date">
+        		</form>
+        	</th>
         	</tr>
        	 	<c:forEach items="${payVouchers}" var="voucher">
             	<tr>

@@ -20,7 +20,7 @@ public class RetrieveAllPayVouchersQuery {
 		
 		// get the DB instance and execute transaction
 		IDatabase db = DatabaseProvider.getInstance();
-		List<Pair<Tutor, PayVoucher>> VoucherList = db.findAllPayVouchers();
+		List<Pair<Tutor, PayVoucher>> VoucherList = db.findAllPayVouchers(null);
 		
 		if (VoucherList.isEmpty()) {
 			System.out.println("No pay voucher found");
