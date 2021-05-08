@@ -467,7 +467,7 @@ public class DerbyDatabase implements IDatabase {
 	}
 
 	@Override
-	public List<Pair<Tutor, PayVoucher>> findVoucherBySearch(String search) throws UnsupportedOperationException {
+	public List<Pair<Tutor, PayVoucher>> findVoucherBySearch(String search, String sort) throws UnsupportedOperationException {
 		return executeTransaction(new Transaction<List<Pair<Tutor, PayVoucher>>>() {
 			@Override
 			public List<Pair<Tutor, PayVoucher>> execute(Connection conn) throws SQLException {
@@ -476,6 +476,26 @@ public class DerbyDatabase implements IDatabase {
 				PreparedStatement stmt3 = null;
 				PreparedStatement stmt4 = null;
 				ResultSet resultSet = null;
+				String sortBy;
+				if (sort != null) {
+					if (sort.equals("Tutor Name")) {
+						sortBy = "tutors.name ASC, pay_vouchers.due_date DESC";
+					} else if (sort.equals("Name DESC")) {
+						sortBy = "tutors.name DESC, pay_vouchers.due_date DESC";
+					} else if (sort.equals("Subject")){
+						sortBy = "tutors.subject ASC, pay_vouchers.due_date DESC, tutors.name ASC";
+					} else if (sort.equals("Subject DESC")){
+						sortBy = "tutors.subject DESC, pay_vouchers.due_date DESC, tutors.name ASC";
+					} else if (sort.equals("Date ASC")){
+						sortBy = "tutors.subject ASC, pay_vouchers.due_date DESC, tutors.name ASC";
+					} else {
+						sortBy = "pay_vouchers.due_date DESC, tutors.name ASC";
+					}
+				} else {
+					sortBy = "pay_vouchers.due_date DESC, tutors.name ASC";
+				}
+				
+				System.out.println(sortBy);
 				
 				try {
 					// show submitted vouchers
@@ -485,8 +505,9 @@ public class DerbyDatabase implements IDatabase {
 							"from tutors, pay_vouchers " + 
 							"where pay_vouchers.is_submitted = true " +
 							"AND pay_vouchers.tutor_id = tutors.tutor_id " + 
-							"Order by pay_vouchers.due_date DESC"
+							"Order by "+ sortBy
 						);
+						//stmt1.setString(1, sortBy);
 						resultSet = stmt1.executeQuery();
 					// show signed vouchers
 					} else if (search.toUpperCase().equals("SIGNED")) {
@@ -495,8 +516,9 @@ public class DerbyDatabase implements IDatabase {
 							"from tutors, pay_vouchers " + 
 							"where pay_vouchers.is_signed = true " +
 							"AND pay_vouchers.tutor_id = tutors.tutor_id " + 
-							"Order by pay_vouchers.due_date DESC"
+							"Order by "+ sortBy
 						);
+						//stmt2.setString(1, sortBy);
 						resultSet = stmt2.executeQuery();
 					// show all vouchers
 					} else if (search.equals("")) {
@@ -504,8 +526,9 @@ public class DerbyDatabase implements IDatabase {
 							"select tutors.*, pay_vouchers.* " + 
 							"from tutors, pay_vouchers " + 
 							"where pay_vouchers.tutor_id = tutors.tutor_id " + 
-							"Order by pay_vouchers.due_date DESC"
+							"Order by "+ sortBy
 						);
+						//stmt3.setString(1, sortBy);
 						resultSet = stmt3.executeQuery();
 					} else {
 						// searches by name or start date or due date or subject
@@ -524,13 +547,14 @@ public class DerbyDatabase implements IDatabase {
 							"OR pay_vouchers.start_date = ? " + 
 							"OR UPPER(tutors.subject) LIKE UPPER(?)) " +
 							"AND pay_vouchers.tutor_id = tutors.tutor_id " + 
-							"Order by pay_vouchers.due_date DESC"
+							"Order by "+ sortBy
 						);
 						
 						stmt4.setString(1, fuzzy);
 						stmt4.setString(2, date);
 						stmt4.setString(3, date);
 						stmt4.setString(4, fuzzy);
+						//stmt4.setString(5, sortBy);
 						resultSet = stmt4.executeQuery();
 					}
 					
@@ -634,20 +658,38 @@ public class DerbyDatabase implements IDatabase {
 }
 
 	@Override
-	public List<Pair<Tutor, PayVoucher>> findAllPayVouchers() throws UnsupportedOperationException {
+	public List<Pair<Tutor, PayVoucher>> findAllPayVouchers(String sort) throws UnsupportedOperationException {
 		return executeTransaction(new Transaction<List<Pair<Tutor, PayVoucher>>>() {
 			@Override
 			public List<Pair<Tutor, PayVoucher>> execute(Connection conn) throws SQLException {
 				PreparedStatement stmt = null;
 				ResultSet resultSet = null;
-
+				String sortBy = "pay_vouchers.due_date DESC, tutors.name ASC";
+				if (sort != null) {
+					if (sort.equals("Tutor Name")) {
+						sortBy = "tutors.name ASC, pay_vouchers.due_date DESC";
+					} else if (sort.equals("Name DESC")) {
+						sortBy = "tutors.name DESC, pay_vouchers.due_date DESC";
+					} else if (sort.equals("Subject")){
+						sortBy = "tutors.subject ASC, pay_vouchers.due_date DESC, tutors.name ASC";
+					} else if (sort.equals("Subject DESC")){
+						sortBy = "tutors.subject DESC, pay_vouchers.due_date DESC, tutors.name ASC";
+					} else if (sort.equals("Date ASC")){
+						sortBy = "pay_vouchers.due_date ASC, tutors.name ASC";
+					} else if (sort.equals("Date") || sort.equals("Due Date")){
+						sortBy = "pay_vouchers.due_date DESC, tutors.name ASC";
+					}
+				} else {
+					sortBy = "pay_vouchers.due_date DESC, tutors.name ASC";
+				}
+				
 				try {
 					// Retrieve all attributes from pay_voucher
 					stmt = conn.prepareStatement(
 						"select pay_vouchers.*, tutors.* " + 
 						"from pay_vouchers, tutors " + 
 						"where pay_vouchers.tutor_id = tutors.tutor_id " + 
-						"Order by pay_vouchers.due_date DESC"
+						"Order by "+ sortBy
 						
 					);
 					
@@ -1011,8 +1053,9 @@ public class DerbyDatabase implements IDatabase {
 				try {
 					stmt = conn.prepareStatement(
 						"select pay_vouchers.* " + 
-						"from pay_vouchers " +
-						"Order by pay_vouchers.due_date DESC"
+						"from pay_vouchers, tutors " +
+						"Where tutors.tutor_id = pay_vouchers.tutor_id " +
+						"Order by pay_vouchers.due_date DESC, tutors.name ASC"
 					);
 					
 					List<PayVoucher> result = new ArrayList<PayVoucher>();

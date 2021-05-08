@@ -2,6 +2,8 @@ package tutorsdb.persist;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 
 import model.Pair;
@@ -213,7 +215,7 @@ public class FakeDatabase implements IDatabase {
 	}
 
 	@Override
-	public List<Pair<Tutor, PayVoucher>> findVoucherBySearch(String search) {
+	public List<Pair<Tutor, PayVoucher>> findVoucherBySearch(String search, String sort) {
 		List<Pair<Tutor, PayVoucher>> result = new ArrayList<Pair<Tutor, PayVoucher>>();
 		
 		String upperSearch = search.toUpperCase();
@@ -258,22 +260,71 @@ public class FakeDatabase implements IDatabase {
 	}
 
 	@Override
-	public List<Pair<Tutor, PayVoucher>> findAllPayVouchers() {
+	public List<Pair<Tutor, PayVoucher>> findAllPayVouchers(String sort) {
 		//returns every voucher with correspond tutor
 		List<Pair<Tutor, PayVoucher>>  result = new ArrayList<Pair<Tutor, PayVoucher>>();
-		for (Tutor tutor : tutorList) {
-			for (PayVoucher dbVoucher: payVoucherList) {
-				if (tutor.getTutorID() == dbVoucher.getTutorID()) {
-					
-					PayVoucher voucher = new PayVoucher(dbVoucher.getDueDate().substring(5) + "/" + dbVoucher.getDueDate().substring(0, 4), 
-							dbVoucher.getStartDate().substring(5) + "/" + dbVoucher.getStartDate().substring(0, 4), dbVoucher.getTotalHours(), 
-							dbVoucher.getTotalPay(), dbVoucher.getIsSubmitted(), dbVoucher.getIsSigned(), dbVoucher.getIsNew(),
-							dbVoucher.getIsAdminEdited(), dbVoucher.getPayVoucherID(), dbVoucher.getTutorID());
-					
-					result.add(new Pair<Tutor, PayVoucher>(tutor, voucher));
+		List<Tutor> sortedTutorList;
+		List<PayVoucher> sortedPayVoucherList;
+		sortedTutorList = tutorList;
+		sortedPayVoucherList = payVoucherList;
+		if (sort == null) {
+			sort = "Due Date";
+		}
+		
+		for (int i = 0; i < sortedPayVoucherList.size(); i++) {
+			for (int c = i + 1; c < sortedPayVoucherList.size(); c++) {
+				PayVoucher tempI = sortedPayVoucherList.get(i);
+				PayVoucher tempC = sortedPayVoucherList.get(c);
+				int compare = tempI.getDueDate().compareTo(tempC.getDueDate());
+				if (compare < 0) {
+					sortedPayVoucherList.set(i,tempC);
+					sortedPayVoucherList.set(c,tempI);
 				}
 			}
 		}
+		
+		for (int i = 0; i < sortedTutorList.size(); i++) {
+			for (int c = i + 1; c < sortedTutorList.size(); c++) {
+				Tutor tempI = sortedTutorList.get(i);
+				Tutor tempC = sortedTutorList.get(c);
+				int compare = tempI.getName().compareTo(tempC.getName());
+				if (compare > 0) {
+					sortedTutorList.set(i,tempC);
+					sortedTutorList.set(c,tempI);
+				}
+			}
+		}
+		
+		if (sort.equals("Tutor Name")) {
+			for (Tutor tutor : sortedTutorList) {
+				for (PayVoucher dbVoucher: sortedPayVoucherList) {
+					if (tutor.getTutorID() == dbVoucher.getTutorID()) {
+						
+						PayVoucher voucher = new PayVoucher(dbVoucher.getDueDate().substring(5) + "/" + dbVoucher.getDueDate().substring(0, 4), 
+								dbVoucher.getStartDate().substring(5) + "/" + dbVoucher.getStartDate().substring(0, 4), dbVoucher.getTotalHours(), 
+								dbVoucher.getTotalPay(), dbVoucher.getIsSubmitted(), dbVoucher.getIsSigned(), dbVoucher.getIsNew(),
+								dbVoucher.getIsAdminEdited(), dbVoucher.getPayVoucherID(), dbVoucher.getTutorID());
+						
+						result.add(new Pair<Tutor, PayVoucher>(tutor, voucher));
+					}
+				}
+			}
+		} else {
+			for (PayVoucher dbVoucher: sortedPayVoucherList) {
+				for (Tutor tutor : sortedTutorList) {
+					if (tutor.getTutorID() == dbVoucher.getTutorID()) {
+						
+						PayVoucher voucher = new PayVoucher(dbVoucher.getDueDate().substring(5) + "/" + dbVoucher.getDueDate().substring(0, 4), 
+								dbVoucher.getStartDate().substring(5) + "/" + dbVoucher.getStartDate().substring(0, 4), dbVoucher.getTotalHours(), 
+								dbVoucher.getTotalPay(), dbVoucher.getIsSubmitted(), dbVoucher.getIsSigned(), dbVoucher.getIsNew(),
+								dbVoucher.getIsAdminEdited(), dbVoucher.getPayVoucherID(), dbVoucher.getTutorID());
+						
+						result.add(new Pair<Tutor, PayVoucher>(tutor, voucher));
+					}
+				}
+			}
+		}
+		
 		return result;
 	}
 

@@ -271,7 +271,7 @@ public class DerbyDatabaseTests {
 		Tutor tutor = new Tutor();
 		tutor.setName("Tyler Franks");
 		
-		List<Pair<Tutor, PayVoucher>> test = db.findVoucherBySearch("Tyler Franks");
+		List<Pair<Tutor, PayVoucher>> test = db.findVoucherBySearch("Tyler Franks", null);
 		Tutor testTutor = test.get(0).getLeft();
 	
 		assertTrue(testTutor.getName().equals(tutor.getName()));
@@ -309,7 +309,7 @@ public class DerbyDatabaseTests {
 	public void testFindAllPayVouchers() {
 		
 		List<PayVoucher> vouchers = db.getPayVouchers();
-		List<Pair<Tutor, PayVoucher>> test = db.findAllPayVouchers();
+		List<Pair<Tutor, PayVoucher>> test = db.findAllPayVouchers(null);
 		
 		assertEquals(test.size(), vouchers.size());
 		assertEquals(test.get(0).getRight().getPayVoucherID(), vouchers.get(0).getPayVoucherID());

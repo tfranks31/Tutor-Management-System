@@ -34,8 +34,7 @@ public class SearchControllerTest {
 	@Test
 	public void testGetAllVouchers() {
 		List<PayVoucher> vouchers = db.getPayVouchers();
-		List<Pair<Tutor, PayVoucher>> test = controller.getAllVouchers();
-		
+		List<Pair<Tutor, PayVoucher>> test = controller.getAllVouchers(null);
 		assertEquals(test.size(), vouchers.size());
 		assertEquals(test.get(0).getRight().getPayVoucherID(), vouchers.get(0).getPayVoucherID());
 		assertEquals(test.get(1).getRight().getPayVoucherID(), vouchers.get(1).getPayVoucherID());
@@ -51,7 +50,7 @@ public class SearchControllerTest {
 		Tutor tutor = new Tutor();
 		tutor.setName("Tyler Franks");
 		
-		List<Pair<Tutor, PayVoucher>> test = controller.getVoucherFromSearch("Tyler Franks");
+		List<Pair<Tutor, PayVoucher>> test = controller.getVoucherFromSearch("Tyler Franks",null);
 		Tutor testTutor = test.get(0).getLeft();
 	
 		assertTrue(testTutor.getName().equals(tutor.getName()));
