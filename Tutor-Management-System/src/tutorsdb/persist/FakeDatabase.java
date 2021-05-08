@@ -573,4 +573,10 @@ public class FakeDatabase implements IDatabase {
 		
 		return result;
 	}
+
+	@Override
+	public List<Pair<UserAccount, Tutor>> getUserTutorsFromSearch(String search) {
+		// TODO Auto-generated method stub
+		return null;
+	}
 }

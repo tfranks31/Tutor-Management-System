@@ -22,10 +22,10 @@ import model.UserAccount;
 public class SearchServlet extends HttpServlet{
 	private static final long serialVersionUID = 1L;
 	private SearchController controller = null;
-	private String searchParameter = null;
-	private String stillSearching = null;
-	
-	private boolean editTutor = false;
+	String searchParameter = null;
+	String searchParameterTutor = null;
+	String stillSearching = null;
+	boolean editTutor = false;
 	boolean editProfile = false;
 	boolean addTutor = false;
 	
@@ -320,7 +320,29 @@ public class SearchServlet extends HttpServlet{
 			
 			stillSearching = searchParameter;
 			
-			System.out.println(stillSearching);
+		} else if (req.getParameter("tutorSearch") != null) {
+			
+			System.out.println("Search Servlet: tutor search");
+			
+			controller = new SearchController();
+			searchParameter = req.getParameter("tutorSearch");
+			
+			ArrayList<Pair<UserAccount, Tutor>> usertutorList = controller.getUserTutorsFromSearch(searchParameter);
+			
+			if (usertutorList.isEmpty()) {
+				req.setAttribute("errorMessage", "There were no Tutors found");
+				System.out.println("Search Servlet: no Tutors Found");
+			}
+
+			// Reset the page number to 1
+			req.getSession().setAttribute("pageNumber", 1);
+			pageNumber = 1;
+			
+			// Update search with the vouchers
+			req.setAttribute("UserTutors", usertutorList);
+			req.getRequestDispatcher("/_view/viewTutors.jsp").forward(req, resp);
+			
+			stillSearching = searchParameter;
 		} 
 		
 		//user wants to view profile
