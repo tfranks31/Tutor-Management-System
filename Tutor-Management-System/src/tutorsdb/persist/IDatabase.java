@@ -36,7 +36,7 @@ public interface IDatabase {
 	 * @return A List of Pairs containing PayVouchers with their associated
 	 * Tutor information.
 	 */
-	public List<Pair<Tutor, PayVoucher>> findVoucherBySearch(String search);
+	public List<Pair<Tutor, PayVoucher>> findVoucherBySearch(String search,String sort);
 	
 	/**
 	 * Insert a new Tutor and their UserAccount into this database.
@@ -50,7 +50,7 @@ public interface IDatabase {
 	 * @return A List of Pairs containing PayVouchers with their associated 
 	 * Tutor information.
 	 */
-	public List<Pair<Tutor, PayVoucher>> findAllPayVouchers();
+	public List<Pair<Tutor, PayVoucher>> findAllPayVouchers(String sort);
 	
 	/**
 	 * Submit the PayVoucher with the inputed pay voucher ID.

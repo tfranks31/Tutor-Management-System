@@ -27,7 +27,7 @@ public class VoucherFromSearchQuery {
 
 		// get the DB instance and execute transaction
 		IDatabase db = DatabaseProvider.getInstance();
-		List<Pair<Tutor, PayVoucher>> VoucherList = db.findVoucherBySearch(search);
+		List<Pair<Tutor, PayVoucher>> VoucherList = db.findVoucherBySearch(search, null);
 		
 		if (VoucherList.isEmpty()) {
 			System.out.println("No Voucher found with Search Paramter: " + search);
