@@ -41,6 +41,7 @@ public class LoginServlet extends HttpServlet{
 			
 			resp.sendRedirect("search");
 		}
+
 		// Reload login
 		else {
 			// Call JSP to generate empty form
@@ -51,6 +52,8 @@ public class LoginServlet extends HttpServlet{
 		}
 		
 	}
+	
+	
     
     private boolean loginValidate(HttpServletRequest req) {
     	
@@ -60,7 +63,7 @@ public class LoginServlet extends HttpServlet{
         
         UserAccount user = controller.getUserFromLogin(username, password);
         
-        if (user == null) {
+        if (user == null && req.getParameter("forgot") == null) {
         	req.setAttribute("errorMessage", "Invalid username or password");
         	return false;
         } else {

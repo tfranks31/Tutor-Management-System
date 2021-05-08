@@ -19,7 +19,7 @@
                 <div class="error">${errorMessage}</div>
             </c:if>
             
-            <!-- <a href="ForgotPassword">Forgot Password</a> -->
+           <input id="forgot" type="submit" name="forgot" value="Forgot Password"></br></br>
         </form>
     </div>
 </body>
