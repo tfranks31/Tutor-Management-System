@@ -205,4 +205,11 @@ public interface IDatabase {
 	 * @param isEdited Boolean of the desired updated value
 	 */
 	public void markPayVoucherEditedByAdmin(int voucherID, boolean isEdited);
+	
+	/**
+	 * A utility method to get every user and tutor in the databse
+	 */
+	public List<Pair<UserAccount, Tutor>> getAllUserTutor();
+	
+	public Pair<UserAccount, Tutor> getUserTutorByAccountID(int ID);
 }

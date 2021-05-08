@@ -1644,4 +1644,17 @@ public class DerbyDatabase implements IDatabase {
 			}
 		});
 	}
+
+	@Override
+	public List<Pair<UserAccount, Tutor>> getAllUserTutor() {
+		return null;
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public Pair<UserAccount, Tutor> getUserTutorByAccountID(int ID) {
+		// TODO Auto-generated method stub
+		return null;
+	}
 }
