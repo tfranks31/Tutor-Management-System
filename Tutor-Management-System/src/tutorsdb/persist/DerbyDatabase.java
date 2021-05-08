@@ -1698,9 +1698,10 @@ public class DerbyDatabase implements IDatabase {
 				
 				try {
 					stmt = conn.prepareStatement(
-					"select user_accounts.*, tutors.* " +
-					"from user_accounts, tutors " +
-					"where user_accounts.user_account_id = tutors.user_account_id "
+						"select user_accounts.*, tutors.* " + 
+						"from user_accounts, tutors " + 
+						"where user_accounts.user_account_id = tutors.user_account_id " +
+						"Order BY tutors.name"
 						
 					);
 					
@@ -1715,20 +1716,14 @@ public class DerbyDatabase implements IDatabase {
 						loadTutor(Tutor, resultSet, 5);
 						result.add(new Pair<UserAccount, Tutor>(UserAccount, Tutor));
 					}
-					
+
 					return result;
-				} 
-				
-				finally {
+				} finally {
 					DBUtil.closeQuietly(resultSet);
 					DBUtil.closeQuietly(stmt);
-			
 				}
-		
 			}
-		
 		});
-		
 	}
 	
 	@Override
@@ -1741,10 +1736,10 @@ public class DerbyDatabase implements IDatabase {
 				
 				try {
 					stmt = conn.prepareStatement(
-					"select user_accounts.*, tutors.* " +
-					"from user_accounts, tutors " +
-					"where user_accounts.user_account_id = ? " +
-					"AND user_accounts.user_account_id = tutors.user_account_id "
+						"select user_accounts.*, tutors.* " + 
+						"from user_accounts, tutors " + 
+						"where user_accounts.user_account_id = ? " +
+						"AND user_accounts.user_account_id = tutors.user_account_id "
 					);
 					
 					stmt.setInt(1, ID);
@@ -1760,8 +1755,61 @@ public class DerbyDatabase implements IDatabase {
 						loadTutor(Tutor, resultSet, 5);
 						result = new Pair<UserAccount, Tutor>(UserAccount,Tutor);
 					}
+
+					return result;
+				} finally {
+					DBUtil.closeQuietly(resultSet);
+					DBUtil.closeQuietly(stmt);
+				}
+			}
+		});
+	}
+
+	@Override
+	public List<Pair<UserAccount, Tutor>> getUserTutorsFromSearch(String search) {
+		return executeTransaction(new Transaction<List<Pair<UserAccount, Tutor>>>() {
+			@Override
+			public List<Pair<UserAccount, Tutor>> execute(Connection conn) throws SQLException {
+				PreparedStatement stmt = null;
+				ResultSet resultSet = null;
+				String fuzzy = "%" + search + "%";
+				System.out.println("called");
+				try {
+					if (search.equals("")) {
+						stmt = conn.prepareStatement(
+							"select user_accounts.*, tutors.* " + 
+							"from user_accounts, tutors " + 
+							"where user_accounts.user_account_id = tutors.user_account_id " +
+							"Order BY tutors.name"
+								
+						);
+					} else {
+						stmt = conn.prepareStatement(
+							"select user_accounts.*, tutors.* " + 
+							"from user_accounts, tutors " + 
+							"where (UPPER(user_accounts.username) LIKE UPPER(?) " +
+							"OR UPPER(tutors.name) LIKE UPPER(?) " +
+							"OR UPPER(tutors.subject) LIKE UPPER(?)) " +
+							"AND user_accounts.user_account_id = tutors.user_account_id " +
+							"Order BY tutors.name"
+						);
+						stmt.setString(1, fuzzy);
+						stmt.setString(2, fuzzy);
+						stmt.setString(3, fuzzy);
+					}
+					List<Pair<UserAccount, Tutor>> result = new ArrayList<Pair<UserAccount, Tutor>>();
 					
-				return result;
+					resultSet = stmt.executeQuery();
+					
+					while (resultSet.next()) {
+						UserAccount UserAccount = new UserAccount();
+						loadUserAccount(UserAccount, resultSet, 1);
+						Tutor Tutor = new Tutor();
+						loadTutor(Tutor, resultSet, 5);
+						result.add(new Pair<UserAccount, Tutor>(UserAccount, Tutor));
+					}
+
+					return result;
 				} finally {
 					DBUtil.closeQuietly(resultSet);
 					DBUtil.closeQuietly(stmt);

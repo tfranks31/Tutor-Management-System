@@ -1,5 +1,6 @@
 package tutorsdb.persist;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import model.Entry;
@@ -212,4 +213,6 @@ public interface IDatabase {
 	public List<Pair<UserAccount, Tutor>> getAllUserTutor();
 	
 	public Pair<UserAccount, Tutor> getUserTutorByAccountID(int ID);
+
+	public List<Pair<UserAccount, Tutor>> getUserTutorsFromSearch(String search);
 }

@@ -138,4 +138,11 @@ public class SearchController {
 		
 		return userTutor;
 	}
+
+	public ArrayList<Pair<UserAccount, Tutor>> getUserTutorsFromSearch(String searchParameter) {
+		ArrayList<Pair<UserAccount, Tutor>> userTutorList = new ArrayList<Pair<UserAccount, Tutor>> ();
+		userTutorList = (ArrayList<Pair<UserAccount, Tutor>>)db.getUserTutorsFromSearch(searchParameter);
+		
+		return userTutorList;
+	}
 }
