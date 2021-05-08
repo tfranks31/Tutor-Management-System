@@ -55,6 +55,12 @@ input[type='text'] {
 	border-bottom: solid 1px #000000;
 }
 
+input[type='password'] {
+	border: none;
+	background: none;
+	border-bottom: solid 1px #000000;
+}
+
 #firstName {
 	float: left;
 	padding: 3px;

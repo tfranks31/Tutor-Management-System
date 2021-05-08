@@ -69,10 +69,10 @@
                     <td>
                         <c:choose>
                             <c:when test="${user.isAdmin}">
-                                <input type="text" id="password" name="password" placeholder="Password" value="${password}">
+                                <input type="password" id="password" name="password" placeholder="Password" value="${password}">
                             </c:when>
                             <c:otherwise>
-                                <input type="text" id="password" name="password" value="${password}">
+                                <input type="password" id="password" name="password" value="${password}">
                             </c:otherwise>
                         </c:choose>
                     </td>
