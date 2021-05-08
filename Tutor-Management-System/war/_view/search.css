@@ -147,8 +147,36 @@ th, td{
 }
 
 #name{
-	padding: 10px;
-    text-align: center;
+   	background-color: black;
+	color: white;
+	font-size: 15px;
+	text-align: center;
+	height: 31px;
+	width: 120px;
+	border-radius: 35px;
+	border: 0px;
+}
+
+#subject {
+	background-color: black;
+	color: white;
+	font-size: 15px;
+	text-align: center;
+	height: 31px;
+	width: 105px;
+	border-radius: 35px;
+	border: 0px;
+}
+
+#date {
+	background-color: black;
+	color: white;
+	font-size: 15px;
+	text-align: center;
+	height: 31px;
+	width: 100px;
+	border-radius: 35px;
+	border: 0px;
 }
 
 .error {
