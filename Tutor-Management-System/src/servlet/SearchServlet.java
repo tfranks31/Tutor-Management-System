@@ -24,17 +24,19 @@ public class SearchServlet extends HttpServlet{
 	private SearchController controller = null;
 	private String searchParameter = null;
 	private String stillSearching = null;
-	private boolean editTutor = false;
-	private int pageNumber = 1;
-	private String sort = null;
 	
+	private boolean editTutor = false;
 	boolean editProfile = false;
 	boolean addTutor = false;
+	
+	private int pageNumber = 1;
+	
+	private String sort = null;
 	int countName = 0;
 	int countSubject = 0;
 	int countDate = 0;
 	
-	int pageNumber = 1;
+	
 	
 	@Override
 	protected void doGet(HttpServletRequest req, HttpServletResponse resp)
@@ -217,7 +219,7 @@ public class SearchServlet extends HttpServlet{
 			ArrayList<Pair<UserAccount, Tutor>> userTutorList = new ArrayList<Pair<UserAccount, Tutor>>();
 			
 			// Get all tutors and their vouchers
-			ArrayList<Pair<Tutor, PayVoucher>> allTutorVoucherList = controller.getAllVouchers(null);
+			ArrayList<Pair<UserAccount, Tutor>> allUserTutorList = controller.getAllUserTutors();
 			// Filter out tutors and vouchers based on account info
 			for (int i = ((pageNumber - 1) * 7); i < (pageNumber * 7); i++) {
 				
@@ -233,7 +235,7 @@ public class SearchServlet extends HttpServlet{
 			}
 			
 			if (userTutorList.isEmpty()) {
-				req.setAttribute("errorMessage", "There were no pay vouchers found");
+				req.setAttribute("errorMessage", "There were no tutors found");
 				System.out.println("Search Servlet: no tutors Found");
 			}else {
 				req.setAttribute("voucherAdded", "Pay Vouchers were added Sucessfully");

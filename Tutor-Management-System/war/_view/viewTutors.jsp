@@ -75,7 +75,7 @@
                     <form action="${pageContext.servletContext.contextPath}/search" method="post">
                         <div class="pageNum">
                             <input type="submit" id="previousPageBtn" name="page1" value="&#8592">
-                            Page ${pageNumber}
+                            Page ${pageNumberView}
                             <input type="submit" id="nextPageBtn" name="page2" value="&#8594">
                         </div>
                     </form>
