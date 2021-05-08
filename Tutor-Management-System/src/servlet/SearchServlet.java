@@ -23,7 +23,10 @@ public class SearchServlet extends HttpServlet{
 	private static final long serialVersionUID = 1L;
 	private SearchController controller = null;
 	String searchParameter = null;
+	String stillSearching = null;
 	boolean editTutor = false;
+	int pageNumber = 1;
+	
 	boolean editProfile = false;
 	boolean addTutor = false;
 	
@@ -79,15 +82,53 @@ public class SearchServlet extends HttpServlet{
 			
 			ArrayList<Pair<Tutor, PayVoucher>> tutorVoucherList = new ArrayList<Pair<Tutor, PayVoucher>>();
 			
+			ArrayList<Pair<Tutor, PayVoucher>> tempVoucherList = new ArrayList<Pair<Tutor, PayVoucher>>();
+			
 			// Get all Tutors and their vouchers
 			ArrayList<Pair<Tutor, PayVoucher>> allTutorVoucherList = controller.getAllVouchers();
 			
 			// Filter out tutors and vouchers based on account info
-			for (Pair<Tutor, PayVoucher> tutorVoucher : allTutorVoucherList) {
-				
-				if (tutorVoucher.getLeft().getAccountID() == account.getAccountID() || account.getIsAdmin()) {
+	
+			int count = 0;
+			
+			if (account.getIsAdmin()) {
+			
+				for (Pair<Tutor, PayVoucher> tutorVoucher : allTutorVoucherList) {
 					
-					tutorVoucherList.add(tutorVoucher);
+					if (count >= 7) {
+						
+						break;
+					}
+	
+					
+					if (tutorVoucher.getLeft().getAccountID() == account.getAccountID() || account.getIsAdmin()) {
+						
+						tutorVoucherList.add(tutorVoucher);
+					}
+					
+					count++;
+				}
+			}
+			else {
+				
+				for (Pair<Tutor, PayVoucher> tutorVoucher : allTutorVoucherList) {
+					
+					if (tutorVoucher.getLeft().getAccountID() == account.getAccountID()) {
+						
+						tempVoucherList.add(tutorVoucher);
+					}
+				}
+				
+				for (int i = ((pageNumber - 1) * 7); i < (pageNumber * 7); i++) {
+					
+					if ((tempVoucherList.size() - 1) <= i) {
+						
+						break;
+					
+					}
+						
+					tutorVoucherList.add(tempVoucherList.get(i));
+				
 				}
 			}
 			
@@ -97,6 +138,7 @@ public class SearchServlet extends HttpServlet{
 			}
 			
 			// Update search with the tutors and vouchers
+			req.getSession().setAttribute("pageNumber", pageNumber);
 			req.setAttribute("payVouchers", tutorVoucherList);
 			req.getRequestDispatcher("/_view/search.jsp").forward(req, resp);
 		}
@@ -151,11 +193,12 @@ public class SearchServlet extends HttpServlet{
 			ArrayList<Pair<Tutor, PayVoucher>> allTutorVoucherList = controller.getAllVouchers();
 			
 			// Filter out tutors and vouchers based on account info
-			for (Pair<Tutor, PayVoucher> tutorVoucher : allTutorVoucherList) {
+			for (int i = ((pageNumber - 1) * 7); i < (pageNumber * 7); i++) {
 				
-				if (tutorVoucher.getLeft().getAccountID() == account.getAccountID() || account.getIsAdmin()) {
+				if (allTutorVoucherList.get(i).getLeft().getAccountID() == account.getAccountID() || account.getIsAdmin()) {
 					
-					tutorVoucherList.add(tutorVoucher);
+					tutorVoucherList.add(allTutorVoucherList.get(i));
+				
 				}
 			}
 			
@@ -196,9 +239,15 @@ public class SearchServlet extends HttpServlet{
 				System.out.println("Search Servlet: no Voucher Found");
 			}
 
+			// Reset the page number to 1
+			req.getSession().setAttribute("pageNumber", 1);
+			pageNumber = 1;
+			
 			// Update search with the vouchers
 			req.setAttribute("payVouchers", tutorVoucherList);
 			req.getRequestDispatcher("/_view/search.jsp").forward(req, resp);
+			
+			stillSearching = searchParameter;
 		} 
 		
 		//Redirects to edit tutor page
@@ -225,25 +274,99 @@ public class SearchServlet extends HttpServlet{
 				resp.sendRedirect("addTutor");
 				
 			}
+		
 			
 			//loads the default search page
 			else {
 				loadDefaultSearch(req, resp, account);
 			}
-		}else if (req.getParameter("tutorProfile") != null){
-			Tutor tutor = controller.getTutorByUserID(account);
-			
-			boolean editProfile = true;
-			req.getSession().setAttribute("viewProfile", editProfile);
-			req.getSession().setAttribute("tutorProfileInfo", tutor);
-			
-			//redirects to page
-			resp.sendRedirect("addTutor");
 		}
+		
+		else if(req.getParameter("page1") != null && pageNumber > 1) {
+			if (!req.getParameter("page1").equals("")) {
+				
+				System.out.println("Search Servlet: Previous Page");
+				
+				pageNumber--;
+				editProfile = false;
+				req.getSession().setAttribute("viewProfile", editProfile);
+				
+				boolean editTutor = false;
+				req.getSession().setAttribute("edit", editTutor);
+				
+				req.getSession().setAttribute("pageNumber", pageNumber);
+				
+				loadDefaultSearch(req, resp, account);		
+				
+				//redirects to page
+				resp.sendRedirect("addTutor");
+			}	
+			loadDefaultSearch(req, resp, account);	
+		}
+		
+		else if (req.getParameter("page2") != null && stillSearching == null) {
+			if (!req.getParameter("page2").equals("") && account.getIsAdmin() && 
+				((controller.getAllVouchers().size() % 7 != 0 && (controller.getAllVouchers().size() / 7) + 1 > pageNumber)) ||
+				(controller.getAllVouchers().size() % 7 == 0 && (controller.getAllVouchers().size() / 7) > pageNumber)) {
+			
+				System.out.println("Search Servlet: Next Page");
+				
+				pageNumber++;
+				
+				req.getSession().setAttribute("pageNumber", pageNumber);
+				
+				loadDefaultSearch(req, resp, account);	
+			}
+			loadDefaultSearch(req, resp, account);	
+		}
+		
+		else if (req.getParameter("page2") != null && stillSearching != null) {
+				if (!req.getParameter("page2").equals("") && account.getIsAdmin() && !stillSearching.equals("") && 
+				((controller.getVoucherFromSearch(stillSearching).size() % 7 != 0 && (controller.getVoucherFromSearch(stillSearching).size() / 7) + 1 > pageNumber)) ||
+				(controller.getVoucherFromSearch(stillSearching).size() % 7 == 0 && (controller.getVoucherFromSearch(stillSearching).size() / 7) > pageNumber)) {
+					System.out.println("Search Servlet: Next Page");
+					
+					pageNumber++;
+					
+					req.getSession().setAttribute("pageNumber", pageNumber);
+					
+					loadDefaultSearch(req, resp, account);	
+				}
+			
+			loadDefaultSearch(req, resp, account);	
+		}
+		
+		else if (req.getParameter("page2") != null && !req.getParameter("page2").equals("")
+				 && !account.getIsAdmin()) {
+			
+			ArrayList<Pair<Tutor, PayVoucher>> allTutorVoucherList = controller.getAllVouchers();
+			
+			ArrayList<Pair<Tutor, PayVoucher>> tempVoucherList = new ArrayList<Pair<Tutor, PayVoucher>>();
+			
+			for (Pair<Tutor, PayVoucher> tutorVoucher : allTutorVoucherList) {
+				
+				if (tutorVoucher.getLeft().getAccountID() == account.getAccountID()) {
+					
+					tempVoucherList.add(tutorVoucher);
+				}
+			}
+			
+			if ((tempVoucherList.size() / 7) + 1 > pageNumber) {
+				System.out.println("Search Servlet: Next Page");
+				
+				pageNumber++;
+				
+				req.getSession().setAttribute("pageNumber", pageNumber);
+				
+			}
+			
+			loadDefaultSearch(req, resp, account);
+		}
+		
 		// Default generate pay vouchers
 		else {
 			loadDefaultSearch(req, resp, account);
-		}
+;		}
 	}
 	
 	// Default generate pay vouchers
@@ -251,17 +374,81 @@ public class SearchServlet extends HttpServlet{
 			throws ServletException, IOException {
 		ArrayList<Pair<Tutor, PayVoucher>> tutorVoucherList = new ArrayList<Pair<Tutor, PayVoucher>>();
 		
-		// Get all pay vouchers
-		ArrayList<Pair<Tutor, PayVoucher>> allTutorVoucherList = controller.getAllVouchers();
+		ArrayList<Pair<Tutor, PayVoucher>> tempVoucherList = new ArrayList<Pair<Tutor, PayVoucher>>();
 		
-		// Filter out tutors and vouchers based on account info
-		for (Pair<Tutor, PayVoucher> tutorVoucher : allTutorVoucherList) {
+		// Get all pay vouchers
+		ArrayList<Pair<Tutor, PayVoucher>> allTutorVoucherList;
+		
+		if (stillSearching == null) {
+			allTutorVoucherList = controller.getAllVouchers();
+		}
+		else {
+			allTutorVoucherList = controller.getVoucherFromSearch(stillSearching);
+		}
+		
+		if (account.getIsAdmin()) {
 			
-			if (tutorVoucher.getLeft().getAccountID() == account.getAccountID() || account.getIsAdmin()) {
+			// Filter out tutors and vouchers based on account info
+			if (stillSearching == null) {
+				for (int i = ((pageNumber - 1) * 7); i < (pageNumber * 7); i++) {
+					
+					if ((allTutorVoucherList.size()) <= i) {
+						
+						break;
+					
+					}
+						
+					tutorVoucherList.add(allTutorVoucherList.get(i));
 				
-				tutorVoucherList.add(tutorVoucher);
+				}	
+			}
+			else  {
+
+				for (Pair<Tutor, PayVoucher> tutorVoucher : allTutorVoucherList) {
+						
+						tempVoucherList.add(tutorVoucher);
+					
+				}
+				
+				for (int i = ((pageNumber - 1) * 7); i < (pageNumber * 7); i++) {
+					
+					if ((tempVoucherList.size()) <= i) {
+						
+						break;
+					
+					}
+						
+					tutorVoucherList.add(tempVoucherList.get(i));
+				
+				}	
 			}
 		}
+		
+		else  {
+			
+			// Filter out tutors and vouchers based on account info
+			
+			for (Pair<Tutor, PayVoucher> tutorVoucher : allTutorVoucherList) {
+				
+				if (tutorVoucher.getLeft().getAccountID() == account.getAccountID()) {
+					
+					tempVoucherList.add(tutorVoucher);
+				}
+			}
+			
+			for (int i = ((pageNumber - 1) * 7); i < (pageNumber * 7); i++) {
+				
+				if ((tempVoucherList.size() - 1) <= i) {
+					
+					break;
+				
+				}
+					
+				tutorVoucherList.add(tempVoucherList.get(i));
+			
+			}
+		}
+	
 		
 		if (tutorVoucherList.isEmpty()) {
 			req.setAttribute("errorMessage", "There were no pay vouchers found");

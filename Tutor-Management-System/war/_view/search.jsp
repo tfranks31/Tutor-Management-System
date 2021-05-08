@@ -39,7 +39,7 @@
     	<div class = "search">
         	<form action="${pageContext.servletContext.contextPath}/search" method="post">
             	<input type="text" id="searchBox" name="search" value="${searchParameter}">
-            	<button id= "searchBTN">&#128269</button>
+            	<button id="searchBTN" name="searchBTN">&#128269</button>
         	</form>
     	</div>
     	
@@ -100,9 +100,13 @@
         	<div class="error">${errorMessage}</div>
         </c:if>
 
-    	<div Class = "pageNum">
-        	<p> <<< &#160; Page # &#160; >>></p>
-   	 	</div>
+    	<form action="${pageContext.servletContext.contextPath}/search" method="post">
+    		<div class="pageNum">
+    			<input type="submit" id="previousPageBtn" name="page1" value="&#8592">
+        		Page ${pageNumber}
+        		<input type="submit" id="nextPageBtn" name="page2" value="&#8594">
+  			</div>
+  		</form>
     
     		<c:if test="${user.isAdmin}">
     		<div id="assignVoucher">
