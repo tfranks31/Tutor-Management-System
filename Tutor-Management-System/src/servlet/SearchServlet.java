@@ -208,29 +208,35 @@ public class SearchServlet extends HttpServlet{
 				}				
 			}
 			
-			ArrayList<Pair<Tutor, PayVoucher>> tutorVoucherList = new ArrayList<Pair<Tutor, PayVoucher>>();
+			ArrayList<Pair<UserAccount, Tutor>> userTutorList = new ArrayList<Pair<UserAccount, Tutor>>();
 			
 			// Get all tutors and their vouchers
-			ArrayList<Pair<Tutor, PayVoucher>> allTutorVoucherList = controller.getAllVouchers();
+			ArrayList<Pair<UserAccount, Tutor>> allUserTutorList = controller.getAllUserTutors();
 			
 			// Filter out tutors and vouchers based on account info
 			for (int i = ((pageNumber - 1) * 7); i < (pageNumber * 7); i++) {
 				
-				if (allTutorVoucherList.get(i).getLeft().getAccountID() == account.getAccountID() || account.getIsAdmin()) {
+				if (allUserTutorList.size() <= i) {
+					break;
+				}
+				
+				if (allUserTutorList.get(i).getLeft().getAccountID() == account.getAccountID() || account.getIsAdmin()) {
 					
-					tutorVoucherList.add(allTutorVoucherList.get(i));
+					userTutorList.add(allUserTutorList.get(i));
 				
 				}
 			}
 			
-			if (tutorVoucherList.isEmpty()) {
+			if (userTutorList.isEmpty()) {
 				req.setAttribute("errorMessage", "There were no pay vouchers found");
-				System.out.println("Search Servlet: no Voucher Found");
+				System.out.println("Search Servlet: no tutors Found");
+			}else {
+				req.setAttribute("voucherAdded", "Pay Vouchers were added Sucessfully");
 			}
 			
 			// Update search with the vouchers
-			req.setAttribute("payVouchers", tutorVoucherList);
-			req.getRequestDispatcher("/_view/search.jsp").forward(req, resp);
+			req.setAttribute("UserTutors", userTutorList);
+			req.getRequestDispatcher("/_view/viewTutors.jsp").forward(req, resp);
 		}
 		
 		// User wants to search the pay vouchers with a search parameter
@@ -326,10 +332,10 @@ public class SearchServlet extends HttpServlet{
 				
 				req.getSession().setAttribute("pageNumber", pageNumber);
 				
-				loadDefaultSearch(req, resp, account);		
-				
 			}	
+			
 			loadDefaultSearch(req, resp, account);	
+		
 		}
 		
 		else if (req.getParameter("page2") != null && stillSearching == null) {
@@ -343,7 +349,6 @@ public class SearchServlet extends HttpServlet{
 				
 				req.getSession().setAttribute("pageNumber", pageNumber);
 				
-				loadDefaultSearch(req, resp, account);	
 			}
 			loadDefaultSearch(req, resp, account);	
 		}
@@ -358,7 +363,7 @@ public class SearchServlet extends HttpServlet{
 					
 					req.getSession().setAttribute("pageNumber", pageNumber);
 					
-					loadDefaultSearch(req, resp, account);	
+
 				}
 			
 			loadDefaultSearch(req, resp, account);	
