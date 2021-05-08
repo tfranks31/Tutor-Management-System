@@ -158,9 +158,13 @@ th, td{
 }
 
 .pageNum {
- 	margin-top: -18px;
+ 	margin-top: -8px;
     padding: 10px;
     text-align: center;
+}
+	
+#previousPageBtn, #nextPageBtn {
+	font-size: 18px;
 }
 
 #assignVoucher {
