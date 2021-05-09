@@ -6,6 +6,7 @@ import java.io.FileOutputStream;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.OutputStream;
+import java.text.DecimalFormat;
 import java.util.ArrayList;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
@@ -23,6 +24,7 @@ public class PayVoucherServlet extends HttpServlet{
 	private static final long serialVersionUID = 1L;
 	private int tableSize, payVoucherID = 1;
 	private PayVoucherController controller = null;
+	private DecimalFormat decimalFormat = new DecimalFormat("##.00");
 	
 	@Override
 	protected void doGet(HttpServletRequest req, HttpServletResponse resp)
@@ -110,8 +112,9 @@ public class PayVoucherServlet extends HttpServlet{
 			req.setAttribute("dueDate", voucher.getDueDate());
 			req.setAttribute("accountNumber", tutor.getAccountNumber());
 			req.setAttribute("totalHours",voucher.getTotalHours());
-			req.setAttribute("payRate", tutor.getPayRate());
-			req.setAttribute("totalPay", voucher.getTotalPay());
+			
+			req.setAttribute("payRate", decimalFormat.format(tutor.getPayRate()));
+			req.setAttribute("totalPay", decimalFormat.format(voucher.getTotalPay()));
 			
 			// Call JSP to generate updated form
 			req.getRequestDispatcher("/_view/payVoucher.jsp").forward(req, resp);
@@ -328,8 +331,8 @@ public class PayVoucherServlet extends HttpServlet{
 		req.setAttribute("dueDate", voucher.getDueDate());
 		req.setAttribute("accountNumber", tutor.getAccountNumber());
 		req.setAttribute("totalHours",voucher.getTotalHours());
-		req.setAttribute("payRate", tutor.getPayRate());
-		req.setAttribute("totalPay", voucher.getTotalPay());
+		req.setAttribute("payRate", decimalFormat.format(tutor.getPayRate()));
+		req.setAttribute("totalPay", decimalFormat.format(voucher.getTotalPay()));
 		
 		// Refresh payVoucher
 		
