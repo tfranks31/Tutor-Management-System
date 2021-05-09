@@ -54,13 +54,20 @@
                     </td>
                 <tr>
                     <td>
-                        <label for="username" class="label">Credentials:</label>
+                    	<c:choose>  
+		                	<c:when test="${addTutor}">
+		                		<label for="email" class="label" >Email:</label>
+		                	</c:when>
+                            <c:otherwise>
+                                <label for="username" class="label">Credentials:</label>
+                            </c:otherwise>
+                        </c:choose>                    
                     </td>
                     <td>
-                        <c:choose>
-                            <c:when test="${user.isAdmin}">
-                                <input type="text" id="username" name="username" placeholder="Username" value="${username}">
-                            </c:when>
+                        <c:choose>  
+		                	<c:when test="${addTutor}">
+		                		<input type="text" id="username" name="email" placeholder="Email" value="${email}">
+		                	</c:when>
                             <c:otherwise>
                                 <input type="text" id="username" name="username" value="${username}" readonly>
                             </c:otherwise>
@@ -77,21 +84,29 @@
                         </c:choose>
                     </td>
                 </tr>
-                <tr>
-                    <td>
-                        <label for="email" class="label" >Email:</label>
-                    </td>
-                    <td>
-                    <c:choose>
-                        <c:when test="${user.isAdmin}">
-                            <input type="text" id="email" name="email" placeholder="Email" value="${email}">
-                        </c:when>
-                        <c:otherwise>
-                            <input type="text" id="email" name="email" value="${email}" readonly>
-                        </c:otherwise>
-                    </c:choose>
-                    </td>
-                </tr>
+                <c:choose>  
+                	<c:when test="${addTutor}">
+
+                	</c:when>
+                    <c:otherwise>
+                        <tr>
+		                    <td>
+		                        <label for="email" class="label" >Email:</label>
+		                    </td>
+		                    <td>
+		                    <c:choose>
+		                        <c:when test="${user.isAdmin}">
+		                            <input type="text" id="email" name="email" placeholder="Email" value="${email}">
+		                        </c:when>
+		                        <c:otherwise>
+		                            <input type="text" id="email" name="email" value="${email}" readonly>
+		                        </c:otherwise>
+		                    </c:choose>
+		                    </td>
+		                </tr>
+                    </c:otherwise>
+                </c:choose>
+                
                 <tr>
                     <td>
                         <label for="studentID" class="label">Student Info:</label>

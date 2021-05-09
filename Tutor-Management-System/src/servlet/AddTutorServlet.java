@@ -32,7 +32,7 @@ public class AddTutorServlet extends HttpServlet {
 			req.setAttribute("edit", editTutor);
 			tutorProfile = (boolean)req.getSession().getAttribute("viewProfile");
 			req.setAttribute("viewProle", tutorProfile);
-			addTutor = (boolean)req.getSession().getAttribute("viewProfile");
+			addTutor = (boolean)req.getSession().getAttribute("addTutor");
 			req.setAttribute("addTutor", addTutor);
 		}
 		
@@ -114,9 +114,9 @@ public class AddTutorServlet extends HttpServlet {
 		
 		String firstName = req.getParameter("firstName");
 		String lastName = req.getParameter("lastName");
-		String username = req.getParameter("username");
 		String password = req.getParameter("password");
 		String email = req.getParameter("email");
+		String username = email.split("@")[0];
 		String studentID = req.getParameter("studentID");
 		String accountNumber = req.getParameter("accountNumber");
 		String subject = req.getParameter("subject");
@@ -212,9 +212,9 @@ public class AddTutorServlet extends HttpServlet {
 		// Place all parameters in string for readability sake
 		String firstName = req.getParameter("firstName");
 		String lastName = req.getParameter("lastName");
-		String username = req.getParameter("username");
 		String password = req.getParameter("password");
 		String email = req.getParameter("email");
+		String username = email.split("@")[0];
 		String studentID = req.getParameter("studentID");
 		String accountNumber = req.getParameter("accountNumber");
 		String subject = req.getParameter("subject");
