@@ -85,4 +85,33 @@ public class AddTutorControllerTest {
 		db.deleteTutor(dbTutor);
 		db.deleteUserAccount(dbAccount);
 	}
+	
+	@Test
+	public void testUpdatePasswordWithUserID() {
+		
+		UserAccount newAccount = new UserAccount("user", "pass", -1, false);
+		db.insertUserAccount(newAccount);
+		
+		List<UserAccount> accountList = db.getUserAccounts();
+		
+		// Newly added objects should be the last object in the list
+		UserAccount dbAccount = accountList.get(accountList.size() - 1);
+		
+		// Check that the objects were successfully entered
+		assertEquals(dbAccount.getUsername(), newAccount.getUsername());
+		assertEquals(dbAccount.getPassword(), newAccount.getPassword());
+		assertEquals(dbAccount.getIsAdmin(), newAccount.getIsAdmin());
+		//update the password
+		controller.updatePassword(dbAccount, "newpassword");
+		//get the account again
+		accountList = db.getUserAccounts();
+		dbAccount = accountList.get(accountList.size() - 1);
+		
+		assertEquals(dbAccount.getUsername(), newAccount.getUsername());
+		assertEquals(dbAccount.getPassword(), "newpassword");
+		assertEquals(dbAccount.getIsAdmin(), newAccount.getIsAdmin());
+		
+		// Remove test objects
+		db.deleteUserAccount(dbAccount);
+	}
 }

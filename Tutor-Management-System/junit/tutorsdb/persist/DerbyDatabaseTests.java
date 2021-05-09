@@ -425,25 +425,35 @@ public class DerbyDatabaseTests {
 		db.deletePayVoucher(dbPayVoucher);
 	}
 	
+	
 	@Test
 	public void testAssignVoucherSpecific() {
+		UserAccount newUser = new UserAccount("username", "password", 10000000, false);
+		db.insertUserAccount(newUser);
 		
-		Tutor newTutor = new Tutor("user pass", "user@user.use", "use", 1.0, -1, 1, "321", "123");
+		List<UserAccount> userAccountList = db.getUserAccounts();
+		
+		newUser = userAccountList.get(userAccountList.size() - 1);
+		
+		Tutor newTutor = new Tutor("user pass", "user@user.use", "use", 1.0, -1, newUser.getAccountID(), "321", "123");
 		db.insertTutor(newTutor);
-		Tutor dbTutor = db.getTutors().get(db.getTutors().size() - 1);
 		
-		db.assignVoucherSpecific("04/01/0001", "05/01/0001", dbTutor.getTutorID());
+		
+		Tutor dbTutor = db.getTutors().get(db.getTutors().size() - 1);
+		UserAccount dbUser = db.getUserAccounts().get(db.getUserAccounts().size() -1);
+		
+		db.assignVoucherSpecific("04/01/0001", "05/01/0001", dbUser.getUsername());
 		List<PayVoucher> vouchers = db.getPayVouchers();
 		
 		String startDate = vouchers.get(vouchers.size() - 1).getStartDate();
 		String dueDate = vouchers.get(vouchers.size() - 1).getDueDate();
-		
 		assertTrue(startDate.equals("04/01/0001"));
 		assertTrue(dueDate.equals("05/01/0001"));
 			
 		PayVoucher delete = vouchers.get(vouchers.size() - 1);
 		db.deletePayVoucher(delete);
 		db.deleteTutor(dbTutor);
+		db.deleteUserAccount(dbUser);
 	}
 	
 	@Test
