@@ -37,7 +37,7 @@
                                 <input type="text" id="firstName" name="firstName" placeholder="First Name" value="${firstName}">
                             </c:when>
                             <c:otherwise>
-                                <input type="text" id="firstName" name="firstName" value="${firstName}" readonly>
+                                <input type="text" id="firstName" name="firstName" value="${firstName}" style="background-color: #d2d2d2; border:2px solid #d2d2d2;" readonly>
                             </c:otherwise>
                         </c:choose>
                     </td>
@@ -47,7 +47,7 @@
                                 <input type="text" id="lastName" name="lastName" placeholder="Last Name" value="${lastName}">
                             </c:when>
                             <c:otherwise>
-                                <input type="text" id="lastName" name="lastName" value="${lastName}" readonly>
+                                <input type="text" id="lastName" name="lastName" value="${lastName}" style="background-color: #d2d2d2; border:2px solid #d2d2d2;" readonly>
                             </c:otherwise>
                         </c:choose>
 
@@ -69,7 +69,7 @@
 		                		<input type="text" id="username" name="email" placeholder="Email" value="${email}">
 		                	</c:when>
                             <c:otherwise>
-                                <input type="text" id="username" name="username" value="${username}" readonly>
+                                <input type="text" id="username" name="username" value="${username}" style="background-color: #d2d2d2; border:2px solid #d2d2d2;" readonly>
                             </c:otherwise>
                         </c:choose>
                     </td>               
@@ -99,7 +99,7 @@
 		                            <input type="text" id="email" name="email" placeholder="Email" value="${email}">
 		                        </c:when>
 		                        <c:otherwise>
-		                            <input type="text" id="email" name="email" value="${email}" readonly>
+		                            <input type="text" id="email" name="email" value="${email}" style="background-color: #d2d2d2; border:2px solid #d2d2d2;" readonly>
 		                        </c:otherwise>
 		                    </c:choose>
 		                    </td>
@@ -117,7 +117,7 @@
                                 <input type="text" id="studentID" name="studentID" placeholder="Student ID" value="${studentID}">
                             </c:when>
                             <c:otherwise>
-                                <input type="text" id="studentID" name="studentID" value="${studentID}" readonly>
+                                <input type="text" id="studentID" name="studentID" value="${studentID}" style="background-color: #d2d2d2; border:2px solid #d2d2d2;" readonly>
                             </c:otherwise>
                         </c:choose>
                     </td>
@@ -127,7 +127,7 @@
                                 <input type="text" id="accountNumber" name="accountNumber" placeholder="Account Number" value="${accountNumber}">
                             </c:when>
                             <c:otherwise>
-                                <input type="text" id="accountNumber" name="accountNumber" value="${accountNumber}" readonly>
+                                <input type="text" id="accountNumber" name="accountNumber" value="${accountNumber}" style="background-color: #d2d2d2; border:2px solid #d2d2d2;" readonly>
                             </c:otherwise>
                         </c:choose>     
                     </td>
@@ -142,7 +142,7 @@
                                 <input type="text" id="subject" name="subject" placeholder="Subject" value="${subject}">
                             </c:when>
                             <c:otherwise>
-                                <input type="text" id="subject" name="subject" value="${subject}" readonly>
+                                <input type="text" id="subject" name="subject" value="${subject}" style="background-color: #d2d2d2; border:2px solid #d2d2d2;" readonly>
                             </c:otherwise>
                         </c:choose>
                     </td>
@@ -152,7 +152,7 @@
                                 <input type="text" id="payRate" name="payRate" placeholder="Pay Rate" value="${payRate}">
                             </c:when>
                             <c:otherwise>
-                                <input type="text" id="payRate" name="payRate" value="${payRate}" readonly>
+                                <input type="text" id="payRate" name="payRate" value="${payRate}" style="background-color: #d2d2d2; border:2px solid #d2d2d2;" readonly>
                             </c:otherwise>
                         </c:choose>
                     </td>
