@@ -66,6 +66,8 @@ public class LoginServlet extends HttpServlet{
 			if (!req.getParameter("resetPassword").equals("")) {
 		
 				if (forgotPassword(req)) {
+					
+					req.setAttribute("errorMessage1", "");
 				
 					req.getRequestDispatcher("/_view/login.jsp").forward(req, resp);
 				}

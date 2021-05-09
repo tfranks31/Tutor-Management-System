@@ -74,9 +74,9 @@
 
                     <form action="${pageContext.servletContext.contextPath}/search" method="post">
                         <div class="pageNum">
-                            <input type="submit" id="previousPageBtn" name="page1" value="&#8592">
-                            Page ${pageNumberView}
-                            <input type="submit" id="nextPageBtn" name="page2" value="&#8594">
+                            <input type="submit" id="previousPageBtn" name="page3" value="&#8592">
+                            Page ${pageNumberTutor}
+                            <input type="submit" id="nextPageBtn" name="page4" value="&#8594">
                         </div>
                     </form>
 
