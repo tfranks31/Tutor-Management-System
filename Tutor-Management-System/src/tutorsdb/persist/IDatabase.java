@@ -80,9 +80,9 @@ public interface IDatabase {
 	 * end date.
 	 * @param startDate The date the PayVoucher is open at.
 	 * @param dueDate The date the PayVoucher is due at.
-	 * @param name The name of the specific tutor to assign a voucher to.
+	 * @param tutorID The ID of the specific tutor to assign a voucher to.
 	 */
-	public void assignVoucherSpecific(String startDate, String dueDate, int tutorID);
+	public void assignVoucherSpecific(String startDate, String dueDate, String userName);
 	
 	
 	/**

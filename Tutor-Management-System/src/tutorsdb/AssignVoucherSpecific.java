@@ -9,6 +9,7 @@ import tutorsdb.persist.IDatabase;
  * Execute assignVoucher query manually from the command line.
  */
 public class AssignVoucherSpecific {
+/*
 	public static void main(String[] args) throws Exception {
 		Scanner keyBoard = new Scanner(System.in);
 		
@@ -19,12 +20,13 @@ public class AssignVoucherSpecific {
 		System.out.print("Enter Due Date: ");
 		String dueDate = keyBoard.nextLine();
 		System.out.print("Enter Tutors ID: ");
-		int ID = keyBoard.nextInt();
+		int tutorID = keyBoard.nextInt();
 		
 		// get the DB instance and execute transaction
 		IDatabase db = DatabaseProvider.getInstance();
-		db.assignVoucherSpecific(startDate, dueDate, ID);
+		db.assignVoucherSpecific(startDate, dueDate, tutorID);
 		
 		System.out.println("Vouchers Sucessfully Assigned");
 	}
+	*/
 }

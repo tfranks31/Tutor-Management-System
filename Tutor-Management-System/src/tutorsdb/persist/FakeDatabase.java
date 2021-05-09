@@ -466,28 +466,29 @@ public class FakeDatabase implements IDatabase {
 	}
 
 	@Override
-	public void assignVoucherSpecific(String startDate, String dueDate, String name) {
+	public void assignVoucherSpecific(String startDate, String dueDate, String userName) {
 		
 		String start = startDate.substring(startDate.length() - 4) + "/" + startDate.substring(0, startDate.length() - 5);
 		String due = dueDate.substring(dueDate.length() - 4) + "/" + dueDate.substring(0, dueDate.length() - 5);
 		
-		for (Tutor tutor : tutorList) {
-			if (tutor.getName().equals(name)) {
-				PayVoucher voucher = new PayVoucher();
-				voucher.setStartDate(start);
-				voucher.setDueDate(due);
-				voucher.setTutorID(tutor.getTutorID());
-				voucher.setIsAdminEdited(false);
-				voucher.setIsNew(true);
-				voucher.setPayVoucherID(payVoucherList.size() + 1);
-				voucher.setIsSigned(false);
-				voucher.setIsSubmitted(false);
-				voucher.setTotalHours(0);
-				voucher.setTotalPay(0);
-				payVoucherList.add(voucher);
+		for (UserAccount user : accountList) {
+			for (Tutor tutor : tutorList) {
+				if (user.getUsername().equals(userName) && user.getAccountID() == tutor.getAccountID()) {
+					PayVoucher voucher = new PayVoucher();
+					voucher.setStartDate(start);
+					voucher.setDueDate(due);
+					voucher.setTutorID(tutor.getTutorID());
+					voucher.setIsAdminEdited(false);
+					voucher.setIsNew(true);
+					voucher.setPayVoucherID(payVoucherList.size() + 1);
+					voucher.setIsSigned(false);
+					voucher.setIsSubmitted(false);
+					voucher.setTotalHours(0);
+					voucher.setTotalPay(0);
+					payVoucherList.add(voucher);
+				}
 			}
 		}
-		
 	}
 
 	@Override

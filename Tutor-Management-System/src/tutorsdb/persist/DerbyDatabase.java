@@ -1490,13 +1490,15 @@ public class DerbyDatabase implements IDatabase {
 	}
 
 	@Override
-	public void assignVoucherSpecific(String startDate, String dueDate, int tutorID) {
+	public void assignVoucherSpecific(String startDate, String dueDate, String userName) {
+		
 		executeTransaction(new Transaction<Boolean>() {
-			
+	
 			@Override
 			public Boolean execute(Connection conn) throws SQLException {
 				PreparedStatement stmt1 = null;
 				PreparedStatement stmt2 = null;
+				PreparedStatement stmt3 = null;
 				ResultSet resultSet = null;
 				String start = startDate.substring(startDate.length() - 4) + "/" + startDate.substring(0, startDate.length() - 5);
 				String due = dueDate.substring(dueDate.length() - 4) + "/" + dueDate.substring(0, dueDate.length() - 5);
@@ -1518,24 +1520,44 @@ public class DerbyDatabase implements IDatabase {
 						result.add(Tutor);
 					}
 					
+					
+					stmt3 = conn.prepareStatement(
+							"SELECT user_accounts.* " + 
+							"FROM user_accounts "
+					);
+					
+					
+					resultSet = stmt3.executeQuery();
+					
+					List<UserAccount> userResult = new ArrayList<UserAccount>();
+					
+					while (resultSet.next()) {
+						UserAccount user = new UserAccount();
+						loadUserAccount(user, resultSet, 1);
+
+						userResult.add(user);
+					}
 					//for all of the returned tutors add a new pay voucher
-					for (Tutor tutor : result) {
-						if (tutor.getTutorID() == tutorID) {
-							stmt2 = conn.prepareStatement(
-								"INSERT INTO pay_vouchers (tutor_id, start_date, due_date, total_hours, total_pay, is_submitted, is_signed, is_new, is_admin_edited) " +
-								"VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)"
-							);
-							stmt2.setInt(1, tutor.getTutorID());
-							stmt2.setString(2, start);
-							stmt2.setString(3, due);
-							stmt2.setDouble(4, 0);
-							stmt2.setDouble(5, 0);
-							stmt2.setBoolean(6, false);
-							stmt2.setBoolean(7, false);
-							stmt2.setBoolean(8, true);
-							stmt2.setBoolean(9, false);
-							
-							stmt2.executeUpdate();
+					
+					for (UserAccount user : userResult) {
+						for (Tutor tutor : result) {
+							if (user.getUsername().equals(userName) && user.getAccountID() == tutor.getAccountID()) {
+								stmt2 = conn.prepareStatement(
+									"INSERT INTO pay_vouchers (tutor_id, start_date, due_date, total_hours, total_pay, is_submitted, is_signed, is_new, is_admin_edited) " +
+									"VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)"
+								);
+								stmt2.setInt(1, tutor.getTutorID());
+								stmt2.setString(2, start);
+								stmt2.setString(3, due);
+								stmt2.setDouble(4, 0);
+								stmt2.setDouble(5, 0);
+								stmt2.setBoolean(6, false);
+								stmt2.setBoolean(7, false);
+								stmt2.setBoolean(8, true);
+								stmt2.setBoolean(9, false);
+								
+								stmt2.executeUpdate();
+							}
 						}
 					}
 					return true;
@@ -1544,9 +1566,11 @@ public class DerbyDatabase implements IDatabase {
 					DBUtil.closeQuietly(resultSet);
 					DBUtil.closeQuietly(stmt1);
 					DBUtil.closeQuietly(stmt2);
+					DBUtil.closeQuietly(stmt3);
 				}
 			}
 		});
+		
 	}
 
 	@Override
