@@ -48,7 +48,7 @@
                             <th>Tutor Name</th>
                             <th>Subject</th>
                             <th>User Name</th>
-                            <th>Assign Pay Voucher</th>
+                            <th>Student ID</th>
                             </tr>
                        
                             <c:forEach items="${UserTutors}" var="user">
@@ -60,9 +60,9 @@
                                         </form>
                                     </td>
                                     <td> ${user.right.name} </td>
-                                    <td> ${user.right.subject} </td>
+                                    <td> ${user.right.subject}</td>
                                     <td> ${user.left.username}</td>
-                                    <td> TO BE ADDED</td>
+                                    <td> ${user.right.studentID}</td>
                                 </tr>
                             </c:forEach>
                         </table>
@@ -102,14 +102,12 @@
                                 
                                 <div id="radio">
                                     <input type="radio" id="assign-all" name="assign" value="allTutors" checked>
-                                
                                     <label for="assign-all" id="radio-label">All Tutors</label>
                                     <input type="radio" id="assign-one" name="assign" value="oneTutor">
-                                
                                     <label for="assign-one" id="radio-label">Specific Tutor:</label>
-                                    <input type="text" id="edit-tutor-name" name="assignName" placeholder="Tutor Name"
-                                        value="${assignName}"></input>
+                                    <input type="text" id="edit-tutor-name" name="assignUserName" placeholder="User Name" value="${assignUserName}"></input>
                                 </div>
+
                             </form>
                         </div>
                     </c:if>
@@ -132,11 +130,11 @@
                     
                                 </br></br>
                             </form>
-                      
+                            
                         </c:otherwise>
 
                     </c:choose>
-
+                </br></br></br></br>
                 </div>
 
         </body>

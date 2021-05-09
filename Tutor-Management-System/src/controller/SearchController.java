@@ -79,10 +79,10 @@ public class SearchController {
 	 * Assign a PayVoucher with the specified start date and dueDate.
 	 * @param startDate Date the PayVoucher will start on.
 	 * @param dueDate Date the PayVoucher will be due on.
-	 * @param name Name of the tutor pay voucher is assigned added to.
+	 * @param userName Name of the tutor pay voucher is assigned added to.
 	 */
-	public void assignPayVoucherSpecific(String startDate, String dueDate, String name) {
-		db.assignVoucherSpecific(startDate, dueDate, name);
+	public void assignPayVoucherSpecific(String startDate, String dueDate, String userName) {
+		db.assignVoucherSpecific(startDate, dueDate, userName);
 	}
 	
 	/**

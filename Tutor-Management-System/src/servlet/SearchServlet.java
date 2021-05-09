@@ -189,6 +189,37 @@ public class SearchServlet extends HttpServlet{
 			
 			req.getRequestDispatcher("/payVoucher").forward(req, resp);
 		}
+		//user wants to view profile
+		else if (req.getParameter("tutorProfile") != null){
+			Tutor tutor = controller.getTutorByUserID(account);
+			
+			boolean editProfile = true;
+			req.getSession().setAttribute("viewProfile", editProfile);
+			req.getSession().setAttribute("tutorProfileInfo", tutor);
+			
+			//redirects to page
+			resp.sendRedirect("addTutor");
+		} 
+		//Redirects to edit tutor page
+		else if (req.getParameter("userTutorID") != null) {
+			
+			System.out.println("Search Servlet: Edit Tutor");
+			
+			System.out.println("UserTutorID: " + req.getParameter("userTutorID"));
+			
+				System.out.println("debug: " + req.getParameter("assignVoucher"));
+			editTutor = true;
+			req.getSession().setAttribute("edit", editTutor);
+			
+			int userID =  Integer.parseInt(req.getParameter("userTutorID"));
+			
+			Pair<UserAccount, Tutor> userTutorPair = controller.getUserTutorByAccountID(userID);
+			
+			req.getSession().setAttribute("editUser", userTutorPair.getLeft());
+			req.getSession().setAttribute("editTutor", userTutorPair.getRight());
+			
+			resp.sendRedirect("addTutor");
+		}
 		
 		// User wants to assign a pay voucher
 		else if (req.getParameter("assignVoucher") != null && req.getParameter("assign") != null) {
@@ -205,14 +236,16 @@ public class SearchServlet extends HttpServlet{
 					controller.assignPayVoucherAll(req.getParameter("startDate"), req.getParameter("dueDate"));
 				}			
 			}
+			
 			if (assignmentType.equals("oneTutor")) {
 				
 				System.out.println("Search Servlet: assign voucher specific");
 				
+				
 				if (searchValidate(req)) {
 					
 					//assigns the voucher to one tutor
-					controller.assignPayVoucherSpecific(req.getParameter("startDate"), req.getParameter("dueDate"), req.getParameter("assignName"));
+					controller.assignPayVoucherSpecific(req.getParameter("startDate"), req.getParameter("dueDate"),  req.getParameter("assignUserName"));
 				}				
 			}
 			
@@ -372,17 +405,7 @@ public class SearchServlet extends HttpServlet{
 			stillSearching = searchParameter;
 		} 
 		
-		//user wants to view profile
-		else if (req.getParameter("tutorProfile") != null){
-			Tutor tutor = controller.getTutorByUserID(account);
-			
-			boolean editProfile = true;
-			req.getSession().setAttribute("viewProfile", editProfile);
-			req.getSession().setAttribute("tutorProfileInfo", tutor);
-			
-			//redirects to page
-			resp.sendRedirect("addTutor");
-		}
+		
 		
 		//admin wants to view tutor page
 		else if (req.getParameter("tutorPage") != null){
@@ -395,23 +418,7 @@ public class SearchServlet extends HttpServlet{
 		
 			loadDefaultSearch(req,resp, account);
 		}
-		//Redirects to edit tutor page
-		else if (req.getParameter("userTutorID") != null) {
-			
-			System.out.println("Search Servlet: Edit Tutor");
-			
-			editTutor = true;
-			req.getSession().setAttribute("edit", editTutor);
-			
-			int userID =  Integer.parseInt(req.getParameter("userTutorID"));
-			
-			Pair<UserAccount, Tutor> userTutorPair = controller.getUserTutorByAccountID(userID);
-			
-			req.getSession().setAttribute("editUser", userTutorPair.getLeft());
-			req.getSession().setAttribute("editTutor", userTutorPair.getRight());
-			
-			resp.sendRedirect("addTutor");
-		}
+		
 		
 		else if(req.getParameter("page1") != null && pageNumber > 1) {
 			if (!req.getParameter("page1").equals("")) {
@@ -667,7 +674,8 @@ public class SearchServlet extends HttpServlet{
 		
 		String startDate = req.getParameter("startDate");
 		String dueDate = req.getParameter("dueDate");
-		
+		System.out.println(startDate);
+		System.out.println(dueDate);
 		// Check for valid date format
 		if (!startDate.matches("^(1[0-2]|0[1-9])/(3[01]|[12][0-9]|0[1-9])/[0-9]{4}$")
 			|| !dueDate.matches("^(1[0-2]|0[1-9])/(3[01]|[12][0-9]|0[1-9])/[0-9]{4}$")) {
@@ -710,7 +718,7 @@ public class SearchServlet extends HttpServlet{
 		}
 		
 		// Update search with the vouchers
-		req.setAttribute("UserTutors", allUserTutorList);
+		req.setAttribute("UserTutors", allUserTutorList);;
 		req.getRequestDispatcher("/_view/viewTutors.jsp").forward(req, resp);
 	}
 }
