@@ -27,7 +27,7 @@ html, body {
  	left: 50%;
  	margin-left: -465px;
 	width: 930px;
-	height: 735px;
+	height: 770px;
 	border: 2px solid #e1eae2;
 	border-radius: 20px;
 	background-color: #e1eae2;
@@ -93,8 +93,11 @@ html, body {
 }
 
 #addTutor {
+	position: absolute;
 	float: right;
-	margin-right: 24px;
+	top: 0;
+	margin-top: 82px;
+	right: 24px;
 	background-color: black;
 	color: white;
 	font-size: 15px;

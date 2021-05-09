@@ -30,6 +30,7 @@ public class SearchServlet extends HttpServlet{
 	boolean addTutor = false;
 	
 	private int pageNumber = 1;
+	private int pageNumberTutor = 1;
 	
 	private String sort = null;
 	int countName = 0;
@@ -385,11 +386,54 @@ public class SearchServlet extends HttpServlet{
 			System.out.println("Search Servlet: tutor search");
 			
 			controller = new SearchController();
-			searchParameter = req.getParameter("tutorSearch");
+			searchParameter = req.getParameter("tutorSearch");	
+
+			ArrayList<Pair<UserAccount, Tutor>> allUserTutors = controller.getUserTutorsFromSearch(searchParameter);
 			
-			ArrayList<Pair<UserAccount, Tutor>> usertutorList = controller.getUserTutorsFromSearch(searchParameter);
+			ArrayList<Pair<UserAccount, Tutor>> tempUserTutor = new ArrayList<Pair<UserAccount, Tutor>>();
 			
-			if (usertutorList.isEmpty()) {
+			ArrayList<Pair<UserAccount, Tutor>> userTutorList =  new ArrayList<Pair<UserAccount, Tutor>>();
+			
+			pageNumberTutor = 1;
+			req.getSession().setAttribute("pageNumberTutor", pageNumberTutor);
+			
+			if (account.getIsAdmin()) {
+				
+				for (int i = ((pageNumber - 1) * 7); i < (pageNumber * 7); i++) {
+					
+					if (allUserTutors.size() <= i) {
+						
+						break;
+					}
+					
+					userTutorList.add(allUserTutors.get(i));
+				}
+			}
+			
+			else {
+				
+				for (Pair<UserAccount, Tutor> userTutor : allUserTutors) {
+					
+					if (userTutor.getLeft().getAccountID() == account.getAccountID()) {
+						
+						tempUserTutor.add(userTutor);
+					}
+				
+				}
+			
+				for (int i = ((pageNumber - 1) * 7); i < (pageNumber * 7); i++) {
+				
+					if ((tempUserTutor.size()) <= i) {
+					
+						break;
+				
+					}
+					
+				userTutorList.add(tempUserTutor.get(i));
+				}
+			}
+			
+			if (userTutorList.isEmpty()) {
 				req.setAttribute("errorMessage", "There were no Tutors found");
 				System.out.println("Search Servlet: no Tutors Found");
 			}
@@ -399,7 +443,7 @@ public class SearchServlet extends HttpServlet{
 			pageNumber = 1;
 			
 			// Update search with the vouchers
-			req.setAttribute("UserTutors", usertutorList);
+			req.setAttribute("UserTutors", userTutorList);
 			req.getRequestDispatcher("/_view/viewTutors.jsp").forward(req, resp);
 			
 			stillSearching = searchParameter;
@@ -409,6 +453,9 @@ public class SearchServlet extends HttpServlet{
 		
 		//admin wants to view tutor page
 		else if (req.getParameter("tutorPage") != null){
+			
+			pageNumberTutor = 1;
+			req.getSession().setAttribute("pageNumberTutor", pageNumberTutor);
 			
 			loadDefaultTutorPage(req, resp);
 		}
@@ -440,6 +487,32 @@ public class SearchServlet extends HttpServlet{
 		
 		}
 		
+		else if(req.getParameter("page3") != null && pageNumberTutor > 1) {
+			if (!req.getParameter("page3").equals("")) {
+				
+				System.out.println("Search Servlet: Previous Page");
+				
+				pageNumberTutor--;
+				editProfile = false;
+				req.getSession().setAttribute("viewProfile", editProfile);
+				
+				boolean editTutor = false;
+				req.getSession().setAttribute("edit", editTutor);
+				
+				req.getSession().setAttribute("pageNumberTutor", pageNumberTutor);
+				
+			}	
+			
+			loadDefaultTutorPage(req, resp);
+		}
+		
+		else if(req.getParameter("page3") != null && pageNumberTutor == 1) {
+			if (!req.getParameter("page3").equals("")) {
+				
+				loadDefaultTutorPage(req, resp);
+			}
+		}
+		
 		else if (req.getParameter("page2") != null && (stillSearching == null || stillSearching.equals("")) && account.getIsAdmin()) {
 			if (!req.getParameter("page2").equals("") && 
 				((controller.getAllVouchers(null).size() % 7 != 0 && (controller.getAllVouchers(null).size() / 7) + 1 > pageNumber)) ||
@@ -452,9 +525,24 @@ public class SearchServlet extends HttpServlet{
 				req.getSession().setAttribute("pageNumber", pageNumber);
 				
 			}
-			System.out.println("Is here");
 			
 			loadDefaultSearch(req, resp, account);	
+		}
+		
+		else if (req.getParameter("page4") != null && (stillSearching == null || stillSearching.equals("")) && account.getIsAdmin()) {
+			if (!req.getParameter("page4").equals("") && 
+				((controller.getAllUserTutors().size() % 7 != 0 && (controller.getAllUserTutors().size() / 7) + 1 > pageNumberTutor)) ||
+				(controller.getAllUserTutors().size() % 7 == 0 && (controller.getAllUserTutors().size() / 7) > pageNumberTutor)) {
+			
+				System.out.println("Search Servlet: Next Page");
+				
+				pageNumberTutor++;
+				
+				req.getSession().setAttribute("pageNumberTutor", pageNumberTutor);
+				
+			}
+			
+			loadDefaultTutorPage(req, resp);
 		}
 		
 		else if (req.getParameter("page2") != null && stillSearching != null && account.getIsAdmin()) {
@@ -472,6 +560,22 @@ public class SearchServlet extends HttpServlet{
 			
 			loadDefaultSearch(req, resp, account);	
 		}
+		
+		else if (req.getParameter("page4") != null && stillSearching != null && account.getIsAdmin()) {
+			if (!req.getParameter("page4").equals("") && !stillSearching.equals("") && 
+			((controller.getUserTutorsFromSearch(stillSearching).size() % 7 != 0 && (controller.getUserTutorsFromSearch(stillSearching).size() / 7) + 1 > pageNumber)) ||
+			(controller.getUserTutorsFromSearch(stillSearching).size() % 7 == 0 && (controller.getUserTutorsFromSearch(stillSearching).size() / 7) > pageNumber)) {
+				System.out.println("Search Servlet: Next Page");
+				
+				pageNumberTutor++;
+				
+				req.getSession().setAttribute("pageNumberTutor", pageNumberTutor);
+				
+
+			}
+		
+			loadDefaultTutorPage(req, resp);
+	}
 		
 		else if (req.getParameter("page2") != null && !account.getIsAdmin() &&
 				(stillSearching == null || stillSearching.equals(""))) {
@@ -709,8 +813,46 @@ public class SearchServlet extends HttpServlet{
 		
 		ArrayList<Pair<UserAccount, Tutor>> allUserTutorList = new ArrayList<Pair<UserAccount, Tutor>>();
 		
+		ArrayList<Pair<UserAccount, Tutor>> userTutors = new ArrayList<Pair<UserAccount, Tutor>>();
+		
+		ArrayList<Pair<UserAccount, Tutor>> tempUserTutors = new ArrayList<Pair<UserAccount, Tutor>>();
+		
 		// Get all pay vouchers
-		allUserTutorList =  controller.getAllUserTutors();
+		if (stillSearching == null) {
+			
+			userTutors =  controller.getAllUserTutors();
+			
+			for (int i = ((pageNumberTutor - 1) * 7); i < (pageNumberTutor * 7); i++) {
+				
+				if (userTutors.size() <= i) {
+					
+					break;
+				}	
+				
+				allUserTutorList.add(userTutors.get(i));
+			}	
+		}
+		
+		else {
+			allUserTutorList =  controller.getUserTutorsFromSearch(stillSearching);
+			 
+			for (Pair<UserAccount, Tutor> userTutor : userTutors) {
+				
+				tempUserTutors.add(userTutor);
+			}
+			
+			for (int i = ((pageNumberTutor - 1) * 7); i < (pageNumberTutor * 7); i++) {
+				
+				if ((tempUserTutors.size() <= i)) {
+					
+					break;
+				}
+				
+				allUserTutorList.add(tempUserTutors.get(i));
+			}
+		}
+		
+	
 		
 		if (allUserTutorList.isEmpty()) {
 			req.setAttribute("errorMessage", "There were no Tutors found");
