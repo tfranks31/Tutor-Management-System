@@ -1490,7 +1490,7 @@ public class DerbyDatabase implements IDatabase {
 	}
 
 	@Override
-	public void assignVoucherSpecific(String startDate, String dueDate, String name) {
+	public void assignVoucherSpecific(String startDate, String dueDate, int tutorID) {
 		executeTransaction(new Transaction<Boolean>() {
 			
 			@Override
@@ -1520,7 +1520,7 @@ public class DerbyDatabase implements IDatabase {
 					
 					//for all of the returned tutors add a new pay voucher
 					for (Tutor tutor : result) {
-						if (tutor.getName().equals(name)) {
+						if (tutor.getTutorID() == tutorID) {
 							stmt2 = conn.prepareStatement(
 								"INSERT INTO pay_vouchers (tutor_id, start_date, due_date, total_hours, total_pay, is_submitted, is_signed, is_new, is_admin_edited) " +
 								"VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)"

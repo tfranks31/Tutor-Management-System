@@ -432,7 +432,7 @@ public class DerbyDatabaseTests {
 		db.insertTutor(newTutor);
 		Tutor dbTutor = db.getTutors().get(db.getTutors().size() - 1);
 		
-		db.assignVoucherSpecific("04/01/0001", "05/01/0001", dbTutor.getName());
+		db.assignVoucherSpecific("04/01/0001", "05/01/0001", dbTutor.getTutorID());
 		List<PayVoucher> vouchers = db.getPayVouchers();
 		
 		String startDate = vouchers.get(vouchers.size() - 1).getStartDate();

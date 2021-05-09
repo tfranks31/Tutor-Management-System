@@ -18,12 +18,12 @@ public class AssignVoucherSpecific {
 		String startDate = keyBoard.nextLine();
 		System.out.print("Enter Due Date: ");
 		String dueDate = keyBoard.nextLine();
-		System.out.print("Enter Tutors Name: ");
-		String name = keyBoard.nextLine();
+		System.out.print("Enter Tutors ID: ");
+		int ID = keyBoard.nextInt();
 		
 		// get the DB instance and execute transaction
 		IDatabase db = DatabaseProvider.getInstance();
-		db.assignVoucherSpecific(startDate, dueDate, name);
+		db.assignVoucherSpecific(startDate, dueDate, ID);
 		
 		System.out.println("Vouchers Sucessfully Assigned");
 	}
