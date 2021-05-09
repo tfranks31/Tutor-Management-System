@@ -495,8 +495,6 @@ public class DerbyDatabase implements IDatabase {
 					sortBy = "pay_vouchers.due_date DESC, tutors.name ASC";
 				}
 				
-				System.out.println(sortBy);
-				
 				try {
 					// show submitted vouchers
 					if (search.toUpperCase().equals("SUBMITTED")) {
@@ -1611,7 +1609,6 @@ public class DerbyDatabase implements IDatabase {
 	@Override
 	public void updatePasswordWithUserID(UserAccount user, String password) {
 		executeTransaction(new Transaction<Boolean>() {
-			
 			@Override
 			public Boolean execute(Connection conn) throws SQLException {
 				PreparedStatement stmt = null;
@@ -1773,7 +1770,6 @@ public class DerbyDatabase implements IDatabase {
 				PreparedStatement stmt = null;
 				ResultSet resultSet = null;
 				String fuzzy = "%" + search + "%";
-				System.out.println("called");
 				try {
 					if (search.equals("")) {
 						stmt = conn.prepareStatement(

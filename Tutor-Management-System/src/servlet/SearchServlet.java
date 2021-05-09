@@ -255,7 +255,6 @@ public class SearchServlet extends HttpServlet{
 					countName ++;
 					countSubject = 0;
 					countDate = 0;
-					System.out.println(countName % 3);
 					if (countName % 3 == 2) {
 						sort = "Name DESC";
 					} else if(countName % 3 == 0) {
@@ -659,7 +658,6 @@ public class SearchServlet extends HttpServlet{
 			System.out.println("Search Servlet: no Voucher Found");
 		}
 		
-		System.out.print("Ethan " + stillSearching + "Ethan");
 		// Update search with the vouchers
 		req.setAttribute("payVouchers", tutorVoucherList);
 		req.getRequestDispatcher("/_view/search.jsp").forward(req, resp);
