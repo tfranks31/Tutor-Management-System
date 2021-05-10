@@ -232,7 +232,7 @@ public class SearchServlet extends HttpServlet{
 				System.out.println("Search Servlet: assign voucher all");
 				
 				if (searchValidate(req)) {
-					
+					req.setAttribute("voucherAdded", "Pay Vouchers were added Sucessfully");
 					// Assign the voucher to all tutors
 					controller.assignPayVoucherAll(req.getParameter("startDate"), req.getParameter("dueDate"));
 				}			
@@ -244,7 +244,7 @@ public class SearchServlet extends HttpServlet{
 				
 				
 				if (searchValidate(req)) {
-					
+					req.setAttribute("voucherAdded", "Pay Voucher was added Sucessfully");
 					//assigns the voucher to one tutor
 					controller.assignPayVoucherSpecific(req.getParameter("startDate"), req.getParameter("dueDate"),  req.getParameter("assignUserName"));
 				}				
@@ -271,8 +271,6 @@ public class SearchServlet extends HttpServlet{
 			if (userTutorList.isEmpty()) {
 				req.setAttribute("errorMessage", "There were no tutors found");
 				System.out.println("Search Servlet: no tutors Found");
-			}else {
-				req.setAttribute("voucherAdded", "Pay Vouchers were added Sucessfully");
 			}
 			
 			// Update search with the vouchers
