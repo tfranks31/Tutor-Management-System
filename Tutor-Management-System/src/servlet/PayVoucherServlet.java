@@ -1,9 +1,5 @@
 package servlet;
 
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileOutputStream;
-import java.io.FileWriter;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.text.DecimalFormat;
@@ -24,7 +20,7 @@ public class PayVoucherServlet extends HttpServlet{
 	private static final long serialVersionUID = 1L;
 	private int tableSize, payVoucherID = 1;
 	private PayVoucherController controller = null;
-	private DecimalFormat decimalFormat = new DecimalFormat("##.00");
+	private DecimalFormat decimalFormat = new DecimalFormat("##0.00");
 	
 	@Override
 	protected void doGet(HttpServletRequest req, HttpServletResponse resp)
@@ -34,7 +30,9 @@ public class PayVoucherServlet extends HttpServlet{
 		
 		controller = new PayVoucherController();
 		
+		// Get the account logged in
 		UserAccount account = (UserAccount) req.getSession().getAttribute("user");
+		
 		// If user not logged in, redirect to login
 		if (account == null) {
 			
@@ -58,6 +56,7 @@ public class PayVoucherServlet extends HttpServlet{
 			
 			resp.sendRedirect("search");
 		}
+		
 		// Load and generate rows
 		else {
 			
@@ -68,6 +67,8 @@ public class PayVoucherServlet extends HttpServlet{
 				
 				payVoucherID = Integer.parseInt(req.getParameter("ID"));
 			}
+			
+			// Get the voucher's entries
 			ArrayList<Tuple<Tutor, PayVoucher, Entry>> tutorVoucherEntryList = controller.getPayVoucherEntries(payVoucherID);
 			ArrayList<Entry> entries = new ArrayList<Entry>();
 			PayVoucher voucher = tutorVoucherEntryList.get(0).getMiddle(); //all voucher instances are identical
@@ -94,6 +95,7 @@ public class PayVoucherServlet extends HttpServlet{
 			
 			String[] cells = new String[entries.size() * 4];
 			
+			// Set cells to be displayed on the pay voucher
 			for (int i = 0; i < cells.length; i += 4) {
 				
 				Entry entry = entries.get(i / 4);
@@ -161,6 +163,7 @@ public class PayVoucherServlet extends HttpServlet{
 			
 			cells = new String[entries.size() * 4];
 			
+			// Update cells with entry information
 			for (int i = 0; i < cells.length; i += 4) {
 				
 				Entry entry = entries.get(i / 4);
@@ -183,6 +186,8 @@ public class PayVoucherServlet extends HttpServlet{
 					
 			tableSize = 0;
 			cells = req.getParameterValues("cell");
+			
+			// Validate that all cells do not have errors
 			if (validate(req, cells)) {
 				
 				// Runs through all the cells refreshing old entries and creating new entries need be
@@ -263,16 +268,19 @@ public class PayVoucherServlet extends HttpServlet{
 					
 					UserAccount account = (UserAccount) req.getSession().getAttribute("user");
 					
+					// Remove "new" status if the voucher is being updated by it's tutor
 					if (voucher.getIsNew() && !account.getIsAdmin()) {
 						
 						controller.markPayVoucherNotNew(voucher.getPayVoucherID());
 					}
 					
+					// Remove the edited by admin status if the voucher is being updated by it's tutor
 					if (voucher.getIsAdminEdited() && !account.getIsAdmin()) {
 						
 						controller.markPayVoucherEditedByAdmin(voucher.getPayVoucherID(), false);
 					}
 					
+					// Mark the voucher as being edited by an admin if an admin is updating the voucher
 					if (account.getIsAdmin()) {
 						
 						controller.markPayVoucherEditedByAdmin(voucher.getPayVoucherID(), true);
@@ -284,7 +292,7 @@ public class PayVoucherServlet extends HttpServlet{
 					tutorVoucherEntryList = controller.getPayVoucherEntries(payVoucherID);
 					entries = new ArrayList<Entry>();
 					
-					// Populate entries
+					// Refresh updated entries
 					for (Tuple<Tutor, PayVoucher, Entry> tutorVoucherEntry : tutorVoucherEntryList) {
 						
 						if (tutorVoucherEntry.getRight() != null) {
@@ -309,8 +317,11 @@ public class PayVoucherServlet extends HttpServlet{
 						// Sign and get the updated voucher
 						voucher = controller.signPayVoucher(voucher.getPayVoucherID());
 					}
+					
+					// User wants to export their pay voucher
 					else if (req.getParameter("exportVoucher") != null) {
 						
+						// Set flag to not refresh the page
 						callRefresh = false;
 						exportPayVoucherToCSV(cells, voucher, tutor, req, resp);
 					}
@@ -334,21 +345,29 @@ public class PayVoucherServlet extends HttpServlet{
 		req.setAttribute("payRate", decimalFormat.format(tutor.getPayRate()));
 		req.setAttribute("totalPay", decimalFormat.format(voucher.getTotalPay()));
 		
-		// Refresh payVoucher
-		
+		// Refresh payVoucher		
 		if (callRefresh) {
 			
 			req.getRequestDispatcher("/_view/payVoucher.jsp").forward(req, resp);
 		}
 	}
 	
+	/**
+	 * Validate the inputed cells.
+	 * @param req The request to set an error message to.
+	 * @param cells The cells to validate.
+	 * @return True if the cells are valid, false if they are not valid.
+	 */
 	private boolean validate(HttpServletRequest req, String[] cells) {
 		
+		// Check each row of cells
 		for (int i = 0; i < cells.length; i += 4) {
 			
+			// Skip over empty rows
 			if (!cells[i].equals("") || !cells[i + 1].equals("") ||
 				!cells[i + 2].equals("") || !cells[i + 3].equals("")) {
 				
+				// Check for a valid date format
 				if (!cells[i].matches("^(1[0-2]|0[1-9])/(3[01]|[12][0-9]|0[1-9])/[0-9]{4}$")) {
 					
 					req.setAttribute("errorMessage", "Date format must be MM/DD/YYYY");
@@ -375,6 +394,8 @@ public class PayVoucherServlet extends HttpServlet{
 					req.setAttribute("errorMessage", "Hours can't be over 24");
 					return false;
 				}
+				
+				// Checks if a service performed was entered
 				if (cells[i + 2].equals("")) {
 					
 					req.setAttribute("errorMessage", "Please input what service was performed");
@@ -387,6 +408,7 @@ public class PayVoucherServlet extends HttpServlet{
 					return false;
 				}
 					
+				// Checks if where performed was entered
 				if (cells[i + 3].equals("")) {
 					
 					req.setAttribute("errorMessage", "Please input where the tutoring was performed");
@@ -404,13 +426,23 @@ public class PayVoucherServlet extends HttpServlet{
 		return true;
 	}
 	
+	/**
+	 * Export the inputed cells to a CSV file.
+	 * @param cells The cells to export to CSV.
+	 * @param voucher The current pay voucher, used in naming the file.
+	 * @param tutor The tutor that owns the pay voucher, used in naming the file.
+	 * @param req The request to set an error message to.
+	 * @param resp The response to forward the CSV data to.
+	 */
 	private void exportPayVoucherToCSV(String[] cells, PayVoucher voucher, Tutor tutor, HttpServletRequest req, HttpServletResponse resp) {
 		
+		// Get first and last name, as well as reformat date to avoid file path conflicts
 		String[] name = tutor.getName().split(" ");
 		String date = voucher.getDueDate().replace("/", "-");
 		
 		StringBuilder voucherInfo = new StringBuilder();
 		
+		// CSV headers
 		voucherInfo.append("DATE");
 		voucherInfo.append(',');
 		voucherInfo.append("HOURS");
@@ -420,6 +452,7 @@ public class PayVoucherServlet extends HttpServlet{
 		voucherInfo.append("WHERE_PERFORMED");
 		voucherInfo.append('\n');
 		
+		// Add all cells to the CSV string
 		for (int i = 0; i < cells.length; i += 4) {
 			
 			voucherInfo.append(cells[i]);
@@ -432,6 +465,7 @@ public class PayVoucherServlet extends HttpServlet{
 			voucherInfo.append('\n');
 		}		
 		
+		// Set and send the response
 		try {
 
 			resp.setContentType("text/csv");

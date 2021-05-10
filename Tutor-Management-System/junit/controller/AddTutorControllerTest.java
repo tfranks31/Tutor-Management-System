@@ -1,6 +1,8 @@
 package controller;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
 
 import java.util.List;
 
@@ -110,6 +112,60 @@ public class AddTutorControllerTest {
 		assertEquals(dbAccount.getUsername(), newAccount.getUsername());
 		assertEquals(dbAccount.getPassword(), "newpassword");
 		assertEquals(dbAccount.getIsAdmin(), newAccount.getIsAdmin());
+		
+		// Remove test objects
+		db.deleteUserAccount(dbAccount);
+	}
+	
+	@Test
+	public void testFindStudentID() {
+		
+		Tutor newTutor = new Tutor("user pass", "user@user.use", "use", 1, -1, 1, "321", "123");
+		db.insertTutor(newTutor);
+		
+		List<Tutor> tutorList = db.getTutors();
+		
+		// Newly added objects should be the last object in the list
+		Tutor dbTutor = tutorList.get(tutorList.size() - 1);
+		
+		assertTrue(controller.findStudentID(dbTutor.getStudentID(), dbTutor, true));
+		assertFalse(controller.findStudentID(dbTutor.getStudentID(), dbTutor, false));
+		
+		// Remove test objects
+		db.deleteTutor(dbTutor);
+	}
+	
+	@Test
+	public void testFindEmail() {
+		
+		Tutor newTutor = new Tutor("user pass", "user@user.use", "use", 1, -1, 1, "321", "123");
+		db.insertTutor(newTutor);
+		
+		List<Tutor> tutorList = db.getTutors();
+		
+		// Newly added objects should be the last object in the list
+		Tutor dbTutor = tutorList.get(tutorList.size() - 1);
+		
+		assertTrue(controller.findEmail(dbTutor.getEmail(), dbTutor, true));
+		assertFalse(controller.findEmail(dbTutor.getEmail(), dbTutor, false));
+		
+		// Remove test objects
+		db.deleteTutor(dbTutor);
+	}
+	
+	@Test
+	public void testFindUsername() {
+		
+		UserAccount newAccount = new UserAccount("user", "pass", -1, false);
+		db.insertUserAccount(newAccount);
+		
+		List<UserAccount> accountList = db.getUserAccounts();
+		
+		// Newly added objects should be the last object in the list
+		UserAccount dbAccount = accountList.get(accountList.size() - 1);
+		
+		assertTrue(controller.findUsername(dbAccount.getUsername(), dbAccount, true));
+		assertFalse(controller.findUsername(dbAccount.getUsername(), dbAccount, false));
 		
 		// Remove test objects
 		db.deleteUserAccount(dbAccount);
