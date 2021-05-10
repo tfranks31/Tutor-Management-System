@@ -1,5 +1,7 @@
 package controller;
 
+import model.Pair;
+import model.Tutor;
 import model.UserAccount;
 import tutorsdb.persist.DatabaseProvider;
 import tutorsdb.persist.DerbyDatabase;
@@ -31,5 +33,23 @@ public class LoginController {
 		UserAccount user = db.accountByLogin(username, password);
 		
 		return user;
+	}
+	
+	public Pair<UserAccount, Tutor> getUserTutorFromForgotPassword(String username, String studentID) {
+		
+		for (Pair<UserAccount, Tutor> userTutor : db.getAllUserTutor()) {
+			
+			if (userTutor.getLeft().getUsername().equals(username) && userTutor.getRight().getStudentID().equals(studentID)) {
+				
+				return userTutor;
+			}
+		}
+		
+		return null;
+	}
+	
+	public void updatePassword(UserAccount account, String password) {
+		
+		db.updatePasswordWithUserID(account, password);
 	}
 }

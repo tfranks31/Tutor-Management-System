@@ -9,6 +9,7 @@ import model.UserAccount;
 import model.Pair;
 import tutorsdb.persist.DatabaseProvider;
 import tutorsdb.persist.DerbyDatabase;
+import tutorsdb.persist.FakeDatabase;
 import tutorsdb.persist.IDatabase;
 
 /**
@@ -29,10 +30,10 @@ public class SearchController {
 	 * Get all PayVouchers from the database with their tutor information.
 	 * @return ArrayList containing pairs of Tutors and their PayVouchers.
 	 */
-	public ArrayList<Pair<Tutor, PayVoucher>> getAllVouchers() {
+	public ArrayList<Pair<Tutor, PayVoucher>> getAllVouchers(String sort) {
 		
 		// Get all vouchers from the database
-		List<Pair<Tutor, PayVoucher>> allVouchersList = db.findAllPayVouchers();
+		List<Pair<Tutor, PayVoucher>> allVouchersList = db.findAllPayVouchers(sort);
 		
 		ArrayList<Pair<Tutor, PayVoucher>> allVouchers = new ArrayList<Pair<Tutor, PayVoucher>>();
 		for (Pair<Tutor, PayVoucher> voucherPair : allVouchersList) {
@@ -48,10 +49,10 @@ public class SearchController {
 	 * @param search Parameter to search by.
 	 * @return ArrayList containing pairs of Tutors and their PayVouchers.
 	 */
-	public ArrayList<Pair<Tutor, PayVoucher>> getVoucherFromSearch(String search){
+	public ArrayList<Pair<Tutor, PayVoucher>> getVoucherFromSearch(String search, String sort){
 		
 		// Get all vouchers with the search parameter
-		List<Pair<Tutor, PayVoucher>> resultList = db.findVoucherBySearch(search);
+		List<Pair<Tutor, PayVoucher>> resultList = db.findVoucherBySearch(search,sort);
 		
 		ArrayList<Pair<Tutor, PayVoucher>> result = new ArrayList<Pair<Tutor, PayVoucher>>();
 		for (Pair<Tutor, PayVoucher> voucherPair : resultList) {
@@ -78,10 +79,10 @@ public class SearchController {
 	 * Assign a PayVoucher with the specified start date and dueDate.
 	 * @param startDate Date the PayVoucher will start on.
 	 * @param dueDate Date the PayVoucher will be due on.
-	 * @param name Name of the tutor pay voucher is assigned added to.
+	 * @param userName Name of the tutor pay voucher is assigned added to.
 	 */
-	public void assignPayVoucherSpecific(String startDate, String dueDate, String name) {
-		db.assignVoucherSpecific(startDate, dueDate, name);
+	public void assignPayVoucherSpecific(String startDate, String dueDate, String userName) {
+		db.assignVoucherSpecific(startDate, dueDate, userName);
 	}
 	
 	/**
@@ -93,5 +94,55 @@ public class SearchController {
 		Pair<UserAccount, Tutor> userTutor;
 		userTutor = db.getTutorInfo(name);
 		return userTutor;
+	}
+	
+	
+	/**
+	 * Returns an instance of respective tutor to the entered user ID
+	 * @param user userAccount of session user
+	 * @return Tutor object of respective user account
+	 */
+	public Tutor getTutorByUserID(UserAccount user){
+		ArrayList<Tutor> tutorList = (ArrayList<Tutor>) db.getTutors();
+		
+		for (Tutor tutor : tutorList) {
+			if (tutor.getAccountID() == user.getAccountID()) {
+				return tutor;
+			}
+		}
+		
+		return null;
+	}
+	
+	/**
+	 * Returns a list of all users linked with their respective tutors
+	 * @return List of a Pair of userAccount and Tutor objects
+	 */
+	public ArrayList<Pair<UserAccount, Tutor>> getAllUserTutors(){
+		
+		ArrayList<Pair<UserAccount, Tutor>> userTutorList = new ArrayList<Pair<UserAccount, Tutor>> ();
+		userTutorList = (ArrayList<Pair<UserAccount, Tutor>>)db.getAllUserTutor();
+		
+		return userTutorList;
+	}
+	
+	
+	/**
+	 * Returns a Pair of UserAccount and Tutor
+	 * @param ID UserAccount Id of the user and tutor to return
+	 * @return a Pair consisting of a userAccount and its respective Tutor
+	 */
+	public Pair<UserAccount, Tutor> getUserTutorByAccountID(int ID){
+	
+		Pair<UserAccount, Tutor> userTutor = db.getUserTutorByAccountID(ID);
+		
+		return userTutor;
+	}
+
+	public ArrayList<Pair<UserAccount, Tutor>> getUserTutorsFromSearch(String searchParameter) {
+		ArrayList<Pair<UserAccount, Tutor>> userTutorList = new ArrayList<Pair<UserAccount, Tutor>> ();
+		userTutorList = (ArrayList<Pair<UserAccount, Tutor>>)db.getUserTutorsFromSearch(searchParameter);
+		
+		return userTutorList;
 	}
 }

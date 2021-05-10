@@ -1,5 +1,6 @@
 package tutorsdb.persist;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import model.Entry;
@@ -36,7 +37,7 @@ public interface IDatabase {
 	 * @return A List of Pairs containing PayVouchers with their associated
 	 * Tutor information.
 	 */
-	public List<Pair<Tutor, PayVoucher>> findVoucherBySearch(String search);
+	public List<Pair<Tutor, PayVoucher>> findVoucherBySearch(String search,String sort);
 	
 	/**
 	 * Insert a new Tutor and their UserAccount into this database.
@@ -50,7 +51,7 @@ public interface IDatabase {
 	 * @return A List of Pairs containing PayVouchers with their associated 
 	 * Tutor information.
 	 */
-	public List<Pair<Tutor, PayVoucher>> findAllPayVouchers();
+	public List<Pair<Tutor, PayVoucher>> findAllPayVouchers(String sort);
 	
 	/**
 	 * Submit the PayVoucher with the inputed pay voucher ID.
@@ -79,9 +80,9 @@ public interface IDatabase {
 	 * end date.
 	 * @param startDate The date the PayVoucher is open at.
 	 * @param dueDate The date the PayVoucher is due at.
-	 * @param name The name of the specific tutor to assign a voucher to.
+	 * @param tutorID The ID of the specific tutor to assign a voucher to.
 	 */
-	public void assignVoucherSpecific(String startDate, String dueDate, String name);
+	public void assignVoucherSpecific(String startDate, String dueDate, String userName);
 	
 	
 	/**
@@ -185,4 +186,33 @@ public interface IDatabase {
 	 * @return A pair consisting of the Tutor and it's respective account
 	 */
 	public Pair<UserAccount, Tutor>getTutorInfo(String name);
+	
+	/**
+	 * Updates a users password 
+	 * @param user The userAccount who password is being updated
+	 * @param password	String of what the user wants the new password to be
+	 */
+	public void updatePasswordWithUserID(UserAccount user, String password);
+	
+	/**
+	 * A utility method to remove the status of new voucher by setting it to false
+	 * @param voucherID the ID number of the payVoucher getting updated
+	 */
+	public void markPayVoucherNotNew(int voucherID);
+	
+	/**
+	 * A utility method to update the status of a payVoucher isAdminEdited flag
+	 * @param voucherID the ID number of the payVoucher getting updated
+	 * @param isEdited Boolean of the desired updated value
+	 */
+	public void markPayVoucherEditedByAdmin(int voucherID, boolean isEdited);
+	
+	/**
+	 * A utility method to get every user and tutor in the databse
+	 */
+	public List<Pair<UserAccount, Tutor>> getAllUserTutor();
+	
+	public Pair<UserAccount, Tutor> getUserTutorByAccountID(int ID);
+
+	public List<Pair<UserAccount, Tutor>> getUserTutorsFromSearch(String search);
 }

@@ -1,20 +1,36 @@
-html{
-    margin-top: 20px;
-    margin-left: 16%;
-    margin-right: 16%;
-    margin-bottom: 20px;
-    background-image: url("payVoucherBackground.jpg");
-	background-size: 1920px 1325px;
-	background-position: center;
+html, body {
+	margin: 0px;
+	padding: 0px;
+	position: relative;
 }
 
-body {
+.super-class {
+	top: 0;
+	width: 100%;
+	position: relative;
+}
+
+.background-image {
+	position: absolute;
+	z-index: 0;
+	background-image: url("payVoucherBackground.jpeg");
+	background-size: cover;
+	min-width: 900px;
+	min-height: 1045px;
+	filter: blur(7px);
+}
+
+.content {
+	position: absolute;
+	z-index: 1;
+ 	left: 50%;
+ 	margin-left: -450px;
 	width: 900px;
-	margin: auto;
 	border: 2px solid #e1eae2;
 	border-radius: 20px;
 	border-height: 12px;
 	background-color: #e1eae2;
+	margin-top: 30px;
 }
 
 .Header{
@@ -86,10 +102,9 @@ th, td{
     text-align:center;
 }
 
-#back {
-	float: left;
-	margin-top: -42px;
-	margin-left: 55px;
+#back {	
+	margin-top: 30px;
+	left: 50%;
    	background-color: black;
 	color: white;
 	font-size: 15px;
@@ -102,7 +117,7 @@ th, td{
 
 #update {
 	position: relative;
-	left: 13%;
+	left: 0%;
    	background-color: black;
 	color: white;
 	font-size: 15px;
@@ -139,7 +154,20 @@ th, td{
 	border: 0px;
 }
 
+.export {
+	float: left;
+	margin-left: 50px;
+	background-color: black;
+	color: white;
+	font-size: 15px;
+	height: 42px;
+	width: 185px;
+	border-radius: 35px;
+	border: 0px;
+}
+
 .error {
 	color: red;
 	text-align: center;
 }
+

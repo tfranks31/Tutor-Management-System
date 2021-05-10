@@ -158,11 +158,11 @@ public class DerbyDatabaseTests {
 		db.insertTutor(newTutor);
 		Tutor dbTutor = db.getTutors().get(db.getTutors().size() - 1);
 		
-		PayVoucher newPayVoucher = new PayVoucher("03/04/2021", "03/02/2021", 0, 0, false, false, false, false, -1, dbTutor.getTutorID());
+		PayVoucher newPayVoucher = new PayVoucher("03/04/0001", "03/02/0001", 0, 0, false, false, false, false, -1, dbTutor.getTutorID());
 		db.insertPayVoucher(newPayVoucher);
 		PayVoucher dbPayVoucher = db.getPayVouchers().get(db.getPayVouchers().size() - 1);
 		
-		Entry newEntry = new Entry("03/03/2021", "Tutoring", "zoom", 1, -1, dbPayVoucher.getPayVoucherID());
+		Entry newEntry = new Entry("03/03/0001", "Tutoring", "zoom", 1, -1, dbPayVoucher.getPayVoucherID());
 		db.insertEntry(newEntry);
 		Entry dbEntry = db.getEntries().get(db.getEntries().size() - 1);
 		
@@ -247,7 +247,7 @@ public class DerbyDatabaseTests {
 	
 	@Test
 	public void testUpdateVoucher(){
-		PayVoucher payVoucher = new PayVoucher("03/04/2021", "03/02/2021", 0, 0, false, false, false, false, -1, 1);
+		PayVoucher payVoucher = new PayVoucher("03/04/0001", "03/02/0001", 0, 0, false, false, false, false, -1, 1);
 		db.insertPayVoucher(payVoucher);
 		PayVoucher dbPayVoucher = db.getPayVouchers().get(db.getPayVouchers().size() - 1);
 		
@@ -271,7 +271,7 @@ public class DerbyDatabaseTests {
 		Tutor tutor = new Tutor();
 		tutor.setName("Tyler Franks");
 		
-		List<Pair<Tutor, PayVoucher>> test = db.findVoucherBySearch("Tyler Franks");
+		List<Pair<Tutor, PayVoucher>> test = db.findVoucherBySearch("Tyler Franks", null);
 		Tutor testTutor = test.get(0).getLeft();
 	
 		assertTrue(testTutor.getName().equals(tutor.getName()));
@@ -280,7 +280,7 @@ public class DerbyDatabaseTests {
 	@Test
 	public void testInsertPayVoucher() {
 		
-		PayVoucher newVoucher = new PayVoucher("04/27/2021", "04/20/2021", 0.0,
+		PayVoucher newVoucher = new PayVoucher("04/27/0001", "04/20/0001", 0.0,
 				  0.0, false, false, true, false, 1,1);
 		
 		db.insertPayVoucher(newVoucher);
@@ -309,7 +309,7 @@ public class DerbyDatabaseTests {
 	public void testFindAllPayVouchers() {
 		
 		List<PayVoucher> vouchers = db.getPayVouchers();
-		List<Pair<Tutor, PayVoucher>> test = db.findAllPayVouchers();
+		List<Pair<Tutor, PayVoucher>> test = db.findAllPayVouchers(null);
 		
 		assertEquals(test.size(), vouchers.size());
 		assertEquals(test.get(0).getRight().getPayVoucherID(), vouchers.get(0).getPayVoucherID());
@@ -324,7 +324,7 @@ public class DerbyDatabaseTests {
 	@Test
 	public void testSubmitPayVouchers() {
 		
-		PayVoucher payVoucher = new PayVoucher("03/04/2021", "03/02/2021", 0, 0, false, false, false, false, -1, 1);
+		PayVoucher payVoucher = new PayVoucher("03/04/0001", "03/02/0001", 0, 0, false, false, false, false, -1, 1);
 		db.insertPayVoucher(payVoucher);
 		PayVoucher dbPayVoucher = db.getPayVouchers().get(db.getPayVouchers().size() - 1);
 		
@@ -340,7 +340,7 @@ public class DerbyDatabaseTests {
 	@Test
 	public void testGetPayVoucher() {
 		
-		PayVoucher newVoucher = new PayVoucher("04/27/2021", "04/20/2021", 0.0,
+		PayVoucher newVoucher = new PayVoucher("04/27/0001", "04/20/0001", 0.0,
 				  0.0, false, false, true, false, 1,1);
 		
 		db.insertPayVoucher(newVoucher);
@@ -368,7 +368,7 @@ public class DerbyDatabaseTests {
 	@Test
 	public void testInsertEntries() {
 		
-		Entry newEntry = new Entry("04/27/2021", "tutoring", "zoom",
+		Entry newEntry = new Entry("04/27/0001", "tutoring", "zoom",
 				 0.0, 1, 1);
 		
 		db.insertEntry(newEntry);
@@ -391,7 +391,7 @@ public class DerbyDatabaseTests {
 	@Test
 	public void testGetEntries() {
 		
-		Entry newEntry = new Entry("04/27/2021", "tutoring", "zoom",
+		Entry newEntry = new Entry("04/27/0001", "tutoring", "zoom",
 				 0.0, 1, 1);
 		
 		db.insertEntry(newEntry);
@@ -413,7 +413,7 @@ public class DerbyDatabaseTests {
 	
 	@Test
 	public void testSignPayVoucher() {
-		PayVoucher payVoucher = new PayVoucher("03/04/2021", "03/02/2021", 0, 0, false, false, false, false, -1, 1);
+		PayVoucher payVoucher = new PayVoucher("03/04/0001", "03/02/0001", 0, 0, false, false, false, false, -1, 1);
 		db.insertPayVoucher(payVoucher);
 		PayVoucher dbPayVoucher = db.getPayVouchers().get(db.getPayVouchers().size() - 1);
 		
@@ -425,25 +425,35 @@ public class DerbyDatabaseTests {
 		db.deletePayVoucher(dbPayVoucher);
 	}
 	
+	
 	@Test
 	public void testAssignVoucherSpecific() {
+		UserAccount newUser = new UserAccount("username", "password", 10000000, false);
+		db.insertUserAccount(newUser);
 		
-		Tutor newTutor = new Tutor("user pass", "user@user.use", "use", 1.0, -1, 1, "321", "123");
+		List<UserAccount> userAccountList = db.getUserAccounts();
+		
+		newUser = userAccountList.get(userAccountList.size() - 1);
+		
+		Tutor newTutor = new Tutor("user pass", "user@user.use", "use", 1.0, -1, newUser.getAccountID(), "321", "123");
 		db.insertTutor(newTutor);
-		Tutor dbTutor = db.getTutors().get(db.getTutors().size() - 1);
 		
-		db.assignVoucherSpecific("April", "May", dbTutor.getName());
+		
+		Tutor dbTutor = db.getTutors().get(db.getTutors().size() - 1);
+		UserAccount dbUser = db.getUserAccounts().get(db.getUserAccounts().size() -1);
+		
+		db.assignVoucherSpecific("04/01/0001", "05/01/0001", dbUser.getUsername());
 		List<PayVoucher> vouchers = db.getPayVouchers();
 		
 		String startDate = vouchers.get(vouchers.size() - 1).getStartDate();
 		String dueDate = vouchers.get(vouchers.size() - 1).getDueDate();
-		
-		assertTrue(startDate.equals("April"));
-		assertTrue(dueDate.equals("May"));
+		assertTrue(startDate.equals("04/01/0001"));
+		assertTrue(dueDate.equals("05/01/0001"));
 			
 		PayVoucher delete = vouchers.get(vouchers.size() - 1);
 		db.deletePayVoucher(delete);
 		db.deleteTutor(dbTutor);
+		db.deleteUserAccount(dbUser);
 	}
 	
 	@Test
@@ -480,7 +490,7 @@ public class DerbyDatabaseTests {
 	@Test
 	public void testDeleteEntry() {
 		
-		Entry newEntry = new Entry("04/27/2001", "nothingWasDoneHereNoOneWorked", "notALocationThatWillEverBeUsed",
+		Entry newEntry = new Entry("04/27/0001", "nothingWasDoneHereNoOneWorked", "notALocationThatWillEverBeUsed",
 				 0.0, 1, 1);
 		
 		db.insertEntry(newEntry);
@@ -489,7 +499,6 @@ public class DerbyDatabaseTests {
 		
 		// Newly added objects should be the last object in the list
 		Entry dbEntry = EntriesList.get(EntriesList.size() - 1);
-		
 		// Check that the objects were successfully entered
 		assertEquals(dbEntry.getDate(), newEntry.getDate());
 		assertEquals(dbEntry.getServicePerformed(), newEntry.getServicePerformed());
@@ -537,5 +546,181 @@ public class DerbyDatabaseTests {
 		// Remove test objects from tutorsdb		
 		db.deleteTutor(dbTutor);
 		db.deleteUserAccount(dbAccount);
+	}
+	
+	@Test
+	public void testUpdatePasswordWithUserID() {
+		
+		UserAccount newAccount = new UserAccount("user", "pass", -1, false);
+		db.insertUserAccount(newAccount);
+		
+		List<UserAccount> accountList = db.getUserAccounts();
+		
+		// Newly added objects should be the last object in the list
+		UserAccount dbAccount = accountList.get(accountList.size() - 1);
+		
+		// Check that the objects were successfully entered
+		assertEquals(dbAccount.getUsername(), newAccount.getUsername());
+		assertEquals(dbAccount.getPassword(), newAccount.getPassword());
+		assertEquals(dbAccount.getIsAdmin(), newAccount.getIsAdmin());
+		//update the password
+		db.updatePasswordWithUserID(dbAccount, "newpassword");
+		//get the account again
+		accountList = db.getUserAccounts();
+		dbAccount = accountList.get(accountList.size() - 1);
+		
+		assertEquals(dbAccount.getUsername(), newAccount.getUsername());
+		assertEquals(dbAccount.getPassword(), "newpassword");
+		assertEquals(dbAccount.getIsAdmin(), newAccount.getIsAdmin());
+		
+		// Remove test objects
+		db.deleteUserAccount(dbAccount);
+	}
+	
+	@Test
+	public void testMarkPayVoucherNotNew() {
+		
+		PayVoucher newVoucher = new PayVoucher("04/27/0001", "04/20/0001", 0.0,
+				  0.0, false, false, true, false, 1,1);
+		
+		db.insertPayVoucher(newVoucher);
+		
+		List<PayVoucher> PayVoucherList = db.getPayVouchers();
+		
+		// Newly added objects should be the last object in the list
+		PayVoucher dbVoucher = PayVoucherList.get(PayVoucherList.size() - 1);
+		
+		// Check that the objects were successfully entered
+		assertEquals(dbVoucher.getStartDate(), newVoucher.getStartDate());
+		assertEquals(dbVoucher.getDueDate(), newVoucher.getDueDate());
+		assertEquals(dbVoucher.getIsAdminEdited(), newVoucher.getIsAdminEdited());
+		assertEquals(dbVoucher.getIsNew(), newVoucher.getIsNew());
+		assertEquals(dbVoucher.getIsSigned(), newVoucher.getIsSigned());
+		assertEquals(dbVoucher.getIsSubmitted(), newVoucher.getIsSubmitted());
+		assertTrue(dbVoucher.getTotalHours() == newVoucher.getTotalHours());
+		assertTrue(dbVoucher.getTotalPay() == newVoucher.getTotalPay());
+		assertEquals(dbVoucher.getTutorID(), newVoucher.getTutorID());
+		
+		db.markPayVoucherNotNew(dbVoucher.getPayVoucherID());
+		PayVoucherList = db.getPayVouchers();
+		dbVoucher = PayVoucherList.get(PayVoucherList.size() - 1);
+		
+		assertFalse(dbVoucher.getIsNew());
+		// Remove test objects
+		db.deletePayVoucher(dbVoucher);
+	}
+	
+	@Test
+	public void testMarkPayVoucherEditedByAdmin() {
+		
+		PayVoucher newVoucher = new PayVoucher("04/27/0001", "04/20/0001", 0.0,
+				  0.0, false, false, true, false, 1,1);
+		
+		db.insertPayVoucher(newVoucher);
+		
+		List<PayVoucher> PayVoucherList = db.getPayVouchers();
+		
+		// Newly added objects should be the last object in the list
+		PayVoucher dbVoucher = PayVoucherList.get(PayVoucherList.size() - 1);
+		
+		// Check that the objects were successfully entered
+		assertEquals(dbVoucher.getStartDate(), newVoucher.getStartDate());
+		assertEquals(dbVoucher.getDueDate(), newVoucher.getDueDate());
+		assertEquals(dbVoucher.getIsAdminEdited(), newVoucher.getIsAdminEdited());
+		assertEquals(dbVoucher.getIsNew(), newVoucher.getIsNew());
+		assertEquals(dbVoucher.getIsSigned(), newVoucher.getIsSigned());
+		assertEquals(dbVoucher.getIsSubmitted(), newVoucher.getIsSubmitted());
+		assertTrue(dbVoucher.getTotalHours() == newVoucher.getTotalHours());
+		assertTrue(dbVoucher.getTotalPay() == newVoucher.getTotalPay());
+		assertEquals(dbVoucher.getTutorID(), newVoucher.getTutorID());
+		
+		assertFalse(dbVoucher.getIsAdminEdited());
+		
+		db.markPayVoucherEditedByAdmin(dbVoucher.getPayVoucherID(), true);
+		PayVoucherList = db.getPayVouchers();
+		dbVoucher = PayVoucherList.get(PayVoucherList.size() - 1);
+		
+		assertTrue(dbVoucher.getIsAdminEdited());
+		// Remove test objects
+		db.deletePayVoucher(dbVoucher);
+	}
+	
+	@Test
+	public void testGetAllUserTutor() {
+		
+		List<Tutor> tutors = db.getTutors();
+		List<UserAccount> userAccounts = db.getUserAccounts();
+		List<Pair<UserAccount, Tutor>> userTutorList = new ArrayList<Pair<UserAccount, Tutor>>();
+		
+		//sorts the list by tutor name to match the sql query sorting by tutor name
+		for (int i = 0; i < tutors.size(); i++) {
+			for (int c = i + 1; c < tutors.size(); c++) {
+				Tutor tempI = tutors.get(i);
+				Tutor tempC = tutors.get(c);
+				int compare = tempI.getName().compareTo(tempC.getName());
+				if (compare > 0) {
+					tutors.set(i,tempC);
+					tutors.set(c,tempI);
+				}
+			}
+		}
+		
+		for (Tutor tutor : tutors) {
+			for (UserAccount user: userAccounts) {
+				if (tutor.getAccountID() == user.getAccountID()) {
+					userTutorList.add(new Pair<UserAccount, Tutor>(user, tutor));
+				}
+			}
+		}
+		
+		List<Pair<UserAccount, Tutor>> test = db.getAllUserTutor();
+		
+		assertEquals(test.size(), userTutorList.size());
+		for (int i = 0; i < userTutorList.size(); i++) {
+			assertEquals(test.get(i).getRight().getAccountID(), userTutorList.get(i).getRight().getAccountID());
+			assertEquals(test.get(i).getLeft().getAccountID(), userTutorList.get(i).getLeft().getAccountID());
+		}
+	}
+	
+	@Test
+	public void testGetUserTutorByAccountID() {
+	
+		UserAccount account = new UserAccount();
+		Tutor tutor = new Tutor();
+		
+		account.setUsername("gettutor");
+		account.setPassword("password");
+		tutor.setName("Steven Seymour");
+
+		db.addTutor(account, tutor);
+		
+		Pair<UserAccount, Tutor> manualTest = new Pair<UserAccount, Tutor>(account, tutor);
+		Pair<UserAccount, Tutor> dbTest = db.getUserTutorByAccountID(db.getTutorInfo("Steven Seymour").getLeft().getAccountID());
+		assertEquals(manualTest.getLeft().getUsername(),dbTest.getLeft().getUsername());
+		assertEquals(manualTest.getLeft().getPassword(),dbTest.getLeft().getPassword());
+		assertEquals(manualTest.getRight().getName(),dbTest.getRight().getName());
+		
+		db.deleteTutor(dbTest.getRight());
+		db.deleteUserAccount(dbTest.getLeft());
+		
+	}
+	
+	@Test
+	public void testGetUserTutorsFromSearch() {
+		
+		Tutor tutor = new Tutor();
+		tutor.setName("Barry B. Benson");
+		UserAccount account = new UserAccount();
+		account.setUsername("Barry");
+		account.setPassword("Vanessa Bloome");
+		db.addTutor(account, tutor);
+		
+		List<Pair<UserAccount, Tutor>> test = db.getUserTutorsFromSearch("Barry B. Benson");
+		Tutor testTutor = test.get(0).getRight();
+	
+		assertTrue(testTutor.getName().equals(tutor.getName()));
+		
+		db.deleteTutor(test.get(0).getRight());
+		db.deleteUserAccount(test.get(0).getLeft());
 	}
 }

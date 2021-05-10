@@ -1,6 +1,7 @@
 package controller;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 
 import java.util.ArrayList;
@@ -15,6 +16,7 @@ import model.Tuple;
 import model.Tutor;
 import model.UserAccount;
 import tutorsdb.persist.DatabaseProvider;
+import tutorsdb.persist.DerbyDatabase;
 import tutorsdb.persist.FakeDatabase;
 import tutorsdb.persist.IDatabase;
 
@@ -25,7 +27,7 @@ public class PayVoucherControllerTest {
 	
 	@Before
     public void setUp() {
-		
+
 		DatabaseProvider.setInstance(new FakeDatabase());
 		controller = new PayVoucherController();
 		db = DatabaseProvider.getInstance();
@@ -38,11 +40,11 @@ public class PayVoucherControllerTest {
 		db.insertTutor(newTutor);
 		Tutor dbTutor = db.getTutors().get(db.getTutors().size() - 1);
 		
-		PayVoucher newPayVoucher = new PayVoucher("03/04/2021", "03/02/2021", 0, 0, false, false, false, false, -1, dbTutor.getTutorID());
+		PayVoucher newPayVoucher = new PayVoucher("03/04/0001", "03/02/0001", 0, 0, false, false, false, false, -1, dbTutor.getTutorID());
 		db.insertPayVoucher(newPayVoucher);
 		PayVoucher dbPayVoucher = db.getPayVouchers().get(db.getPayVouchers().size() - 1);
 		
-		Entry newEntry = new Entry("03/03/2021", "Tutoring", "zoom", 1, -1, dbPayVoucher.getPayVoucherID());
+		Entry newEntry = new Entry("03/03/0001", "Tutoring", "zoom", 1, -1, dbPayVoucher.getPayVoucherID());
 		db.insertEntry(newEntry);
 		Entry dbEntry = db.getEntries().get(db.getEntries().size() - 1);
 		
@@ -50,8 +52,8 @@ public class PayVoucherControllerTest {
 		Tuple<Tutor, PayVoucher, Entry> tuple = tupleList.get(tupleList.size() - 1);
 		
 		assertEquals(newTutor.getName(), tuple.getLeft().getName());
-		assertEquals(newPayVoucher.getDueDate(), tuple.getMiddle().getDueDate());
-		assertEquals(newEntry.getDate(), tuple.getRight().getDate());
+		assertEquals("03/04/0001", tuple.getMiddle().getDueDate());
+		assertEquals("03/03/0001", tuple.getRight().getDate());
 		
 		db.deleteEntry(dbEntry);
 		db.deletePayVoucher(dbPayVoucher);
@@ -61,11 +63,11 @@ public class PayVoucherControllerTest {
 	@Test
 	public void testUpdateVoucherWithEntries() {
 		
-		PayVoucher payVoucher = new PayVoucher("03/04/2021", "03/02/2021", 0, 0, false, false, false, false, -1, 1);
+		PayVoucher payVoucher = new PayVoucher("03/04/0001", "03/02/0001", 0, 0, false, false, false, false, -1, 1);
 		db.insertPayVoucher(payVoucher);
 		PayVoucher dbPayVoucher = db.getPayVouchers().get(db.getPayVouchers().size() - 1);
 		
-		Entry entry = new Entry("03/03/2021", "Tutoring", "zoom", 1, -1, -1);
+		Entry entry = new Entry("03/03/0001", "Tutoring", "zoom", 1, -1, -1);
 		ArrayList<Entry> entries = new ArrayList<Entry>();
 		entries.add(entry);
 		
@@ -73,7 +75,7 @@ public class PayVoucherControllerTest {
 		
 		List<Entry> dbEntries = db.getEntries();
 		
-		assertEquals(entry.getDate(), dbEntries.get(dbEntries.size() - 1).getDate());
+		assertEquals("03/03/0001", dbEntries.get(dbEntries.size() - 1).getDate());
 		
 		db.deleteEntry(dbEntries.get(dbEntries.size() - 1));
 		db.deletePayVoucher(dbPayVoucher);
@@ -113,7 +115,7 @@ public class PayVoucherControllerTest {
 	@Test
 	public void testSubmitPayVoucher() {
 		
-		PayVoucher payVoucher = new PayVoucher("03/04/2021", "03/02/2021", 0, 0, false, false, false, false, -1, 1);
+		PayVoucher payVoucher = new PayVoucher("03/04/0001", "03/02/0001", 0, 0, false, false, false, false, -1, 1);
 		db.insertPayVoucher(payVoucher);
 		PayVoucher dbPayVoucher = db.getPayVouchers().get(db.getPayVouchers().size() - 1);
 		
@@ -128,7 +130,7 @@ public class PayVoucherControllerTest {
 	@Test
 	public void testSignPayVoucher() {
 		
-		PayVoucher payVoucher = new PayVoucher("03/04/2021", "03/02/2021", 0, 0, false, false, false, false, -1, 1);
+		PayVoucher payVoucher = new PayVoucher("03/04/0001", "03/02/0001", 0, 0, false, false, false, false, -1, 1);
 		db.insertPayVoucher(payVoucher);
 		PayVoucher dbPayVoucher = db.getPayVouchers().get(db.getPayVouchers().size() - 1);
 		
@@ -138,5 +140,73 @@ public class PayVoucherControllerTest {
 		assertTrue(dbPayVouchers.get(dbPayVouchers.size() - 1).getIsSigned());
 		
 		db.deletePayVoucher(dbPayVoucher);
+	}
+	
+	@Test
+	public void testMarkPayVoucherNotNew() {
+		
+		PayVoucher newVoucher = new PayVoucher("04/27/0001", "04/20/0001", 0.0,
+				  0.0, false, false, true, false, 1,1);
+		
+		db.insertPayVoucher(newVoucher);
+		
+		List<PayVoucher> PayVoucherList = db.getPayVouchers();
+		
+		// Newly added objects should be the last object in the list
+		PayVoucher dbVoucher = PayVoucherList.get(PayVoucherList.size() - 1);
+		
+		// Check that the objects were successfully entered
+		assertEquals(dbVoucher.getStartDate(), newVoucher.getStartDate());
+		assertEquals(dbVoucher.getDueDate(), newVoucher.getDueDate());
+		assertEquals(dbVoucher.getIsAdminEdited(), newVoucher.getIsAdminEdited());
+		assertEquals(dbVoucher.getIsNew(), newVoucher.getIsNew());
+		assertEquals(dbVoucher.getIsSigned(), newVoucher.getIsSigned());
+		assertEquals(dbVoucher.getIsSubmitted(), newVoucher.getIsSubmitted());
+		assertTrue(dbVoucher.getTotalHours() == newVoucher.getTotalHours());
+		assertTrue(dbVoucher.getTotalPay() == newVoucher.getTotalPay());
+		assertEquals(dbVoucher.getTutorID(), newVoucher.getTutorID());
+		
+		controller.markPayVoucherNotNew(dbVoucher.getPayVoucherID());
+		PayVoucherList = db.getPayVouchers();
+		dbVoucher = PayVoucherList.get(PayVoucherList.size() - 1);
+		
+		assertFalse(dbVoucher.getIsNew());
+		// Remove test objects
+		db.deletePayVoucher(dbVoucher);
+	}
+	
+	@Test
+	public void testMarkPayVoucherEditedByAdmin() {
+		
+		PayVoucher newVoucher = new PayVoucher("04/27/0001", "04/20/0001", 0.0,
+				  0.0, false, false, true, false, 1,1);
+		
+		db.insertPayVoucher(newVoucher);
+		
+		List<PayVoucher> PayVoucherList = db.getPayVouchers();
+		
+		// Newly added objects should be the last object in the list
+		PayVoucher dbVoucher = PayVoucherList.get(PayVoucherList.size() - 1);
+		
+		// Check that the objects were successfully entered
+		assertEquals(dbVoucher.getStartDate(), newVoucher.getStartDate());
+		assertEquals(dbVoucher.getDueDate(), newVoucher.getDueDate());
+		assertEquals(dbVoucher.getIsAdminEdited(), newVoucher.getIsAdminEdited());
+		assertEquals(dbVoucher.getIsNew(), newVoucher.getIsNew());
+		assertEquals(dbVoucher.getIsSigned(), newVoucher.getIsSigned());
+		assertEquals(dbVoucher.getIsSubmitted(), newVoucher.getIsSubmitted());
+		assertTrue(dbVoucher.getTotalHours() == newVoucher.getTotalHours());
+		assertTrue(dbVoucher.getTotalPay() == newVoucher.getTotalPay());
+		assertEquals(dbVoucher.getTutorID(), newVoucher.getTutorID());
+		
+		assertFalse(dbVoucher.getIsAdminEdited());
+		
+		controller.markPayVoucherEditedByAdmin(dbVoucher.getPayVoucherID(), true);
+		PayVoucherList = db.getPayVouchers();
+		dbVoucher = PayVoucherList.get(PayVoucherList.size() - 1);
+		
+		assertTrue(dbVoucher.getIsAdminEdited());
+		// Remove test objects
+		db.deletePayVoucher(dbVoucher);
 	}
 }
