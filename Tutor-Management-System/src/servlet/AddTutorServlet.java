@@ -8,7 +8,6 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import controller.AddTutorController;
-import model.Pair;
 import model.Tutor;
 import model.UserAccount;
 
@@ -25,8 +24,10 @@ public class AddTutorServlet extends HttpServlet {
 
 		System.out.println("AddTutor Servlet: doGet");	
 		
+		// Get the account currently logged in
 		UserAccount account = (UserAccount) req.getSession().getAttribute("user");
 		
+		// Set tutor flags
 		if (account != null) {
 			editTutor = (boolean)req.getSession().getAttribute("edit");
 			req.setAttribute("edit", editTutor);
@@ -50,16 +51,21 @@ public class AddTutorServlet extends HttpServlet {
 			System.out.println("AddTutor Servlet: back");
 			
 			resp.sendRedirect("search");
-		} else if (editTutor) {
+		} 
+		
+		// User wants to edit a tutor
+		else if (editTutor) {
 			
 			System.out.println("AddTutor Servlet: edit load");
 			
 			controller = new AddTutorController();
 			
+			// Get the tutor and account that was selected and set on the search page
 			UserAccount user = (UserAccount) req.getSession().getAttribute("editUser");
 			Tutor tutor = (Tutor) req.getSession().getAttribute("editTutor");
 			String[] name = tutor.getName().split(" ");
 			
+			// Set attributes for display
 			req.setAttribute("firstName", name[0]);
 			req.setAttribute("lastName", name[1]);
 			req.setAttribute("username", user.getUsername());
@@ -70,16 +76,21 @@ public class AddTutorServlet extends HttpServlet {
 			req.setAttribute("payRate", tutor.getPayRate());
 			req.setAttribute("subject", tutor.getSubject());
 			
+			// Load addTutor jsp
 			req.getRequestDispatcher("/_view/addTutor.jsp").forward(req, resp);
-		} else if(tutorProfile) {
+		} 
+		
+		// User wants to view their tutorProfile
+		else if(tutorProfile) {
 			System.out.println("AddTutor Servlet: profile load");
 			
 			controller = new AddTutorController();
 			
-			//UserAccount user = (UserAccount) req.getSession().getAttribute("editUser");
+			// Get the logged in tutor's information 
 			Tutor tutor = (Tutor) req.getSession().getAttribute("tutorProfileInfo");
 			String[] name = tutor.getName().split(" ");
 			
+			//Set the attributes for display
 			req.setAttribute("firstName", name[0]);
 			req.setAttribute("lastName", name[1]);
 			req.setAttribute("username", account.getUsername());
@@ -90,10 +101,11 @@ public class AddTutorServlet extends HttpServlet {
 			req.setAttribute("payRate", tutor.getPayRate());
 			req.setAttribute("subject", tutor.getSubject());
 			
+			// Load addTutor jsp
 			req.getRequestDispatcher("/_view/addTutor.jsp").forward(req, resp);
 		}
 		
-		// Load addTutor
+		// Default load addTutor
 		else {
 			
 			System.out.println("AddTutor Servlet: default Load");
@@ -112,6 +124,7 @@ public class AddTutorServlet extends HttpServlet {
 		
 		controller = new AddTutorController();
 		
+		// Put parameters in strings to clean up
 		String firstName = req.getParameter("firstName");
 		String lastName = req.getParameter("lastName");
 		String password = req.getParameter("password");
@@ -124,15 +137,19 @@ public class AddTutorServlet extends HttpServlet {
 		
 		// If the tutor information is valid, continue to the search page
 		if (tutorValidate(req, controller)) {
+			
+			// User wants to add a new tutor
 			if (req.getParameter("addTutor") != null) {
 				
 				System.out.println("AddTutor Servlet: tutorAdded");
 				
+				// Create new account
 				UserAccount newAccount = new UserAccount();
 				newAccount.setUsername(username);
 				newAccount.setPassword(password);
 				newAccount.setIsAdmin(false);
 				
+				// Create new tutor
 				Tutor newTutor = new Tutor();
 				newTutor.setName(firstName + " " + lastName);
 				newTutor.setEmail(email);
@@ -141,22 +158,28 @@ public class AddTutorServlet extends HttpServlet {
 				newTutor.setSubject(subject);
 				newTutor.setPayRate(Double.parseDouble(payRate));
 				
+				// Add the tutor
 				controller.addTutor(newAccount, newTutor);
 				
+				// Display tutor that was added and redirect to search
 				req.setAttribute("tutorName", firstName + " " + lastName);
-				
 				resp.sendRedirect("search");
 				
-			}else if (req.getParameter("editTutorInfo") != null) {
+			}
+			
+			// User wants to edit a tutor
+			else if (req.getParameter("editTutorInfo") != null) {
 				
 				System.out.println("AddTutor Servlet: tutorEdited");
-									
+							
+				// Create an account to hold updated fields
 				UserAccount updatedAccount = new UserAccount();
 				updatedAccount.setUsername(username);
 				updatedAccount.setPassword(password);
 				updatedAccount.setIsAdmin(false);
 				updatedAccount.setAccountID(((UserAccount) req.getSession().getAttribute("editUser")).getAccountID());
 				
+				// Create a tutor to hold updated fields
 				Tutor updatedTutor = new Tutor();
 				updatedTutor.setName(firstName + " " + lastName);
 				updatedTutor.setEmail(email);
@@ -166,24 +189,31 @@ public class AddTutorServlet extends HttpServlet {
 				updatedTutor.setPayRate(Double.parseDouble(payRate));
 				updatedTutor.setTutorID(((Tutor) req.getSession().getAttribute("editTutor")).getTutorID());
 				
+				// Update the tutor and account
 				controller.editTutor(updatedAccount, updatedTutor);
+				
+				// Display tutor that was updated and redirect to search
 				req.setAttribute("editTutorName", firstName + " " + lastName);
 				resp.sendRedirect("search");
 				
-			}else if (req.getParameter("updatePassword") != null) {
+			}
+			
+			// User is viewing their profile and wants to update their password
+			else if (req.getParameter("updatePassword") != null) {
 				
 				System.out.println("AddTutor Servelet: Update Password");
 			
 				UserAccount account = (UserAccount) req.getSession().getAttribute("user");
 				
+				// Update the account's password
 				controller.updatePassword(account, password);
 				
+				// Display tutor that was updated and redirect to search
 				req.setAttribute("editPasswordName", firstName + " " + lastName);
-				resp.sendRedirect("search");
-				
-			}
-			
+				resp.sendRedirect("search");			
+			}			
 		}
+		
 		// If the tutor information is invalid, set all parameters with inputed
 		// parameters and reload the add tutor page with proper error message
 		else {
@@ -281,18 +311,21 @@ public class AddTutorServlet extends HttpServlet {
 			return false;
 		}
 		
+		// Check that the student ID is not already in use by a different tutor
 		if (controller.findStudentID(studentID, (Tutor) req.getSession().getAttribute("editTutor"), addTutor)) {
 			
 			req.setAttribute("errorMessage", "Student ID already in use");
 			return false;
 		}
 		
+		// Check that the email is not already in use by a different tutor
 		if (controller.findEmail(email, (Tutor) req.getSession().getAttribute("editTutor"), addTutor)) {
 			
 			req.setAttribute("errorMessage", "Email already in use");
 			return false;
 		}
 		
+		// Check that the username is not already in use by a different tutor
 		if (controller.findUsername(username, (UserAccount) req.getSession().getAttribute("editUser"), addTutor)) {
 			
 			req.setAttribute("errorMessage", "Username already in use. Please use a different email");

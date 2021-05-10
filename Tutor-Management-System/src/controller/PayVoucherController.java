@@ -113,11 +113,20 @@ public class PayVoucherController {
 		return db.signPayVoucher(voucherID);
 	}
 	
+	/**
+	 * Mark the PayVoucher with the selected voucherID as no longer being new.
+	 * @param voucherID The voucherID from the PayVoucher to mark and no longer new.
+	 */
 	public void markPayVoucherNotNew(int voucherID) {
 		
 		db.markPayVoucherNotNew(voucherID);
 	}
 	
+	/**
+	 * Update the PayVoucher with the selected voucherID with being admin edited.
+	 * @param voucherID The voucherID from the PayVoucher to update being admin edited.
+	 * @param isEdited Whether or not the PayVoucher is now admin edited.
+	 */
 	public void markPayVoucherEditedByAdmin(int voucherID, boolean isEdited) {
 		
 		db.markPayVoucherEditedByAdmin(voucherID, isEdited);

@@ -65,17 +65,31 @@ public class AddTutorController {
 		db.updatePasswordWithUserID(User, Password);
 	}
 	
+	/**
+	 * Check to see if the database already has the inputed student id in use.
+	 * @param studentID Student id to look for.
+	 * @param selectedTutor The tutor currently being viewed.
+	 * @param isAddTutor Whether or not a tutor is being added.
+	 * @return True if the student ID exists and if owned by a different tutor, false if it does not.
+	 */
 	public boolean findStudentID(String studentID, Tutor selectedTutor, boolean isAddTutor) {
 		
 		List<Tutor> tutorList = db.getTutors();
+		
+		// Search through all tutors and check their student ids
 		for (Tutor tutor : tutorList) {
 			
+			// Student id is found
 			if (tutor.getStudentID().equals(studentID)) {
 				
+				// The user is adding a tutor, which means that the id found is by default in use by another tutor
 				if (isAddTutor) {
 					
 					return true;
-				}				
+				}		
+				
+				// The user is editing a tutor, which means that the id found either belongs to the selected tutor
+				// or is owned by another tutor
 				else if (selectedTutor != null && !isAddTutor && tutor.getTutorID() != selectedTutor.getTutorID()) {
 					
 					return true;
@@ -86,17 +100,31 @@ public class AddTutorController {
 		return false;
 	}
 	
+	/**
+	 * Check to see if the database already has the inputed email in use.
+	 * @param email	Email to look for.
+	 * @param selectedTutor The tutor currently being viewed.
+	 * @param isAddTutor Whether or not a tutor is being added.
+	 * @return True if the email exists and is owned by a different tutor, false if it does not.
+	 */
 	public boolean findEmail(String email, Tutor selectedTutor, boolean isAddTutor) {
 		
 		List<Tutor> tutorList = db.getTutors();
+		
+		// Search through all tutors and check their emails
 		for (Tutor tutor : tutorList) {
 			
+			// Email is found
 			if (tutor.getEmail().equals(email)) {
 				
+				// The user is adding a tutor, which means that the email found is by default in use by another tutor
 				if (isAddTutor) {
 					
 					return true;
-				}				
+				}			
+				
+				// The user is editing a tutor, which means that the email found either belongs to the selected tutor
+				// or is owned by another tutor
 				else if (selectedTutor != null && !isAddTutor && tutor.getTutorID() != selectedTutor.getTutorID()) {
 					
 					return true;
@@ -107,17 +135,31 @@ public class AddTutorController {
 		return false;
 	}
 	
+	/**
+	 * Check to see if the database already has the generated username in use.
+	 * @param username Username to look for.
+	 * @param selectedAccount The account of the tutor currently being viewed.
+	 * @param isAddTutor Whether or not a tutor is being added.
+	 * @return True if the username exists and is owned by a different user, false if it does not.
+	 */
 	public boolean findUsername(String username, UserAccount selectedAccount, boolean isAddTutor) {
 		
 		List<UserAccount> userList = db.getUserAccounts();
+		
+		// Search through all user accounts and check their usernames
 		for (UserAccount user : userList) {
 			
+			// Username is found
 			if (user.getUsername().equals(username)) {
 				
+				// The user is adding a tutor, which means that the username found is by default in use by another account
 				if (isAddTutor) {
 					
 					return true;
 				}
+				
+				// The user is editing a tutor, which means that the username found either belongs to the selected account
+				// or is owned by another account.
 				else if (selectedAccount != null && !isAddTutor && user.getAccountID() != selectedAccount.getAccountID()) {
 					
 					return true;

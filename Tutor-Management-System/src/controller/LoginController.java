@@ -35,8 +35,15 @@ public class LoginController {
 		return user;
 	}
 	
+	/**
+	 * Get the UserAccount and Tutor with the username and studentID.
+	 * @param username The UserAccount's username.
+	 * @param studentID The Tutor's studentID.
+	 * @return Both the UserAccount and Tutor with the respecting username and studentID.
+	 */
 	public Pair<UserAccount, Tutor> getUserTutorFromForgotPassword(String username, String studentID) {
 		
+		// Search through tutors and users checking if they are found
 		for (Pair<UserAccount, Tutor> userTutor : db.getAllUserTutor()) {
 			
 			if (userTutor.getLeft().getUsername().equals(username) && userTutor.getRight().getStudentID().equals(studentID)) {
@@ -48,6 +55,11 @@ public class LoginController {
 		return null;
 	}
 	
+	/**
+	 * Update the specified UserAccount with the specified password.
+	 * @param account The UserAccount to update.
+	 * @param password The UserAccount's new password.
+	 */
 	public void updatePassword(UserAccount account, String password) {
 		
 		db.updatePasswordWithUserID(account, password);

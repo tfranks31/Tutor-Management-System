@@ -60,6 +60,7 @@ public class SearchServlet extends HttpServlet{
 			resp.sendRedirect("login");
 		}
 		
+		// User wants to go to the tutor page, only admins can
 		else if ((editTutor ||  addTutor) && account.getIsAdmin()) {
 
 			//sets all unused session variables and local counterparts to zero
@@ -124,6 +125,7 @@ public class SearchServlet extends HttpServlet{
 			pageNumber = 1;
 			req.getSession().setAttribute("pageNumber", pageNumber);
 			
+			// Load all pay vouchers if an admin is logged in
 			if (account.getIsAdmin()) {
 			
 				for (Pair<Tutor, PayVoucher> tutorVoucher : allTutorVoucherList) {
@@ -142,6 +144,8 @@ public class SearchServlet extends HttpServlet{
 					count++;
 				}
 			}
+			
+			// Load only the pay vouchers that the tutor is allowed to see
 			else {
 				
 				for (Pair<Tutor, PayVoucher> tutorVoucher : allTutorVoucherList) {
@@ -165,6 +169,7 @@ public class SearchServlet extends HttpServlet{
 				}
 			}
 			
+			// No vouchers were found
 			if (tutorVoucherList.isEmpty()) {
 				req.setAttribute("errorMessage", "There were no pay vouchers found");
 				System.out.println("Search Servlet: no Voucher Found");
@@ -228,6 +233,7 @@ public class SearchServlet extends HttpServlet{
 			
 			String assignmentType = req.getParameter("assign");
 			
+			// Assign to all tutors
 			if (assignmentType.equals("allTutors")) {
 				
 				System.out.println("Search Servlet: assign voucher all");
@@ -239,6 +245,7 @@ public class SearchServlet extends HttpServlet{
 				}			
 			}
 			
+			// Assign to a specific tutor
 			if (assignmentType.equals("oneTutor")) {
 				
 				System.out.println("Search Servlet: assign voucher specific");
@@ -269,6 +276,7 @@ public class SearchServlet extends HttpServlet{
 				}
 			}
 			
+			// No tutors were found
 			if (userTutorList.isEmpty()) {
 				req.setAttribute("errorMessage", "There were no tutors found");
 				System.out.println("Search Servlet: no tutors Found");
@@ -283,7 +291,11 @@ public class SearchServlet extends HttpServlet{
 		else if (req.getParameter("search") != null) {
 
 			sort = req.getParameter("sort");
+			
+			// User has an applied sort
 			if (sort != null) {
+				
+				// Sort by tutor name, count to account for sort directions
 				if (sort.equals("Tutor Name")){
 					countName ++;
 					countSubject = 0;
@@ -295,6 +307,7 @@ public class SearchServlet extends HttpServlet{
 					}
 				}
 				
+				// Sort by subject, count to account for sort directions
 				if (sort.equals("Subject")){
 					countSubject ++;
 					countName = 0;
@@ -306,6 +319,7 @@ public class SearchServlet extends HttpServlet{
 					}
 				}
 				
+				// Sort by due date, count to account for sort directions
 				if (sort.equals("Due Date")){
 					countDate ++;
 					countSubject = 0;
@@ -334,6 +348,7 @@ public class SearchServlet extends HttpServlet{
 			pageNumber = 1;
 			req.getSession().setAttribute("pageNumber", pageNumber);
 			
+			// Load all pay vouchers if the user is an admin
 			if (account.getIsAdmin()) {
 				
 				for (int i = ((pageNumber - 1) * 7); i < (pageNumber * 7); i++) {
@@ -346,6 +361,7 @@ public class SearchServlet extends HttpServlet{
 				}
 			}
 			
+			// Load only the pay vouchers assigned to the logged in tutor
 			else {
 				
 				for (Pair<Tutor, PayVoucher> tutorVoucher : allTutorVoucherList) {
@@ -369,6 +385,7 @@ public class SearchServlet extends HttpServlet{
 				}
 			}
 
+			// No pay vouchers were found
 			if (tutorVoucherList.isEmpty()) {
 				req.setAttribute("errorMessage", "There were no pay vouchers found");
 				System.out.println("Search Servlet: no Voucher Found");
@@ -380,7 +397,10 @@ public class SearchServlet extends HttpServlet{
 			
 			stillSearching = searchParameter;
 			
-		} else if (req.getParameter("tutorSearch") != null) {
+		}
+		
+		// User wants to search for a tutor
+		else if (req.getParameter("tutorSearch") != null) {
 			
 			System.out.println("Search Servlet: tutor search");
 			
@@ -396,6 +416,7 @@ public class SearchServlet extends HttpServlet{
 			pageNumberTutor = 1;
 			req.getSession().setAttribute("pageNumberTutor", pageNumberTutor);
 			
+			// Load all tutors
 			if (account.getIsAdmin()) {
 				
 				for (int i = ((pageNumber - 1) * 7); i < (pageNumber * 7); i++) {
@@ -432,6 +453,7 @@ public class SearchServlet extends HttpServlet{
 				}
 			}
 			
+			// No tutors were found
 			if (userTutorList.isEmpty()) {
 				req.setAttribute("errorMessage", "There were no Tutors found");
 				System.out.println("Search Servlet: no Tutors Found");
@@ -448,8 +470,6 @@ public class SearchServlet extends HttpServlet{
 			stillSearchingTutor = searchParameterTutor;
 		} 
 		
-		
-		
 		//admin wants to view tutor page
 		else if (req.getParameter("tutorPage") != null){
 			
@@ -465,7 +485,7 @@ public class SearchServlet extends HttpServlet{
 			loadDefaultSearch(req,resp, account);
 		}
 		
-		
+		// User wants to go back a page in voucher search
 		else if(req.getParameter("page1") != null && pageNumber > 1) {
 			if (!req.getParameter("page1").equals("")) {
 				
@@ -486,6 +506,7 @@ public class SearchServlet extends HttpServlet{
 		
 		}
 		
+		// User wants to go back a page in tutor search
 		else if(req.getParameter("page3") != null && pageNumberTutor > 1) {
 			if (!req.getParameter("page3").equals("")) {
 				
@@ -505,6 +526,7 @@ public class SearchServlet extends HttpServlet{
 			loadDefaultTutorPage(req, resp);
 		}
 		
+		// User wants to go back a page but keep them on the same page
 		else if(req.getParameter("page3") != null && pageNumberTutor == 1) {
 			if (!req.getParameter("page3").equals("")) {
 				
@@ -512,6 +534,7 @@ public class SearchServlet extends HttpServlet{
 			}
 		}
 		
+		// User wants to go to the next page in voucher search
 		else if (req.getParameter("page2") != null && (stillSearching == null || stillSearching.equals("")) && account.getIsAdmin()) {
 			if (!req.getParameter("page2").equals("") && 
 				((controller.getAllVouchers(null).size() % 7 != 0 && (controller.getAllVouchers(null).size() / 7) + 1 > pageNumber)) ||
@@ -528,6 +551,7 @@ public class SearchServlet extends HttpServlet{
 			loadDefaultSearch(req, resp, account);	
 		}
 		
+		// User wants to go to the next page in tutor search
 		else if (req.getParameter("page4") != null && (stillSearchingTutor == null || stillSearchingTutor.equals("")) && account.getIsAdmin()) {
 			if (!req.getParameter("page4").equals("") && 
 				((controller.getAllUserTutors().size() % 7 != 0 && (controller.getAllUserTutors().size() / 7) + 1 > pageNumberTutor)) ||
@@ -544,6 +568,7 @@ public class SearchServlet extends HttpServlet{
 			loadDefaultTutorPage(req, resp);
 		}
 		
+		// User wants to go to the next page but they are still searching for something
 		else if (req.getParameter("page2") != null && stillSearching != null && account.getIsAdmin()) {
 				if (!req.getParameter("page2").equals("") && !stillSearching.equals("") && 
 				((controller.getVoucherFromSearch(stillSearching,null).size() % 7 != 0 && (controller.getVoucherFromSearch(stillSearching,null).size() / 7) + 1 > pageNumber)) ||
@@ -560,6 +585,7 @@ public class SearchServlet extends HttpServlet{
 			loadDefaultSearch(req, resp, account);	
 		}
 		
+		// User wants to go to the next page but they are still searching for a tutor
 		else if (req.getParameter("page4") != null && stillSearchingTutor != null && account.getIsAdmin()) {
 			if (!req.getParameter("page4").equals("") && !stillSearchingTutor.equals("") && 
 			((controller.getUserTutorsFromSearch(stillSearchingTutor).size() % 7 != 0 && (controller.getUserTutorsFromSearch(stillSearchingTutor).size() / 7) + 1 > pageNumber)) ||
@@ -574,7 +600,7 @@ public class SearchServlet extends HttpServlet{
 			}
 		
 			loadDefaultTutorPage(req, resp);
-	}
+		}
 		
 		else if (req.getParameter("page2") != null && !account.getIsAdmin() &&
 				(stillSearching == null || stillSearching.equals(""))) {
@@ -608,6 +634,7 @@ public class SearchServlet extends HttpServlet{
 			loadDefaultSearch(req, resp, account);
 		}
 		
+		// Tutor wants to go to the next page and is still searching
 		else if (req.getParameter("page2") != null && !account.getIsAdmin() &&
 				(stillSearching != null || !stillSearching.equals(""))) {
 			
@@ -639,8 +666,11 @@ public class SearchServlet extends HttpServlet{
 			loadDefaultSearch(req, resp, account);
 		}
 		
+		// User has an applied sort
 		else if (req.getParameter("sort") != null) {
 			sort = req.getParameter("sort");
+			
+			// User wants to sort by Tutor Name
 			if (sort.equals("Tutor Name")){
 				countName ++;
 				countSubject = 0;
@@ -653,6 +683,7 @@ public class SearchServlet extends HttpServlet{
 				}
 			}
 			
+			// User wants to sort by subject
 			if (sort.equals("Subject")){
 				countSubject ++;
 				countName = 0;
@@ -664,6 +695,7 @@ public class SearchServlet extends HttpServlet{
 				}
 			}
 			
+			// User wants to sort by due date
 			if (sort.equals("Due Date")){
 				countDate ++;
 				countSubject = 0;
@@ -680,10 +712,17 @@ public class SearchServlet extends HttpServlet{
 		// Default generate pay vouchers
 		else {
 			loadDefaultSearch(req, resp, account);
-;		}
+		}
 	}
 	
-	// Default generate pay vouchers
+	/**
+	 * Load a default search for pay vouchers.
+	 * @param req Request to set attributes and forward.
+	 * @param resp Response to forward.
+	 * @param account The active user account.
+	 * @throws ServletException
+	 * @throws IOException
+	 */
 	private void loadDefaultSearch(HttpServletRequest req, HttpServletResponse resp, UserAccount account)
 			throws ServletException, IOException {
 		ArrayList<Pair<Tutor, PayVoucher>> tutorVoucherList = new ArrayList<Pair<Tutor, PayVoucher>>();
@@ -762,7 +801,7 @@ public class SearchServlet extends HttpServlet{
 			}
 		}
 	
-		
+		// No pay vouchers were found
 		if (tutorVoucherList.isEmpty()) {
 			req.setAttribute("errorMessage", "There were no pay vouchers found");
 			System.out.println("Search Servlet: no Voucher Found");
@@ -773,6 +812,11 @@ public class SearchServlet extends HttpServlet{
 		req.getRequestDispatcher("/_view/search.jsp").forward(req, resp);
 	}
 	
+	/**
+	 * Validate the inputed search parameters.
+	 * @param req Request that holds the information to validate.
+	 * @return True if the search is valid, false if it is not.
+	 */
 	private boolean searchValidate(HttpServletRequest req) {
 		
 		String startDate = req.getParameter("startDate");
@@ -787,6 +831,7 @@ public class SearchServlet extends HttpServlet{
 			return false;
 		}
 		
+		// Check that due date is not before start date
 		try {
 			
 			Date start = new SimpleDateFormat("MM/dd/yyyy").parse(startDate);
@@ -806,6 +851,13 @@ public class SearchServlet extends HttpServlet{
 		return true;
 	}
 	
+	/**
+	 * Load the default tutor page.
+	 * @param req Request to set attributes and forward.
+	 * @param resp Response to forward.
+	 * @throws ServletException
+	 * @throws IOException
+	 */
 	private void loadDefaultTutorPage(HttpServletRequest req, HttpServletResponse resp)
 			throws ServletException, IOException {
 		System.out.println("Search Servelet: load tutor page ");
@@ -816,7 +868,6 @@ public class SearchServlet extends HttpServlet{
 		
 		ArrayList<Pair<UserAccount, Tutor>> tempUserTutors = new ArrayList<Pair<UserAccount, Tutor>>();
 		
-		// Get all pay vouchers
 		if (stillSearchingTutor == null) {
 			
 			userTutors =  controller.getAllUserTutors();
@@ -852,13 +903,13 @@ public class SearchServlet extends HttpServlet{
 		}
 		
 	
-		
+		// No tutors were found
 		if (allUserTutorList.isEmpty()) {
 			req.setAttribute("errorMessage", "There were no Tutors found");
 			System.out.println("Search Servlet: no Tutors Found Found");
 		}
 		
-		// Update search with the vouchers
+		// Update search with the tutors
 		req.setAttribute("UserTutors", allUserTutorList);;
 		req.getRequestDispatcher("/_view/viewTutors.jsp").forward(req, resp);
 	}

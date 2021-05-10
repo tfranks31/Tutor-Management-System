@@ -9,7 +9,6 @@ import model.UserAccount;
 import model.Pair;
 import tutorsdb.persist.DatabaseProvider;
 import tutorsdb.persist.DerbyDatabase;
-import tutorsdb.persist.FakeDatabase;
 import tutorsdb.persist.IDatabase;
 
 /**
@@ -139,6 +138,11 @@ public class SearchController {
 		return userTutor;
 	}
 
+	/**
+	 * Get all tutors and their accounts from a specified search parameter.
+	 * @param searchParameter The search parameter to get tutors and their accounts by.
+	 * @return
+	 */
 	public ArrayList<Pair<UserAccount, Tutor>> getUserTutorsFromSearch(String searchParameter) {
 		ArrayList<Pair<UserAccount, Tutor>> userTutorList = new ArrayList<Pair<UserAccount, Tutor>> ();
 		userTutorList = (ArrayList<Pair<UserAccount, Tutor>>)db.getUserTutorsFromSearch(searchParameter);
