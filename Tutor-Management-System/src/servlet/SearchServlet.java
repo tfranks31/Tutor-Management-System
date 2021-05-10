@@ -25,6 +25,7 @@ public class SearchServlet extends HttpServlet{
 	String searchParameter = null;
 	String searchParameterTutor = null;
 	String stillSearching = null;
+	String stillSearchingTutor = null;
 	boolean editTutor = false;
 	boolean editProfile = false;
 	boolean addTutor = false;
@@ -386,9 +387,9 @@ public class SearchServlet extends HttpServlet{
 			System.out.println("Search Servlet: tutor search");
 			
 			controller = new SearchController();
-			searchParameter = req.getParameter("tutorSearch");	
+			searchParameterTutor = req.getParameter("tutorSearch");	
 
-			ArrayList<Pair<UserAccount, Tutor>> allUserTutors = controller.getUserTutorsFromSearch(searchParameter);
+			ArrayList<Pair<UserAccount, Tutor>> allUserTutors = controller.getUserTutorsFromSearch(searchParameterTutor);
 			
 			ArrayList<Pair<UserAccount, Tutor>> tempUserTutor = new ArrayList<Pair<UserAccount, Tutor>>();
 			
@@ -439,14 +440,14 @@ public class SearchServlet extends HttpServlet{
 			}
 
 			// Reset the page number to 1
-			req.getSession().setAttribute("pageNumber", 1);
-			pageNumber = 1;
+			req.getSession().setAttribute("pageNumberTutor", 1);
+			pageNumberTutor = 1;
 			
 			// Update search with the vouchers
 			req.setAttribute("UserTutors", userTutorList);
 			req.getRequestDispatcher("/_view/viewTutors.jsp").forward(req, resp);
 			
-			stillSearching = searchParameter;
+			stillSearchingTutor = searchParameterTutor;
 		} 
 		
 		
@@ -529,7 +530,7 @@ public class SearchServlet extends HttpServlet{
 			loadDefaultSearch(req, resp, account);	
 		}
 		
-		else if (req.getParameter("page4") != null && (stillSearching == null || stillSearching.equals("")) && account.getIsAdmin()) {
+		else if (req.getParameter("page4") != null && (stillSearchingTutor == null || stillSearchingTutor.equals("")) && account.getIsAdmin()) {
 			if (!req.getParameter("page4").equals("") && 
 				((controller.getAllUserTutors().size() % 7 != 0 && (controller.getAllUserTutors().size() / 7) + 1 > pageNumberTutor)) ||
 				(controller.getAllUserTutors().size() % 7 == 0 && (controller.getAllUserTutors().size() / 7) > pageNumberTutor)) {
@@ -561,10 +562,10 @@ public class SearchServlet extends HttpServlet{
 			loadDefaultSearch(req, resp, account);	
 		}
 		
-		else if (req.getParameter("page4") != null && stillSearching != null && account.getIsAdmin()) {
-			if (!req.getParameter("page4").equals("") && !stillSearching.equals("") && 
-			((controller.getUserTutorsFromSearch(stillSearching).size() % 7 != 0 && (controller.getUserTutorsFromSearch(stillSearching).size() / 7) + 1 > pageNumber)) ||
-			(controller.getUserTutorsFromSearch(stillSearching).size() % 7 == 0 && (controller.getUserTutorsFromSearch(stillSearching).size() / 7) > pageNumber)) {
+		else if (req.getParameter("page4") != null && stillSearchingTutor != null && account.getIsAdmin()) {
+			if (!req.getParameter("page4").equals("") && !stillSearchingTutor.equals("") && 
+			((controller.getUserTutorsFromSearch(stillSearchingTutor).size() % 7 != 0 && (controller.getUserTutorsFromSearch(stillSearchingTutor).size() / 7) + 1 > pageNumber)) ||
+			(controller.getUserTutorsFromSearch(stillSearchingTutor).size() % 7 == 0 && (controller.getUserTutorsFromSearch(stillSearchingTutor).size() / 7) > pageNumber)) {
 				System.out.println("Search Servlet: Next Page");
 				
 				pageNumberTutor++;
@@ -818,7 +819,7 @@ public class SearchServlet extends HttpServlet{
 		ArrayList<Pair<UserAccount, Tutor>> tempUserTutors = new ArrayList<Pair<UserAccount, Tutor>>();
 		
 		// Get all pay vouchers
-		if (stillSearching == null) {
+		if (stillSearchingTutor == null) {
 			
 			userTutors =  controller.getAllUserTutors();
 			
@@ -834,7 +835,7 @@ public class SearchServlet extends HttpServlet{
 		}
 		
 		else {
-			allUserTutorList =  controller.getUserTutorsFromSearch(stillSearching);
+			userTutors =  controller.getUserTutorsFromSearch(stillSearchingTutor);
 			 
 			for (Pair<UserAccount, Tutor> userTutor : userTutors) {
 				

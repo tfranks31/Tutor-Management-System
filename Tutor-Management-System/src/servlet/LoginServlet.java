@@ -78,6 +78,15 @@ public class LoginServlet extends HttpServlet{
 				}
 			}
 		}
+		
+		else if (req.getParameter("return") != null) {
+			if (!req.getParameter("return").equals("")) {
+				
+				req.setAttribute("errorMessage1", "");
+				
+				req.getRequestDispatcher("/_view/login.jsp").forward(req, resp);
+			}
+		}
 
 		// Reload login
 		else {
@@ -128,7 +137,11 @@ public class LoginServlet extends HttpServlet{
         	req.setAttribute("errorMessage2", "The passwords do not match");
         	return false;
         }
-        else if (userTutor != null && password1.equals(password2)) {
+        else if (password1 == null || password1.equals("") || password2 == null || password2.equals("")) {
+        	req.setAttribute("errorMessage2", "Please fill in both password fields");
+        	return false;
+        }
+        else if (userTutor != null && password1.equals(password2) && password1 != null && !password1.equals("")) {
         	controller.updatePassword(userTutor.getLeft(), password1);
         	return true;
         }
