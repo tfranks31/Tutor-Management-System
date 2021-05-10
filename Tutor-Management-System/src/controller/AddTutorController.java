@@ -2,6 +2,9 @@ package controller;
 
 import model.Tutor;
 import model.UserAccount;
+
+import java.util.List;
+
 import model.Pair;
 import tutorsdb.persist.DatabaseProvider;
 import tutorsdb.persist.DerbyDatabase;
@@ -60,5 +63,68 @@ public class AddTutorController {
 	 */
 	public void updatePassword(UserAccount User, String Password) {
 		db.updatePasswordWithUserID(User, Password);
+	}
+	
+	public boolean findStudentID(String studentID, Tutor selectedTutor, boolean isAddTutor) {
+		
+		List<Tutor> tutorList = db.getTutors();
+		for (Tutor tutor : tutorList) {
+			
+			if (tutor.getStudentID().equals(studentID)) {
+				
+				if (isAddTutor) {
+					
+					return true;
+				}				
+				else if (selectedTutor != null && !isAddTutor && tutor.getTutorID() != selectedTutor.getTutorID()) {
+					
+					return true;
+				}
+			}
+		}
+		
+		return false;
+	}
+	
+	public boolean findEmail(String email, Tutor selectedTutor, boolean isAddTutor) {
+		
+		List<Tutor> tutorList = db.getTutors();
+		for (Tutor tutor : tutorList) {
+			
+			if (tutor.getEmail().equals(email)) {
+				
+				if (isAddTutor) {
+					
+					return true;
+				}				
+				else if (selectedTutor != null && !isAddTutor && tutor.getTutorID() != selectedTutor.getTutorID()) {
+					
+					return true;
+				}		
+			}
+		}
+		
+		return false;
+	}
+	
+	public boolean findUsername(String username, UserAccount selectedAccount, boolean isAddTutor) {
+		
+		List<UserAccount> userList = db.getUserAccounts();
+		for (UserAccount user : userList) {
+			
+			if (user.getUsername().equals(username)) {
+				
+				if (isAddTutor) {
+					
+					return true;
+				}
+				else if (selectedAccount != null && !isAddTutor && user.getAccountID() != selectedAccount.getAccountID()) {
+					
+					return true;
+				}				
+			}
+		}
+		
+		return false;
 	}
 }

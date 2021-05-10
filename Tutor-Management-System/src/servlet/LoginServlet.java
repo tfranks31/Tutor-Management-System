@@ -29,6 +29,8 @@ public class LoginServlet extends HttpServlet{
 		req.setAttribute("forgotPassword", forgotPassword);
 		// Formally log out of the session
 		req.getSession().setAttribute("user", null);
+		req.getSession().setAttribute("editUser", null);
+		req.getSession().setAttribute("editTutor", null);
 
 		req.setAttribute("forgotPassword", null);
 		

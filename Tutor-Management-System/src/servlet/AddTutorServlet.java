@@ -123,7 +123,7 @@ public class AddTutorServlet extends HttpServlet {
 		String payRate = req.getParameter("payRate");
 		
 		// If the tutor information is valid, continue to the search page
-		if (tutorValidate(req)) {
+		if (tutorValidate(req, controller)) {
 			if (req.getParameter("addTutor") != null) {
 				
 				System.out.println("AddTutor Servlet: tutorAdded");
@@ -190,7 +190,7 @@ public class AddTutorServlet extends HttpServlet {
 			
 			req.setAttribute("firstName", firstName);
 			req.setAttribute("lastName", lastName);
-			req.setAttribute("username", username);
+			req.setAttribute("username", req.getParameter("username"));
 			req.setAttribute("password", password);
 			req.setAttribute("email", email);
 			req.setAttribute("studentID", studentID);
@@ -207,7 +207,7 @@ public class AddTutorServlet extends HttpServlet {
 	 * @param req Request with the submitted information.
 	 * @return True if the information if valid, False if it is not valid.
 	 */
-	private boolean tutorValidate(HttpServletRequest req) {
+	private boolean tutorValidate(HttpServletRequest req, AddTutorController controller) {
 		
 		// Place all parameters in string for readability sake
 		String firstName = req.getParameter("firstName");
@@ -278,6 +278,24 @@ public class AddTutorServlet extends HttpServlet {
 		if (Double.valueOf(payRate) <= 0) {
 			
 			req.setAttribute("errorMessage", "Pay Rate must be positive");
+			return false;
+		}
+		
+		if (controller.findStudentID(studentID, (Tutor) req.getSession().getAttribute("editTutor"), addTutor)) {
+			
+			req.setAttribute("errorMessage", "Student ID already in use");
+			return false;
+		}
+		
+		if (controller.findEmail(email, (Tutor) req.getSession().getAttribute("editTutor"), addTutor)) {
+			
+			req.setAttribute("errorMessage", "Email already in use");
+			return false;
+		}
+		
+		if (controller.findUsername(username, (UserAccount) req.getSession().getAttribute("editUser"), addTutor)) {
+			
+			req.setAttribute("errorMessage", "Username already in use. Please use a different email");
 			return false;
 		}
 		
