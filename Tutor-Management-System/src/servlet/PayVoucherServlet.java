@@ -370,7 +370,11 @@ public class PayVoucherServlet extends HttpServlet{
 					req.setAttribute("errorMessage", "Hours must be positive");
 					return false;
 				}
-				
+				//checks if hours is over 24
+				if (Double.valueOf(cells[i + 1]) > 24) {
+					req.setAttribute("errorMessage", "Hours can't be over 24");
+					return false;
+				}
 				if (cells[i + 2].equals("")) {
 					
 					req.setAttribute("errorMessage", "Please input what service was performed");
